@@ -112,8 +112,6 @@ at-spi/Makefile
 tests/Makefile
 tests/apps/Makefile
 tests/at-spi-sharp/Makefile
-tests/data/Makefile
-tests/dummyatk/Makefile
 tests/at-spi-sharp/atspitest.sh
 ])
 
