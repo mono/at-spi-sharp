@@ -17,7 +17,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 // 
-// Copyright (c) 2008 Novell, Inc. (http://www.novell.com) 
+// Copyright (c) 2009 Novell, Inc. (http://www.novell.com) 
 // 
 // Authors: 
 //      Mike Gorse <mgorse@novell.com>
@@ -28,12 +28,12 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("UIAutomationWinformsTests")]
+[assembly: AssemblyTitle("AtSpiSharpTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Novell, Inc.")]
-[assembly: AssemblyProduct("UIAutomationWinformsTests")]
-[assembly: AssemblyCopyright("Copyright © 20089Novell, Inc")]
+[assembly: AssemblyProduct("AtSpiSharpTests")]
+[assembly: AssemblyCopyright("Copyright © 2009 Novell, Inc")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

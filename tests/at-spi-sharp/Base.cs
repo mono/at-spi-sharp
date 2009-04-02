@@ -31,7 +31,7 @@ using System.Threading;
 using Mono.Unix;
 using NDesk.DBus;
 using NUnit.Framework;
-using org.freedesktop.atspi;
+using Atspi;
 
 namespace AtSpiTest
 {
@@ -47,14 +47,13 @@ namespace AtSpiTest
 		#region Private Fields
 		
 		private static System.Diagnostics.Process p = null;
-		private bool threadDone = false;
 
 		#endregion
 		
 		#region Setup/Teardown
 
 		public virtual void StartApplication (string name)
-		{			
+		{
 			if (p != null)
 				return;
 			Registry.Initialize (true);
@@ -69,11 +68,25 @@ namespace AtSpiTest
 		[TestFixtureTearDown]
 		public virtual void TearDown ()
 		{
-Console.WriteLine ("dbg: Tearing down.  Don't shed too many tears.");
 			p.Kill ();
+			p = null;
 			Registry.Terminate ();
+			// give the registry daemon time to process the signal
+			System.Threading.Thread.Sleep (100);
 		}
 
+#endregion
+
+		#region Private Methods
+
+		public static string GetAppPath (string filename)
+		{
+			return "../../../apps/" + filename;
+		}
+#endregion
+
+		#region Protected Helper Methods
+		
 		protected Accessible FindApplication (string name)
 		{
 			return Desktop.Instance.FindDescendant (new FindPredicate (CheckName), name);
@@ -92,15 +105,15 @@ Console.WriteLine ("dbg: Tearing down.  Don't shed too many tears.");
 		protected Accessible GetApplication (string filename, string name)
 		{
 			if (filename != null)
-				StartApplication ("../apps/" + filename);
+				StartApplication (GetAppPath (filename));
 			else
 				Registry.Initialize (true);
-			do {
+			for (;;) {
 				Accessible a = FindApplication (name);
 				if (a != null)
 					return a;
-			} while (Iterate ());
-			throw new Exception ("Couldn't find application: " + name);
+				Iterate ();
+			}
 		}
 
 		protected Accessible GetFrame (string filename)
@@ -120,68 +133,35 @@ Console.WriteLine ("dbg: Tearing down.  Don't shed too many tears.");
 
 		protected Accessible FindByRole (Accessible accessible, Role role)
 		{
-			return FindByRole (accessible, role, 100);
+			return FindByRole (accessible, role, false);
 		}
 
-		protected Accessible FindByRole (Accessible accessible, Role role, int time)
+		protected Accessible FindByRole (Accessible accessible, Role role, bool wait)
 		{
 			for (;;) {
 				Accessible ret = Desktop.Instance.FindDescendant (new FindPredicate (CheckRole), role);
 				if (ret != null)
 					return ret;
-				if (time > 0 && Iterate (time))
-					continue;
-				else
-			return null;
+				if (!wait)
+					return null;
+				Iterate ();
 			}
 		}
 
 		protected bool CheckRole (Accessible accessible, object [] args)
 		{
-Console.WriteLine ("dbg: CheckRole: " + accessible.Role);
 			return (accessible.Role == (Role)args[0]);
 		}
 
-		protected bool Iterate ()
-		{
-			return Iterate (500);
-		}
-
-		protected bool Iterate (int time)
-		{
-			// TODO: see if there's a more elegant way to do this
-			Thread iterateThread = new Thread (new ThreadStart (IterateThread));
-			threadDone = false;
-			iterateThread.Start ();
-			int tries = 0;
-			while (!threadDone && tries < (time / 100)) {
-				tries++;
-				System.Threading.Thread.Sleep (100);
-			}
-			if (!threadDone)
-				iterateThread.Abort ();
-			return threadDone;
-		}
-
-		void IterateThread ()
+		protected void Iterate ()
 		{
 			Registry.Bus.Iterate ();
-			threadDone = true;
 		}
 		#endregion
 		
-		#region Basic Tests
-		
-		#endregion
-
 		#region Abstract Members
 	
 		#endregion
-	
-		#region Protected Helper Methods
-		
-		#endregion
-
 	}
 	
 }

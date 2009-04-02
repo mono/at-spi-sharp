@@ -19,54 +19,29 @@
 // 
 // Copyright (c) 2009 Novell, Inc. (http://www.novell.com) 
 // 
-// Authors:
+// Authors: 
 //      Mike Gorse <mgorse@novell.com>
 // 
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-namespace Atspi
-{
-	// TODO: Derive this from the at-spi xml?
-	public enum StateType
-	{
-		Invalid,
-		Active,
-		Armed,
-		Busy,
-		Checked,
-		Defunct,
-		Editable,
-		Enabled,
-		Expandable,
-		Expanded,
-		Focusable,
-		Focused,
-		Horizontal,
-		Iconified,
-		Modal,
-		MultiLine,
-		Multiselectable,
-		Opaque,
-		Pressed,
-		Resizable,
-		Selectable,
-		Selected,
-		Sensitive,
-		Showing,
-		SingleLine,
-		Stale,
-		Transient,
-		Vertical,
-		Visible,
-		ManagesDescendants,
-		Indeterminate,
-		Truncated,
-		Required,
-		InvalidEntry,
-		SupportsAutocompletion,
-		SelectableText,
-		Default,
-		Animated,
-		Visited,
-		LastDefined
-	}
-}
+// Information about this assembly is defined by the following attributes. 
+// Change them to the values specific to your project.
+
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Novell, Inc.")]
+[assembly: AssemblyCopyright("Copyright © 2009 Novell, Inc")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// If the build and revision are set to '*' they will be updated automatically.
+
+[assembly: AssemblyVersion("1.0.0.0")]
+
+// The following attributes are used to specify the signing key for the assembly, 
+// if desired. See the Mono documentation for more information about signing.
+
+[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]

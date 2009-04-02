@@ -1,6 +1,27 @@
-// Copyright 2009 Novell, Inc.
-// This software is made available under the MIT License
-// See COPYING for details
+// Permission is hereby granted, free of charge, to any person obtaining 
+// a copy of this software and associated documentation files (the 
+// "Software"), to deal in the Software without restriction, including 
+// without limitation the rights to use, copy, modify, merge, publish, 
+// distribute, sublicense, and/or sell copies of the Software, and to 
+// permit persons to whom the Software is furnished to do so, subject to 
+// the following conditions: 
+//  
+// The above copyright notice and this permission notice shall be 
+// included in all copies or substantial portions of the Software. 
+//  
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+// 
+// Copyright (c) 2009 Novell, Inc. (http://www.novell.com) 
+// 
+// Authors:
+//      Mike Gorse <mgorse@novell.com>
+// 
 
 using System;
 using System.Collections.Generic;
@@ -8,16 +29,23 @@ using System.Threading;
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
-namespace org.freedesktop.atspi
+namespace Atspi
 {
 	public class Registry
 	{
-		public static Registry Instance = null;
+		public static Registry Instance {
+			get {
+				return instance;
+			}
+		}
+
+		private volatile static Registry instance;
 		private Bus bus;
 		private Thread busThread;
 		private RegistryInterface proxy;
 		private List<Application> applications;
 		private Desktop desktop;
+		private static object sync = new object ();
 
 		public static void Initialize ()
 		{
@@ -26,25 +54,31 @@ namespace org.freedesktop.atspi
 
 		public static void Initialize (bool glib)
 		{
-			if (Instance != null)
-				return;
+			lock (sync) {
+				if (instance != null)
+					return;
 
-			Instance = new Registry (glib);
-
-Console.WriteLine ("dbg: getting applications");
-			Instance.GetApplications ();
+				new Registry (glib);
+			}
 		}
 
 		public static void Terminate ()
 		{
-			Instance.TerminateInternal ();
-			Instance = null;
+			instance.TerminateInternal ();
+			Desktop.Terminate ();
+			instance = null;
 		}
 
 		public static Bus Bus { get { return Instance.bus; } }
 
-		public Registry (bool glib)
+		internal Registry (bool glib)
 		{
+			lock (sync) {
+				if (instance != null)
+					throw new Exception ("Attempt to create a second registry");
+				instance = this;
+			}
+
 			bus = Bus.Session;
 			applications = new List<Application> ();
 			desktop = new Desktop ();
@@ -58,16 +92,16 @@ Console.WriteLine ("dbg: getting applications");
 				busThread.IsBackground = true;
 				busThread.Start ();
 			}
+
+			string [] appNames = proxy.getApplications ();
+			foreach (string app in appNames) {
+				Application application = new Application (app);
+				applications.Add (application);
+				desktop.Add (application);
+			}
 		}
 
 		public static Desktop Desktop { get { return Instance.desktop; } }
-
-		private void GetApplications ()
-		{
-			string [] appNames = proxy.getApplications ();
-			foreach (string app in appNames)
-				applications.Add (new Application (app));
-		}
 
 		internal void TerminateInternal ()
 		{
@@ -79,7 +113,6 @@ Console.WriteLine ("dbg: getting applications");
 
 		private void Iterate ()
 		{
-Console.WriteLine ("dbg: iterate");
 			while (true)
 				bus.Iterate ();
 		}
@@ -87,7 +120,6 @@ Console.WriteLine ("dbg: iterate");
 		void OnUpdateApplications (int added, string name)
 		{
 			// added is really a bool
-Console.WriteLine ("dbg: app: " + added + ", " + name);
 			if (added != 0) {
 				Application app = new Application (name);
 				applications.Add (app);
@@ -109,8 +141,8 @@ Console.WriteLine ("dbg: app: " + added + ", " + name);
 	interface RegistryInterface : Introspectable
 	{
 		string [] getApplications ();
-		event updateApplicationsHandler updateApplications;
+		event UpdateApplicationsHandler updateApplications;
 	}
 
-	delegate void updateApplicationsHandler (int added, string name);
+	delegate void UpdateApplicationsHandler (int added, string name);
 }

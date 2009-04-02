@@ -1,6 +1,6 @@
 #! /bin/sh
 
-PROJECT=UiaAtkBridge
+PROJECT=at-spi-sharp
 FILE=
 CONFIGURE=configure.ac
 

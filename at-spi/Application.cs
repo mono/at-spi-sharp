@@ -1,23 +1,43 @@
-// Copyright 2009 Novell, Inc.
-// This software is made available under the MIT License
-// See COPYING for details
+// Permission is hereby granted, free of charge, to any person obtaining 
+// a copy of this software and associated documentation files (the 
+// "Software"), to deal in the Software without restriction, including 
+// without limitation the rights to use, copy, modify, merge, publish, 
+// distribute, sublicense, and/or sell copies of the Software, and to 
+// permit persons to whom the Software is furnished to do so, subject to 
+// the following conditions: 
+//  
+// The above copyright notice and this permission notice shall be 
+// included in all copies or substantial portions of the Software. 
+//  
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+// 
+// Copyright (c) 2009 Novell, Inc. (http://www.novell.com) 
+// 
+// Authors:
+//      Mike Gorse <mgorse@novell.com>
+// 
 
 using System;
 using System.Collections.Generic;
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
-namespace org.freedesktop.atspi
+namespace Atspi
 {
 	internal class Application
 	{
-			internal string name;
-		ITree proxy;
-		Dictionary<string, Accessible> accessibles;
+		internal string name;
+		private ITree proxy;
+		private Dictionary<string, Accessible> accessibles;
 
 		internal Application (string name)
 		{
-Console.WriteLine ("dbg: add application: " + name);
 			this.name = name;
 			proxy = Registry.Bus.GetObject<ITree> (name, new ObjectPath ("/org/freedesktop/atspi/tree"));
 			accessibles = new Dictionary<string, Accessible> ();
@@ -31,22 +51,16 @@ Console.WriteLine ("dbg: add application: " + name);
 		{
 			foreach (AccessibleProxy e in elements)
 				GetElement (e);
-	}
+		}
 
 		Accessible GetElement (AccessibleProxy e)
 		{
-Console.WriteLine ("dbg: GetElement: " + e.role);
-			Accessible obj = GetElement (e.path, true);
-			obj.name = e.name;
-			obj.parent = GetElement (e.parent, true);
-			obj.role = (Role)e.role;
-Console.WriteLine ("dbg: adding object: " + obj.Role);
-			obj.description = e.description;
-			foreach (string iface in e.interfaces)
-				obj.AddInterface (iface);
-			obj.stateSet = new StateSet (e.states);
-			foreach (string path in e.children)
-				obj.children.Add (GetElement (path, true));
+			Accessible obj = GetElement (e.path, false);
+			if (obj == null) {
+				obj = new Accessible (this, e);
+				accessibles [e.path] = obj;
+			} else
+				obj.Update (e);
 			return obj;
 		}
 
@@ -80,7 +94,9 @@ Console.WriteLine ("dbg: adding object: " + obj.Role);
 			return GetElement (op.ToString (), false);
 		}
 
-		internal string Name { get { return name; } }
+		internal string Name {
+			get { return name; }
+		}
 
 		internal Accessible GetRoot ()
 		{

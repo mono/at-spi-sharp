@@ -12,7 +12,6 @@ SHAMROCK_EXPAND_LIBDIR
 SHAMROCK_EXPAND_BINDIR
 SHAMROCK_EXPAND_DATADIR
 
-AC_CHECK_TOOL(CC, gcc, gcc)
 AC_PROG_CC
 AC_PROG_INSTALL
 AM_PROG_LIBTOOL
@@ -26,11 +25,6 @@ AC_SUBST(MONO)
 AC_PATH_PROG(GMCS, gmcs, no)
 if test "x$GMCS" = "xno"; then
         AC_MSG_ERROR([gmcs Not found])
-fi
-
-AC_PATH_PROG(CC, gcc, no)
-if test "x$CC" = "xno"; then
-        AC_MSG_ERROR([gcc Not found])
 fi
 
 AC_PATH_PROG(GACUTIL, gacutil, no)
@@ -55,32 +49,10 @@ fi
 
 AC_SUBST(NUNIT_PATH)
 
-# Require Gtk+ devel package so that we can get access at the pc file to
-# construct a path to the modules directory
 PKG_CHECK_MODULES([NDESK_DBUS], [ndesk-dbus-1.0 ndesk-dbus-glib-1.0])
 
 AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = "xyes")
 
-dnl Following modules used for tests
-PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.7.0])
-AC_SUBST(DBUS_GLIB_LIBS)
-AC_SUBST(DBUS_GLIB_CFLAGS)
-
-PKG_CHECK_MODULES(LIB_XML, [libxml-2.0 >= 2.0.0])
-AC_SUBST(LIB_XML_LIBS)
-AC_SUBST(LIB_XML_CFLAGS)
-
-PKG_CHECK_MODULES(GOBJ, [gobject-2.0 >= 2.0.0])
-AC_SUBST(GOBJ_LIBS)
-AC_SUBST(GOBJ_CFLAGS)
-
-PKG_CHECK_MODULES(GMODULE, [gmodule-2.0 >= 2.0.0])	
-AC_SUBST(GMODULE_LIBS)
-AC_SUBST(GMODULE_CFLAGS)
-
-PKG_CHECK_MODULES(ATK, [atk >= 1.17.0])
-AC_SUBST(ATK_LIBS)
-AC_SUBST(ATK_CFLAGS)
 AC_ARG_ENABLE(debug,
 	AC_HELP_STRING([--enable-debug],
 		[Use 'DEBUG' Configuration [default=YES]]),

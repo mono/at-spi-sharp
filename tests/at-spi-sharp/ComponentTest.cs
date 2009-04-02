@@ -26,18 +26,21 @@
 using System;
 using NDesk.DBus;
 using NUnit.Framework;
-using org.freedesktop.atspi;
+using Atspi;
 
 namespace AtSpiTest
 {
 	[TestFixture]
 	public class ComponentTest : Base
 	{
-			Accessible frame = null;
+		Accessible frame = null;
+		Accessible pushButton = null;
 
 		public ComponentTest ()
 		{
 			frame = GetFrame ("gtkbutton.py");
+			pushButton = FindByRole (frame, Role.PushButton, true);
+			Assert.IsNotNull (pushButton, "Find pushButton");
 		}
 
 		#region Test
@@ -56,8 +59,6 @@ namespace AtSpiTest
 			Assert.IsTrue (screenExtents.X > windowExtents.X, "GetExtents: X should be greater with CoordType.Screen");
 			Assert.IsTrue (screenExtents.Y > windowExtents.Y, "GetExtents: Y should be greater with CoordType.Screen");
 
-			Accessible pushButton = FindByRole (frame, Role.PushButton);
-			Assert.IsNotNull (pushButton, "Find pushButton");
 			BoundingBox buttonExtents;
 			buttonExtents = pushButton.QueryComponent().GetExtents (CoordType.Screen);
 			Assert.IsTrue (buttonExtents.X > screenExtents.X, "Button X > frame X");
@@ -81,8 +82,6 @@ namespace AtSpiTest
 		public void GetAccessibleAtPoint ()
 		{
 			Component component = frame.QueryComponent ();
-			Accessible pushButton = FindByRole (frame, Role.PushButton);
-			Assert.IsNotNull (pushButton, "Find pushButton");
 			BoundingBox buttonExtents;
 			buttonExtents = pushButton.QueryComponent().GetExtents (CoordType.Screen);
 			Accessible accessibleResult = component.GetAccessibleAtPoint (buttonExtents.X, buttonExtents.Y, CoordType.Screen);
@@ -93,7 +92,6 @@ namespace AtSpiTest
 		public void GetPositionAndSize ()
 		{
 			int x, y;
-			Accessible pushButton = FindByRole (frame, Role.PushButton);
 			Component component = pushButton.QueryComponent ();
 			BoundingBox buttonExtents;
 			buttonExtents = component.GetExtents (CoordType.Screen);
@@ -112,10 +110,12 @@ namespace AtSpiTest
 			// just make sure we don't crash
 			Component component = frame.QueryComponent ();
 			ComponentLayer layer = component.Layer;
+			Assert.AreEqual (ComponentLayer.Window, layer, "Layer");
 			short MDIZOrder = component.MDIZOrder;
+			Assert.AreEqual (-1, MDIZOrder, "MDIZOrder");
 			double alpha = component.Alpha;
+			Assert.AreEqual (1, alpha, "Alpha");
 			component.GrabFocus ();
-Console.WriteLine ("dbg: " + layer + ": " + MDIZOrder + ", " + alpha);
 		}
 #endregion
 	}
