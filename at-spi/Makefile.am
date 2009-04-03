@@ -51,7 +51,8 @@ FILES =  \
 	Registry.cs \
 	Role.cs \
 	StateSet.cs \
-	StateType.cs
+	StateType.cs \
+	Value.cs
 
 DATA_FILES = 
 

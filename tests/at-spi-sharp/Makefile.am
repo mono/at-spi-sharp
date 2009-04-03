@@ -54,7 +54,8 @@ FILES =  \
 	AssemblyInfo.cs \
 	ActionTest.cs \
 	Base.cs \
-	ComponentTest.cs
+	ComponentTest.cs \
+	ValueTest.cs
 
 DATA_FILES = 
 

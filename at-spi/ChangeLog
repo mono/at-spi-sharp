@@ -1,0 +1,5 @@
+2009-04-03  Mike Gorse  <mgorse@novell.com>
+
+	* Makefile.am, Accessible.cs, Value.cs: Add Value interface.
+
+	* Action.cs: cosmetic.

@@ -1,0 +1,4 @@
+2009-04-03  Mike Gorse  <mgorse@novell.com>
+
+	* at-spi-sharp/Makefile.am, at-spi-sharp/ValueTest.cs,
+	apps/gtkhscale.py: Add Value test.

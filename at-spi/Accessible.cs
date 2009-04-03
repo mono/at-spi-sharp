@@ -197,6 +197,13 @@ namespace Atspi
 				return new Component (this);
 			return null;
 		}
+
+		public Value QueryValue ()
+		{
+			if ((interfaces & Interfaces.Value) != 0)
+				return new Value (this);
+			return null;
+		}
 	}
 
 	public delegate bool FindPredicate (Accessible a, params object [] args);

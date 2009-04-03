@@ -30,66 +30,43 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	public class Action
+	public class Value
 	{
-		private IAction proxy;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Action";
+		private const string IFACE = "org.freedesktop.atspi.Value";
 
-		public Action (Accessible accessible)
+		public Value (Accessible accessible)
 		{
 			ObjectPath op = new ObjectPath (accessible.path);
-			proxy =Registry.Bus.GetObject<IAction> (accessible.application.name, op);
-			properties =Registry.Bus.GetObject<Properties> (accessible.application.name, op);
+			properties = Registry.Bus.GetObject<Properties> (accessible.application.name, op);
 		}
 
-		public int NActions {
+		public double MinimumValue {
 			get {
-				return (int) properties.Get (IFACE, "nActions");
+				return (double) properties.Get (IFACE, "minimumValue");
 			}
 		}
 
-		public string GetDescription (int index)
-		{
-			return proxy.getDescription (index);
+		public double MaximumValue {
+			get {
+				return (double) properties.Get (IFACE, "maximumValue");
+			}
 		}
 
-		public string GetName (int index)
-		{
-			return proxy.getName (index);
+		public double CurrentValue {
+			get {
+				return (double) properties.Get (IFACE, "currentValue");
+			}
+			set {
+				properties.Set (IFACE, "currentValue", value);
+			}
 		}
 
-		public string GetKeyBinding (int index)
-		{
-			return proxy.getKeyBinding (index);
+		public double MinimumIncrement {
+			get {
+				return (double) properties.Get (IFACE, "minimumIncrement");
+			}
 		}
-
-		public ActionDescription [] Actions {
-			get { return proxy.getActions (); }
-		}
-
-		public bool DoAction (int index)
-		{
-			return proxy.doAction (index);
-		}
-	}
-
-	public struct ActionDescription
-	{
-		public string Name;
-		public string Description;
-		public string KeyBinding;
-	}
-
-	[Interface ("org.freedesktop.atspi.Action")]
-	interface IAction : Introspectable
-		{
-		int nActions { get; }
-		string getDescription (int index);
-		string getName (int index);
-		string getKeyBinding (int index);
-		ActionDescription [] getActions ();
-		bool doAction (int index);
 	}
 }
