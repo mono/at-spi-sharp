@@ -49,7 +49,6 @@ FILES =  \
 	Component.cs \
 	Desktop.cs \
 	EditableText.cs \
-	Helper.cs \
 	Image.cs \
 	Registry.cs \
 	Role.cs \

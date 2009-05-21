@@ -1,4 +1,7 @@
 2009-05-21  Mike Gorse  <mgorse@novell.com>
+	* Makefile.am: Remove Helper.cs.
+
+2009-05-21  Mike Gorse  <mgorse@novell.com>
 
 	* Action.cs: Whitespace.
 
