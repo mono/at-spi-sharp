@@ -55,7 +55,8 @@ FILES =  \
 	ActionTest.cs \
 	Base.cs \
 	ComponentTest.cs \
-	ValueTest.cs
+	ImageTest.cs \
+	TextTest.cs
 
 DATA_FILES = 
 

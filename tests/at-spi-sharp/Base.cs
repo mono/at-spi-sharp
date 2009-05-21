@@ -133,13 +133,18 @@ namespace AtSpiTest
 
 		protected Accessible FindByRole (Accessible accessible, Role role)
 		{
-			return FindByRole (accessible, role, false);
+			return Find (accessible, role, null, false);
 		}
 
 		protected Accessible FindByRole (Accessible accessible, Role role, bool wait)
 		{
+			return Find (accessible, role, null, wait);
+		}
+
+		protected Accessible Find (Accessible accessible, Role role, string name, bool wait)
+		{
 			for (;;) {
-				Accessible ret = Desktop.Instance.FindDescendant (new FindPredicate (CheckRole), role);
+				Accessible ret = Desktop.Instance.FindDescendant (new FindPredicate (Check), role, name);
 				if (ret != null)
 					return ret;
 				if (!wait)
@@ -148,9 +153,10 @@ namespace AtSpiTest
 			}
 		}
 
-		protected bool CheckRole (Accessible accessible, object [] args)
+		protected bool Check (Accessible accessible, object [] args)
 		{
-			return (accessible.Role == (Role)args[0]);
+			return (accessible.Role == (Role)args[0] &&
+				(args [1] == null || accessible.Name == (string)args [1]));
 		}
 
 		protected void Iterate ()

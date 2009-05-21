@@ -30,66 +30,53 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	public class Action
+	public class Image
 	{
-		private IAction proxy;
+		private IImage proxy;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Action";
+		private const string IFACE = "org.freedesktop.atspi.Image";
 
-		public Action (Accessible accessible)
+		public Image (Accessible accessible)
 		{
 			ObjectPath op = new ObjectPath (accessible.path);
-			proxy = Registry.Bus.GetObject<IAction> (accessible.application.name, op);
+			proxy = Registry.Bus.GetObject<IImage> (accessible.application.name, op);
 			properties = Registry.Bus.GetObject<Properties> (accessible.application.name, op);
 		}
 
-		public int NActions {
+		public string Description {
 			get {
-				return (int) properties.Get (IFACE, "nActions");
+				return (string) properties.Get (IFACE, "imageDescription");
 			}
 		}
 
-		public string GetDescription (int index)
-		{
-			return proxy.getDescription (index);
+		public string Locale {
+			get {
+				return (string) properties.Get (IFACE, "imageLocale");
+			}
 		}
 
-		public string GetName (int index)
+		public BoundingBox GetImageExtents (CoordType coordType)
 		{
-			return proxy.getName (index);
+			return proxy.getImageExtents (coordType);
 		}
 
-		public string GetKeyBinding (int index)
+		public void GetPosition (out int x, out int y, CoordType coordType)
 		{
-			return proxy.getKeyBinding (index);
+			proxy.getImagePosition (out x, out y, coordType);
 		}
 
-		public ActionDescription [] Actions {
-			get { return proxy.getActions (); }
-		}
-
-		public bool DoAction (int index)
+		public void GetSize (out int width, out int height)
 		{
-			return proxy.doAction (index);
+			proxy.getImageSize (out width, out height);
 		}
 	}
 
-	public struct ActionDescription
+	[Interface ("org.freedesktop.atspi.Image")]
+	interface IImage : Introspectable
 	{
-		public string Name;
-		public string Description;
-		public string KeyBinding;
-	}
-
-	[Interface ("org.freedesktop.atspi.Action")]
-	interface IAction : Introspectable
-	{
-		int nActions { get; }
-		string getDescription (int index);
-		string getName (int index);
-		string getKeyBinding (int index);
-		ActionDescription [] getActions ();
-		bool doAction (int index);
+		BoundingBox getImageExtents (CoordType coordType);
+		void getImagePosition (out int x, out int y, CoordType coordType);
+		void getImageSize (out int width, out int height);
 	}
 }

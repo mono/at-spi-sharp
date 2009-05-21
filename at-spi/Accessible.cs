@@ -123,11 +123,19 @@ namespace Atspi
 		}
 
 		public Accessible Parent {
-			get { return Parent; }
+			get { return parent; }
 		}
 
 		public IList<Accessible> Children {
 			get { return children; }
+		}
+
+		public int IndexInParent {
+			get {
+				if (parent == null)
+					return -1;
+				return parent.children.IndexOf (this);
+			}
 		}
 
 		public Role Role {
@@ -195,6 +203,27 @@ namespace Atspi
 		{
 			if ((interfaces & Interfaces.Component) != 0)
 				return new Component (this);
+			return null;
+		}
+
+		public EditableText QueryEditableText ()
+		{
+			if ((interfaces & Interfaces.EditableText) != 0)
+				return new EditableText (this);
+			return null;
+		}
+
+		public Image QueryImage ()
+		{
+			if ((interfaces & Interfaces.Image) != 0)
+				return new Image (this);
+			return null;
+		}
+
+		public Text QueryText ()
+		{
+			if ((interfaces & Interfaces.Text) != 0)
+				return new Text (this);
 			return null;
 		}
 

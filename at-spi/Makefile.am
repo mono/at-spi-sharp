@@ -48,10 +48,14 @@ FILES =  \
 	AssemblyInfo.cs \
 	Component.cs \
 	Desktop.cs \
+	EditableText.cs \
+	Helper.cs \
+	Image.cs \
 	Registry.cs \
 	Role.cs \
 	StateSet.cs \
 	StateType.cs \
+	Text.cs \
 	Value.cs
 
 DATA_FILES = 

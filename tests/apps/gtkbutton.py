@@ -85,7 +85,7 @@ class ButtonSample:
         # recommend showing the window last, so it all pops up at once.
 
         self.image = gtk.Image()
-        self.image.set_from_file("%s/samples/opensuse60x38.gif" % uiaqa_path)
+        self.image.set_from_file("%s/apps/opensuse60x38.gif" % uiaqa_path)
         self.image.show()
         # a button to contain the image widget
         self.button3 = gtk.Button()

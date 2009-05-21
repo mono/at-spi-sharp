@@ -116,7 +116,7 @@ namespace Atspi
 		LastDefined
 	}
 
-	public enum CoordType : short
+	public enum CoordType : uint
 	{
 		Screen,
 		Window

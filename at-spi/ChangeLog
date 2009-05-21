@@ -1,3 +1,14 @@
+2009-05-21  Mike Gorse  <mgorse@novell.com>
+
+	* Action.cs: Whitespace.
+
+	* EditableText.cs, image.cs, Text.cs, Accessible.cs, Makefile.am:
+	Added EditableText, Image, and Text bindings.
+
+	* Accessible.cs: Fix Parent, add IndexInParent.
+
+	* Component.cs: Define CoordType as uint to match revised spec.
+
 2009-04-03  Mike Gorse  <mgorse@novell.com>
 
 	* Makefile.am, Accessible.cs, Value.cs: Add Value interface.

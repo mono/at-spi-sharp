@@ -1,3 +1,10 @@
+2009-05-21  Mike Gorse  <mgorse@novell.com>
+
+	* at-spi-sharp/ImageTest.cs, at-spi-sharp/TextTest.cs,
+	at-spi-sharp/Makefile.am: Added Image and Text/EditableText tests.
+
+	* at-spi-sharp/Base.cs: Add Find() to allow searching by name.
+
 2009-04-03  Mike Gorse  <mgorse@novell.com>
 
 	* at-spi-sharp/Makefile.am, at-spi-sharp/ValueTest.cs,
