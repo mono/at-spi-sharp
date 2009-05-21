@@ -1,5 +1,10 @@
 2009-05-21  Mike Gorse  <mgorse@novell.com>
 
+	* at-spi-sharp/SelectionTest.cs, at-spi-sharp/Makefile.am,
+	apps/gtkmenubar.py: Add Selection test.
+
+2009-05-21  Mike Gorse  <mgorse@novell.com>
+
 	* at-spi-sharp/ImageTest.cs, at-spi-sharp/TextTest.cs,
 	at-spi-sharp/Makefile.am: Added Image and Text/EditableText tests.
 

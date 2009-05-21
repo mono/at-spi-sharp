@@ -56,6 +56,7 @@ FILES =  \
 	Base.cs \
 	ComponentTest.cs \
 	ImageTest.cs \
+	SelectionTest.cs \
 	TextTest.cs
 
 DATA_FILES = 

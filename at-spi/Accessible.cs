@@ -220,6 +220,13 @@ namespace Atspi
 			return null;
 		}
 
+		public Selection QuerySelection ()
+		{
+			if ((interfaces & Interfaces.Selection) != 0)
+				return new Selection (this);
+			return null;
+		}
+
 		public Text QueryText ()
 		{
 			if ((interfaces & Interfaces.Text) != 0)

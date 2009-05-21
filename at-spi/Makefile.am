@@ -52,6 +52,7 @@ FILES =  \
 	Image.cs \
 	Registry.cs \
 	Role.cs \
+	Selection.cs \
 	StateSet.cs \
 	StateType.cs \
 	Text.cs \
