@@ -1,0 +1,5 @@
+
+Name: at-spi-sharp Library
+Description: .net binding for at-spi
+Version: @VERSION@
+Libs: -r:@a11ydir@/at-spi-sharp.dll

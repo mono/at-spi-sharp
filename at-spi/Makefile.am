@@ -24,10 +24,11 @@ ASSEMBLY_MDB =
 COMPILE_TARGET = library
 PROJECT_REFERENCES = 
 BUILD_DIR = bin/Release
-
 ATSPI_DLL_MDB=
 
 endif
+
+PACKAGE_FLAG = /package accessibility
 
 AL=al2
 SATELLITE_ASSEMBLY_NAME=.resources.dll

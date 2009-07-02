@@ -81,6 +81,8 @@ AC_SUBST(TOPDIR)
 AC_CONFIG_FILES([
 Makefile
 at-spi/Makefile
+data/Makefile
+data/at-spi-sharp.pc.in
 tests/Makefile
 tests/apps/Makefile
 tests/at-spi-sharp/Makefile
