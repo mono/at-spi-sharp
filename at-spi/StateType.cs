@@ -33,6 +33,7 @@ namespace Atspi
 		Armed,
 		Busy,
 		Checked,
+		Collapsed,
 		Defunct,
 		Editable,
 		Enabled,
@@ -40,6 +41,7 @@ namespace Atspi
 		Expanded,
 		Focusable,
 		Focused,
+	HasToolTip,
 		Horizontal,
 		Iconified,
 		Modal,
@@ -59,14 +61,13 @@ namespace Atspi
 		Visible,
 		ManagesDescendants,
 		Indeterminate,
-		Truncated,
 		Required,
+		Truncated,
+		Animated,
 		InvalidEntry,
 		SupportsAutocompletion,
 		SelectableText,
-		Default,
-		Animated,
-		Visited,
-		LastDefined
+		IsDefault,
+		Visited
 	}
 }

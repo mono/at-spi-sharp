@@ -33,7 +33,7 @@ namespace Atspi
 	public class Accessible
 	{
 		internal string path;
-		//IAccessible proxy;
+		IAccessible proxy;
 		internal Application application;
 		internal List<Accessible> children;
 		private Accessible parent;
@@ -48,7 +48,8 @@ namespace Atspi
 			this.application = application;
 			this.path = path;
 			this.children = new List<Accessible> ();
-			//proxy = Registry.Bus.GetObject<AccessibleInterface> (application.name, new ObjectPath (path));
+			if (application != null)
+				proxy = Registry.Bus.GetObject<IAccessible> (application.name, new ObjectPath (path));
 		}
 
 		internal Accessible (Application application, AccessibleProxy e)
@@ -56,7 +57,7 @@ namespace Atspi
 			this.application = application;
 			this.path = e.path;
 			this.children = new List<Accessible> ();
-			//proxy = Registry.Bus.GetObject<AccessibleInterface> (application.name, new ObjectPath (path));
+			proxy = Registry.Bus.GetObject<IAccessible> (application.name, new ObjectPath (path));
 			Update (e);
 		}
 
@@ -144,6 +145,18 @@ namespace Atspi
 
 		public StateSet StateSet {
 			get { return stateSet; }
+		}
+
+		public Relation [] RelationSet {
+			get {
+				if (proxy == null)
+					return new Relation [0];
+				DBusRelation [] drels = proxy.getRelationSet ();
+				Relation [] set = new Relation [drels.Length];
+				for (int i = 0; i < drels.Length; i++)
+					set [i] = new Relation (application, drels [i]);
+				return set;
+			}
 		}
 
 		public string Name {
@@ -257,5 +270,11 @@ namespace Atspi
 		Table = 0x0080,
 		Text = 0x0100,
 		Value = 0x0200
+	}
+
+	[Interface ("org.freedesktop.atspi.Accessible")]
+	interface IAccessible : Introspectable
+	{
+		DBusRelation [] getRelationSet ();
 	}
 }

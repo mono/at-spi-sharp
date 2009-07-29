@@ -30,31 +30,57 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	public class StateSet
+	public enum RelationType : uint
 	{
-		private ulong states;
+		Null,
+		LabelFor,
+		LabelledBy,
+		ControllerFor,
+		ControlledBy,
+		MemberOf,
+		TooltipFor,
+		NodeChildOf,
+		Extended,
+		FlowsTo,
+		FlowsFrom,
+		SubWindowOf,
+		Embeds,
+		EmbeddedBy,
+		PopupFor,
+		ParentWindowOf,
+		DescriptionFor,
+		DescribedBy
+	}
 
-		public StateSet (int [] states)
-		{
-			if (states.Length != 2)
-				throw new ArgumentException ("Expecting int [2]");
-			this.states = (ulong)(states [1] << (sizeof (int) * 8)) | (ulong)states [0];
+	public class Relation
+	{
+		private RelationType type;
+		private Accessible [] targets;
+
+		public RelationType Type {
+			get {
+				return type;
+			}
 		}
 
-		public bool ContainsState (StateType state)
-		{
-			int n = (int)state;
-			if (n < 0 || n >= (int)Enum.GetValues (typeof (StateType)).Length)
-				throw new ArgumentOutOfRangeException ();
-			return (states & ((ulong)1 << n)) != 0? true: false;
+		public Accessible [] Targets {
+			get {
+				return targets;
+			}
 		}
 
-		public void AddState (StateType state)
+		internal Relation (Application application, DBusRelation rel)
 		{
-			int n = (int)state;
-			if (n < 0 || n >= (int)Enum.GetValues (typeof (StateType)).Length)
-				throw new ArgumentOutOfRangeException ();
-			states |= ((ulong)1 << n);
+			type = rel.type;
+			targets = new Accessible [rel.targets.Length];
+			for (int i = 0; i < rel.targets.Length; i++)
+				targets [i] = application.GetElement (rel.targets [i], false);
 		}
+	}
+
+	struct DBusRelation
+	{
+		public RelationType type;
+		public string [] targets;
 	}
 }

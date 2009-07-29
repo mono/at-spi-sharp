@@ -52,6 +52,7 @@ FILES =  \
 	EditableText.cs \
 	Image.cs \
 	Registry.cs \
+	RelationSet.cs \
 	Role.cs \
 	Selection.cs \
 	StateSet.cs \

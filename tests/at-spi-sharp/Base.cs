@@ -26,9 +26,7 @@
 
 
 using System;
-using System.Reflection;
-using System.Threading;
-using Mono.Unix;
+using System.Collections.Generic;
 using NDesk.DBus;
 using NUnit.Framework;
 using Atspi;
@@ -68,7 +66,8 @@ namespace AtSpiTest
 		[TestFixtureTearDown]
 		public virtual void TearDown ()
 		{
-			p.Kill ();
+			if (p != null)
+				p.Kill ();
 			p = null;
 			Registry.Terminate ();
 			// give the registry daemon time to process the signal
@@ -163,8 +162,41 @@ namespace AtSpiTest
 		{
 			Registry.Bus.Iterate ();
 		}
-		#endregion
 		
+		public static void States (Accessible accessible, params StateType [] expected)
+		{
+			List <StateType> expectedStates = new List <StateType> (expected);
+			List <StateType> missingStates = new List <StateType> ();
+			List <StateType> superfluousStates = new List <StateType> ();
+			
+			StateSet stateSet = accessible.StateSet;
+			foreach (StateType state in Enum.GetValues (typeof (StateType))) {
+				if (expectedStates.Contains (state) && 
+				    (!(stateSet.ContainsState (state))))
+					missingStates.Add (state);
+				else if ((!expectedStates.Contains (state)) && 
+					     (stateSet.ContainsState (state)))
+					superfluousStates.Add (state);
+			}
+
+			string missingStatesMsg = string.Empty;
+			string superfluousStatesMsg = string.Empty;
+
+			if (missingStates.Count != 0) {
+				missingStatesMsg = "Missing states: ";
+				foreach (StateType state in missingStates)
+					missingStatesMsg += state.ToString () + ",";
+			}
+			if (superfluousStates.Count != 0) {
+				superfluousStatesMsg = "Superfluous states: ";
+				foreach (StateType state in superfluousStates)
+					superfluousStatesMsg += state.ToString () + ",";
+			}
+			Assert.IsTrue ((missingStates.Count == 0) && (superfluousStates.Count == 0),
+				missingStatesMsg + " .. " + superfluousStatesMsg);
+		}
+		#endregion
+
 		#region Abstract Members
 	
 		#endregion

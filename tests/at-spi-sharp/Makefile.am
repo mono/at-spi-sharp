@@ -52,6 +52,7 @@ all: $(ASSEMBLY) $(PROGRAMFILES)
 
 FILES =  \
 	AssemblyInfo.cs \
+	AccessibleTest.cs \
 	ActionTest.cs \
 	Base.cs \
 	ComponentTest.cs \
