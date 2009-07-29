@@ -1,6 +1,11 @@
+2009-07-29  Stephen Shaw  <sshaw@decriptor.com>
+
+	* Makefile.am: Checked for ENABLE_TESTS
+
+
 2009-07-01  Mike Gorse  <mgorse@novell.com>
 
-						* Makefile.include: Update to support PACKAGE_FLAG.
+	* Makefile.include: Update to support PACKAGE_FLAG.
 	* mkinstalldirs: Added.
 	* configure.ac, Makefile.am, data/at-spi-sharp.pc.in.in,
 	data/Makefile.am: Added .pc file.
