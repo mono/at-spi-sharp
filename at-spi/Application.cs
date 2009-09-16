@@ -30,21 +30,31 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	internal class Application
+	public class Application
 	{
 		internal string name;
 		private ITree proxy;
+		private Properties properties;
 		private Dictionary<string, Accessible> accessibles;
+
+		private const string IFACE = "org.freedesktop.atspi.Application";
 
 		internal Application (string name)
 		{
 			this.name = name;
 			proxy = Registry.Bus.GetObject<ITree> (name, new ObjectPath ("/org/freedesktop/atspi/tree"));
 			accessibles = new Dictionary<string, Accessible> ();
-			AccessibleProxy [] elements = proxy.getTree ();
+			accessibles ["/org/freedesktop/atspi/accessible/null"] = null;
 			proxy.updateAccessible += OnUpdateAccessible;
 			proxy.removeAccessible += OnRemoveAccessible;
+			properties = Registry.Bus.GetObject<Properties> (name, proxy.getRoot ());
+			AccessibleProxy [] elements = proxy.getTree ();
 			AddAccessibles (elements);
+		}
+
+		~Application ()
+		{
+			proxy.updateAccessible -= OnUpdateAccessible;
 		}
 
 		void AddAccessibles (AccessibleProxy [] elements)
@@ -58,7 +68,7 @@ namespace Atspi
 			Accessible obj = GetElement (e.path, false);
 			if (obj == null) {
 				obj = new Accessible (this, e);
-				accessibles [e.path] = obj;
+				accessibles [e.path.ToString ()] = obj;
 			} else
 				obj.Update (e);
 			return obj;
@@ -91,7 +101,12 @@ namespace Atspi
 
 		internal Accessible GetElement (ObjectPath op)
 		{
-			return GetElement (op.ToString (), false);
+			return GetElement (op, false);
+		}
+
+		internal Accessible GetElement (ObjectPath op, bool create)
+		{
+			return GetElement (op.ToString (), create);
 		}
 
 		internal string Name {
@@ -102,6 +117,12 @@ namespace Atspi
 		{
 			ObjectPath o = proxy.getRoot ();
 			return GetElement (o);
+		}
+
+		public string ToolkitName {
+			get {
+				return (string) properties.Get (IFACE, "toolkitName");
+			}
 		}
 	}
 
@@ -119,13 +140,13 @@ namespace Atspi
 
 	struct AccessibleProxy
 	{
-		public string path;
-		public string parent;
-		public string [] children;
+		public ObjectPath path;
+		public ObjectPath parent;
+		public ObjectPath [] children;
 		public string [] interfaces;
 		public string name;
 		public uint role;
 		public string description;
-		public int [] states;	// 2 32-bit flags
+		public uint [] states;	// 2 32-bit flags
 	}
 }

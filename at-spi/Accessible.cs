@@ -55,9 +55,9 @@ namespace Atspi
 		internal Accessible (Application application, AccessibleProxy e)
 		{
 			this.application = application;
-			this.path = e.path;
+			this.path = e.path.ToString ();
 			this.children = new List<Accessible> ();
-			proxy = Registry.Bus.GetObject<IAccessible> (application.name, new ObjectPath (path));
+			proxy = Registry.Bus.GetObject<IAccessible> (application.name, e.path);
 			Update (e);
 		}
 
@@ -79,7 +79,8 @@ namespace Atspi
 			foreach (string iface in e.interfaces)
 				AddInterface (iface);
 			stateSet = new StateSet (e.states);
-			foreach (string path in e.children)
+			children.Clear ();
+			foreach (ObjectPath path in e.children)
 				children.Add (application.GetElement (path, true));
 		}
 
@@ -96,8 +97,12 @@ namespace Atspi
 				// All objects should support this
 			} else if (name == "org.freedesktop.atspi.Action") {
 				flag = Interfaces.Action;
+			} else if (name == "org.freedesktop.atspi.Collection") {
+				// All objects should support this
 			} else if (name == "org.freedesktop.atspi.Component") {
 				flag = Interfaces.Component;
+			} else if (name == "org.freedesktop.atspi.Document") {
+				flag = Interfaces.Document;
 			} else if (name == "org.freedesktop.atspi.EditableText") {
 				flag = Interfaces.EditableText;
 			} else if (name == "org.freedesktop.atspi.Hypertext") {
@@ -121,6 +126,12 @@ namespace Atspi
 				interfaces |= flag;
 			else
 				interfaces &= ~flag;
+		}
+
+		public Application Application {
+			get {
+				return application;
+			}
 		}
 
 		public Accessible Parent {
@@ -219,10 +230,24 @@ namespace Atspi
 			return null;
 		}
 
+		public Document QueryDocument ()
+		{
+			if ((interfaces & Interfaces.Document) != 0)
+				return new Document (this);
+			return null;
+		}
+
 		public EditableText QueryEditableText ()
 		{
 			if ((interfaces & Interfaces.EditableText) != 0)
 				return new EditableText (this);
+			return null;
+		}
+
+		public Hypertext QueryHypertext ()
+		{
+			if ((interfaces & Interfaces.Hypertext) != 0)
+				return new Hypertext (this);
 			return null;
 		}
 
@@ -237,6 +262,13 @@ namespace Atspi
 		{
 			if ((interfaces & Interfaces.Selection) != 0)
 				return new Selection (this);
+			return null;
+		}
+
+		public Table QueryTable ()
+		{
+			if ((interfaces & Interfaces.Table) != 0)
+				return new Table (this);
 			return null;
 		}
 
@@ -262,14 +294,15 @@ namespace Atspi
 	{
 		Action = 0x0001,
 		Component = 0x0002,
-		EditableText = 0x0004,
-		Hypertext = 0x0008,
-		Image = 0x0010,
-		Selection = 0x0020,
-		StreamableContent = 0x0040,
-		Table = 0x0080,
-		Text = 0x0100,
-		Value = 0x0200
+		Document = 0x0004,
+		EditableText = 0x0008,
+		Hypertext = 0x0010,
+		Image = 0x0020,
+		Selection = 0x0040,
+		StreamableContent = 0x0080,
+		Table = 0x0100,
+		Text = 0x0200,
+		Value = 0x0400
 	}
 
 	[Interface ("org.freedesktop.atspi.Accessible")]

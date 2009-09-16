@@ -56,8 +56,11 @@ FILES =  \
 	ActionTest.cs \
 	Base.cs \
 	ComponentTest.cs \
+	DocumentTest.cs \
+	HypertextTest.cs \
 	ImageTest.cs \
 	SelectionTest.cs \
+	TableTest.cs \
 	TextTest.cs
 
 DATA_FILES = 

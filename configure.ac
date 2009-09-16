@@ -51,6 +51,15 @@ AC_SUBST(NUNIT_PATH)
 
 PKG_CHECK_MODULES([NDESK_DBUS], [ndesk-dbus-1.0 ndesk-dbus-glib-1.0])
 
+# Needed for tests
+PKG_CHECK_MODULES([GLIB_SHARP_20], [glib-sharp-2.0 >= 2.12.8], glib_sharp=yes, glib_sharp=no)
+PKG_CHECK_MODULES([GTK_SHARP_20], [gtk-sharp-2.0 >= 2.12.8], gtk_sharp=yes, gtk_sharp=no)
+
+if test "x$glib_sharp" = "xno" -o "x$gtk_sharp" = "xno"; then
+	AC_MSG_WARN([Could not find glib-sharp >= 2.12.8 or gtk-sharp >= 2.0; unit tests will not be available.])
+	enable_tests=no
+fi
+
 AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = "xyes")
 
 AC_ARG_ENABLE(debug,

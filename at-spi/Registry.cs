@@ -41,7 +41,6 @@ namespace Atspi
 
 		private volatile static Registry instance;
 		private Bus bus;
-		private Thread busThread;
 		private RegistryInterface proxy;
 		private List<Application> applications;
 		private Desktop desktop;
@@ -52,13 +51,13 @@ namespace Atspi
 			Initialize (false);
 		}
 
-		public static void Initialize (bool glib)
+		public static void Initialize (bool startLoop)
 		{
 			lock (sync) {
 				if (instance != null)
 					return;
 
-				new Registry (glib);
+				new Registry (startLoop);
 			}
 		}
 
@@ -71,7 +70,7 @@ namespace Atspi
 
 		public static Bus Bus { get { return Instance.bus; } }
 
-		internal Registry (bool glib)
+		internal Registry (bool startLoop)
 		{
 			lock (sync) {
 				if (instance != null)
@@ -85,13 +84,7 @@ namespace Atspi
 			proxy = bus.GetObject<RegistryInterface> ("org.freedesktop.atspi.Registry", new ObjectPath ("/org/freedesktop/atspi/registry"));
 			proxy.updateApplications += OnUpdateApplications;
 
-			if (glib)
-				BusG.Init ();
-			else {
-				busThread = new Thread (new ThreadStart (Iterate));
-				busThread.IsBackground = true;
-				busThread.Start ();
-			}
+			BusG.Init ();
 
 			string [] appNames = proxy.getApplications ();
 			foreach (string app in appNames) {
@@ -101,20 +94,13 @@ namespace Atspi
 			}
 		}
 
-		public static Desktop Desktop { get { return Instance.desktop; } }
+		public static Desktop Desktop {
+			get { return Instance.desktop; }
+		}
 
 		internal void TerminateInternal ()
 		{
-			if (busThread != null) {
-				busThread.Abort ();
-				busThread = null;
-			}
-		}
-
-		private void Iterate ()
-		{
-			while (true)
-				bus.Iterate ();
+			proxy.updateApplications -= OnUpdateApplications;
 		}
 
 		void OnUpdateApplications (int added, string name)

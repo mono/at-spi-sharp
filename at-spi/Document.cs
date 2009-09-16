@@ -30,98 +30,37 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	// TODO: Derive this from the at-spi xml?
-	public enum Role
+	public class Document
 	{
-		Invalid,
-		AccelLabel,
-		Alert,
-		Animation,
-		Arrow,
-		Calendar,
-		Canvas,
-		CheckBox,
-		CheckMenuItem,
-		ColorChooser,
-		ColumnHeader,
-		ComboBox,
-		DateEditor,
-		DesktopIcon,
-		DesktopFrame,
-		Dial,
-		Dialog,
-		DirectoryPane,
-		DrawingArea,
-		FileChooser,
-		Filler,
-		FocusTraversable,	// not in atk
-		FontChooser,
-		Frame,
-		GlassPane,
-		HtmlContainer,
-		Icon,
-		Image,
-		InternalFrame,
-		Label,
-		LayeredPane,
-		List,
-		ListItem,
-		Menu,
-		MenuBar,
-		MenuItem,
-		OptionPane,
-		PageTab,
-		PageTabList,
-		Panel,
-		PasswordText,
-		PopupMenu,
-		ProgressBar,
-		PushButton,
-		RadioButton,
-		RadioMenuItem,
-		RootPane,
-		RowHeader,
-		ScrollBar,
-		ScrollPane,
-		Separator,
-		Slider,
-		SpinButton,
-		SplitPane,
-		Statusbar,
-		Table,
-		TableCell,
-		TableColumnHeader,
-		TableRowHeader,
-		TearOffMenuItem,
-		Terminal,
-		Text,
-		ToggleButton,
-		ToolBar,
-		ToolTip,
-		Tree,
-		TreeTable,
-		Unknown,
-		Viewport,
-		Extended,	// not in atk
-		Window,
-		Header,
-		Footer,
-		Paragraph,
-		Ruler,
-		Application,
-		Autocomplete,
-		Editbar,
-		Embedded,
-		Entry,
-		Chart,
-		Caption,
-		DocumentFrame,
-		Heading,
-		Page,
-		Section,
-		RedundantObject,
-		Form,
-		Link,
-		InputMethodWindow
+		private IDocument proxy;
+
+		private const string IFACE = "org.freedesktop.atspi.Document";
+
+		public Document (Accessible accessible)
+		{
+			ObjectPath op = new ObjectPath (accessible.path);
+			proxy = Registry.Bus.GetObject<IDocument> (accessible.application.name, op);
+		}
+
+		public string Locale {
+			get { return proxy.getLocale (); }
+		}
+
+		public string GetAttributeValue (string attributeName)
+		{
+			return proxy.getAttributeValue (attributeName);
+		}
+
+		public IDictionary<string, string> Attributes {
+			get { return proxy.getAttributes (); }
+		}
+	}
+
+	[Interface ("org.freedesktop.atspi.Document")]
+	interface IDocument : Introspectable
+	{
+		string getLocale ();
+		string getAttributeValue (string attributename);
+		IDictionary<string, string> getAttributes ();
 	}
 }

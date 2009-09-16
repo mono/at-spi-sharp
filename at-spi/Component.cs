@@ -112,8 +112,7 @@ namespace Atspi
 		MDI,
 		PopUp,
 		Overlay,
-		Window,
-		LastDefined
+		Window
 	}
 
 	public enum CoordType : uint

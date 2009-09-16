@@ -30,98 +30,45 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	// TODO: Derive this from the at-spi xml?
-	public enum Role
+	public class Hypertext
 	{
-		Invalid,
-		AccelLabel,
-		Alert,
-		Animation,
-		Arrow,
-		Calendar,
-		Canvas,
-		CheckBox,
-		CheckMenuItem,
-		ColorChooser,
-		ColumnHeader,
-		ComboBox,
-		DateEditor,
-		DesktopIcon,
-		DesktopFrame,
-		Dial,
-		Dialog,
-		DirectoryPane,
-		DrawingArea,
-		FileChooser,
-		Filler,
-		FocusTraversable,	// not in atk
-		FontChooser,
-		Frame,
-		GlassPane,
-		HtmlContainer,
-		Icon,
-		Image,
-		InternalFrame,
-		Label,
-		LayeredPane,
-		List,
-		ListItem,
-		Menu,
-		MenuBar,
-		MenuItem,
-		OptionPane,
-		PageTab,
-		PageTabList,
-		Panel,
-		PasswordText,
-		PopupMenu,
-		ProgressBar,
-		PushButton,
-		RadioButton,
-		RadioMenuItem,
-		RootPane,
-		RowHeader,
-		ScrollBar,
-		ScrollPane,
-		Separator,
-		Slider,
-		SpinButton,
-		SplitPane,
-		Statusbar,
-		Table,
-		TableCell,
-		TableColumnHeader,
-		TableRowHeader,
-		TearOffMenuItem,
-		Terminal,
-		Text,
-		ToggleButton,
-		ToolBar,
-		ToolTip,
-		Tree,
-		TreeTable,
-		Unknown,
-		Viewport,
-		Extended,	// not in atk
-		Window,
-		Header,
-		Footer,
-		Paragraph,
-		Ruler,
-		Application,
-		Autocomplete,
-		Editbar,
-		Embedded,
-		Entry,
-		Chart,
-		Caption,
-		DocumentFrame,
-		Heading,
-		Page,
-		Section,
-		RedundantObject,
-		Form,
-		Link,
-		InputMethodWindow
+		private Accessible accessible;
+		private IHypertext proxy;
+
+		private const string IFACE = "org.freedesktop.atspi.Hypertext";
+
+		public Hypertext (Accessible accessible)
+		{
+			this.accessible = accessible;
+			ObjectPath op = new ObjectPath (accessible.path);
+			proxy = Registry.Bus.GetObject<IHypertext> (accessible.application.name, op);
+		}
+
+		public int NLinks {
+			get {
+				return proxy.getNLinks ();
+			}
+		}
+
+		public Hyperlink GetLink (int linkIndex)
+		{
+			string path = proxy.getLink (linkIndex);
+			if (path == "/org/freedesktop/atspi/accessible/null")
+				return null;
+			return new Hyperlink (accessible, path);
+		}
+
+		public int GetLinkIndex (int characterIndex)
+		{
+			return proxy.getLinkIndex (characterIndex);
+		}
+	}
+
+	[Interface ("org.freedesktop.atspi.Hypertext")]
+	interface IHypertext : Introspectable
+	{
+		int getNLinks ();
+		string getLink (int linkIndex);
+		int getLinkIndex (int characterIndex);
 	}
 }

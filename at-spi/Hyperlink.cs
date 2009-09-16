@@ -30,98 +30,61 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	// TODO: Derive this from the at-spi xml?
-	public enum Role
+	public class Hyperlink
 	{
-		Invalid,
-		AccelLabel,
-		Alert,
-		Animation,
-		Arrow,
-		Calendar,
-		Canvas,
-		CheckBox,
-		CheckMenuItem,
-		ColorChooser,
-		ColumnHeader,
-		ComboBox,
-		DateEditor,
-		DesktopIcon,
-		DesktopFrame,
-		Dial,
-		Dialog,
-		DirectoryPane,
-		DrawingArea,
-		FileChooser,
-		Filler,
-		FocusTraversable,	// not in atk
-		FontChooser,
-		Frame,
-		GlassPane,
-		HtmlContainer,
-		Icon,
-		Image,
-		InternalFrame,
-		Label,
-		LayeredPane,
-		List,
-		ListItem,
-		Menu,
-		MenuBar,
-		MenuItem,
-		OptionPane,
-		PageTab,
-		PageTabList,
-		Panel,
-		PasswordText,
-		PopupMenu,
-		ProgressBar,
-		PushButton,
-		RadioButton,
-		RadioMenuItem,
-		RootPane,
-		RowHeader,
-		ScrollBar,
-		ScrollPane,
-		Separator,
-		Slider,
-		SpinButton,
-		SplitPane,
-		Statusbar,
-		Table,
-		TableCell,
-		TableColumnHeader,
-		TableRowHeader,
-		TearOffMenuItem,
-		Terminal,
-		Text,
-		ToggleButton,
-		ToolBar,
-		ToolTip,
-		Tree,
-		TreeTable,
-		Unknown,
-		Viewport,
-		Extended,	// not in atk
-		Window,
-		Header,
-		Footer,
-		Paragraph,
-		Ruler,
-		Application,
-		Autocomplete,
-		Editbar,
-		Embedded,
-		Entry,
-		Chart,
-		Caption,
-		DocumentFrame,
-		Heading,
-		Page,
-		Section,
-		RedundantObject,
-		Form,
-		Link,
-		InputMethodWindow
+		private IHyperlink proxy;
+		private Application application;
+		private Properties properties;
+
+		private const string IFACE = "org.freedesktop.atspi.Hyperlink";
+
+		public Hyperlink (Accessible accessible, string path)
+		{
+			application = accessible.application;
+			ObjectPath op = new ObjectPath (path);
+			proxy = Registry.Bus.GetObject<IHyperlink> (application.name, op);
+			properties = Registry.Bus.GetObject<Properties> (application.name, op);
+		}
+
+		public int NAnchors {
+			get {
+				return (int) properties.Get (IFACE, "nAnchors");
+			}
+		}
+
+		public int StartIndex {
+			get {
+				return (int) properties.Get (IFACE, "startIndex");
+			}
+		}
+
+		public int EndIndex {
+			get {
+				return (int) properties.Get (IFACE, "endIndex");
+			}
+		}
+
+		public Accessible GetObject (int index)
+		{
+			ObjectPath path = proxy.getObject (index);
+			Accessible ret = application.GetElement (path, true);
+			// hack -- we get an object which we may not have
+			// received an event for.
+			if (ret != null)
+				ret.AddInterface ("org.freedesktop.atspi.Action");
+			return ret;
+		}
+
+		public string GetURI (int i)
+		{
+			return proxy.getURI (i);
+		}
+	}
+
+	[Interface ("org.freedesktop.atspi.Hyperlink")]
+	interface IHyperlink : Introspectable
+	{
+			ObjectPath getObject (int index);
+			string getURI (int i);
 	}
 }

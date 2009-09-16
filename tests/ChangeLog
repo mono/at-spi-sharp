@@ -1,3 +1,14 @@
+2009-09-16  Mike Gorse  <mgorse@novell.com>
+
+	* apps/Document.cs, apps/gtktreeview.py, apps/Makefile.am,
+	at-spi-sharp/HypertextTest.cs, at-spi-sharp/DocumentTest.cs,
+	at-spi-sharp/TableTest.cs, at-spi-sharp/Makefile.am: Add several tests.
+
+	* at-spi-sharp/Base.cs: Check that StartApplication isn't called when
+	we already have a process.
+	Support loading a sample .exe.
+	ContainsState -. Contains.
+
 2009-07-29  Mike Gorse  <mgorse@novell.com>
 
 	* at-spi-sharp/Accessibletest.cs, at-spi-sharp/Makefile.am,

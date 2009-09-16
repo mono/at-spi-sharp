@@ -1,3 +1,32 @@
+2009-09-16  Mike Gorse  <mgorse@novell.com>
+
+	* Document.cs, Hyperlink.cs, Hypertext.cs, Table.cs, Accessible.cs,
+	Makefile.am: Add several interface bindings.
+
+	* StateSet.cs: int -> uint for constructor to match dbus spec.
+	ContainsState -> Contains to match at-spi spec.
+
+	* Accessible.cs: Clear children before re-adding from an update.
+	Don't treat Collection as an unknown interface.
+
+	* Role.cs: Fix order of some roles.
+
+	* Role.cs, Component.cs: Remove LastDefined.
+
+	* Accessible.cs, Application.cs: make Application public and bind
+	ToolkitName to it.
+
+	* Application.cs: Bind null object.
+	Add destructor to remove event handler.
+
+	* Accessible.cs, Application.cs: Use ObjectPaths instead of strings
+	in some places.
+
+	* Registry.cs: glib -> startLoop, and iterate in a separate thread if
+	startLoop is true.
+
+	* registry.cs: Remove UpdateApplications event handler when terminating.
+
 2009-07-29  Mike Gorse  <mgorse@novell.com>
 
 	* StateType.cs, StateSet.cs: Various fixes.

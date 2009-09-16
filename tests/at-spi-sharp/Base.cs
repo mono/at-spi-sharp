@@ -52,11 +52,16 @@ namespace AtSpiTest
 
 		public virtual void StartApplication (string name)
 		{
-			if (p != null)
-				return;
+			if (p != null) {
+				Console.WriteLine ("WARNING: StartApplication called when we already have a process: killing and moving on");
+				TearDown ();
+			}
 			Registry.Initialize (true);
 			p = new System.Diagnostics.Process ();
-			p.StartInfo.FileName = "python";
+			// TODO: It would be better to look at the first line
+			// of the file, rather than infer from the name.
+			// How to do this?
+			p.StartInfo.FileName = (name.Contains (".exe")? "mono": "python");
 			p.StartInfo.Arguments = name;
 			p.StartInfo.UseShellExecute = false;
 			p.StartInfo.CreateNoWindow = true;
@@ -132,7 +137,7 @@ namespace AtSpiTest
 
 		protected Accessible FindByRole (Accessible accessible, Role role)
 		{
-			return Find (accessible, role, null, false);
+			return FindByRole (accessible, role, false);
 		}
 
 		protected Accessible FindByRole (Accessible accessible, Role role, bool wait)
@@ -172,10 +177,10 @@ namespace AtSpiTest
 			StateSet stateSet = accessible.StateSet;
 			foreach (StateType state in Enum.GetValues (typeof (StateType))) {
 				if (expectedStates.Contains (state) && 
-				    (!(stateSet.ContainsState (state))))
+				    (!(stateSet.Contains (state))))
 					missingStates.Add (state);
 				else if ((!expectedStates.Contains (state)) && 
-					     (stateSet.ContainsState (state)))
+					     (stateSet.Contains (state)))
 					superfluousStates.Add (state);
 			}
 

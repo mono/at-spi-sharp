@@ -19,42 +19,44 @@
 // 
 // Copyright (c) 2009 Novell, Inc. (http://www.novell.com) 
 // 
-// Authors:
-//      Mike Gorse <mgorse@novell.com>
+// Authors: 
+//	Mike Gorse <mgorse@novell.com>
 // 
 
 using System;
 using System.Collections.Generic;
 using NDesk.DBus;
-using org.freedesktop.DBus;
+using NUnit.Framework;
+using Atspi;
 
-namespace Atspi
+namespace AtSpiTest
 {
-	public class StateSet
+	[TestFixture]
+	public class DocumentTest : Base
 	{
-		private ulong states;
+		Accessible frame = null;
+		Document document = null;
 
-		public StateSet (uint [] states)
+		public DocumentTest ()
 		{
-			if (states.Length != 2)
-				throw new ArgumentException ("Expecting int [2]");
-			this.states = (ulong)(states [1] << (sizeof (int) * 8)) | (ulong)states [0];
+			frame = GetFrame ("DocumentTest.exe", "DocumentTest");
+
+			document = frame.QueryDocument ();
+			Assert.IsNotNull (document, "frame.QueryDocument");
 		}
 
-		public bool Contains (StateType state)
-		{
-			int n = (int)state;
-			if (n < 0 || n >= (int)Enum.GetValues (typeof (StateType)).Length)
-				throw new ArgumentOutOfRangeException ();
-			return (states & ((ulong)1 << n)) != 0? true: false;
-		}
+		#region Test
 
-		public void AddState (StateType state)
+		[Test]
+		public void Document ()
 		{
-			int n = (int)state;
-			if (n < 0 || n >= (int)Enum.GetValues (typeof (StateType)).Length)
-				throw new ArgumentOutOfRangeException ();
-			states |= ((ulong)1 << n);
+			Assert.AreEqual ("en", document.Locale, "Document Locale");
+			Assert.AreEqual ("2.0", document.GetAttributeValue ("left-margin"), "Document GetAttributeValue");
+			Assert.AreEqual (string.Empty, document.GetAttributeValue ("undefined"), "Document GetAttributeValue for an undefined attribute");
+			IDictionary<string, string> attributes = document.Attributes;
+			Assert.AreEqual (1, attributes.Count, "Document Attributes.Count");
+			Assert.AreEqual ("2.0", attributes ["left-margin"], "Document Attributes[\"left-margin\"]");
 		}
+#endregion
 	}
 }

@@ -49,7 +49,10 @@ FILES =  \
 	AssemblyInfo.cs \
 	Component.cs \
 	Desktop.cs \
+	Document.cs \
 	EditableText.cs \
+	Hyperlink.cs \
+	Hypertext.cs \
 	Image.cs \
 	Registry.cs \
 	RelationSet.cs \
@@ -57,6 +60,7 @@ FILES =  \
 	Selection.cs \
 	StateSet.cs \
 	StateType.cs \
+	Table.cs \
 	Text.cs \
 	Value.cs
 
