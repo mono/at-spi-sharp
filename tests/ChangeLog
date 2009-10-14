@@ -1,3 +1,23 @@
+2009-10-14  Mike Gorse  <mgorse@novell.com>
+
+	* apps/Document.cs, at-spi-sharp/EventTest.cs: at-spi-sharp/Makefile.am:
+	Add event test.
+
+	* apps/gtktextview.py: Set text when button clicked.
+
+	* at-spi-sharp/UncachedChildrenTest.cs: at-spi-sharp/Makefile.am:
+	Added UncachedChildren test.
+
+	* at-spi-sharp/TableTest.cs: Upper-case test function name.
+
+	* at-spi-sharp/Base.cs: Fix exception in TearDown when process already
+	exited.
+
+	* at-spi-sharp/atspitest.sh.in: Add -labels to flags.
+
+	* at-spi-sharp/atspitest.sh.in, at-spi-sharp/Makefile.am:
+	Remove Debug/Release distinction.
+
 2009-09-16  Mike Gorse  <mgorse@novell.com>
 
 	* apps/Document.cs, apps/gtktreeview.py, apps/Makefile.am,

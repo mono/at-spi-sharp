@@ -46,37 +46,37 @@ namespace Atspi
 
 		public string Description {
 			get {
-				return (string) properties.Get (IFACE, "imageDescription");
+				return (string) properties.Get (IFACE, "ImageDescription");
 			}
 		}
 
 		public string Locale {
 			get {
-				return (string) properties.Get (IFACE, "imageLocale");
+				return (string) properties.Get (IFACE, "ImageLocale");
 			}
 		}
 
 		public BoundingBox GetImageExtents (CoordType coordType)
 		{
-			return proxy.getImageExtents (coordType);
+			return proxy.GetImageExtents (coordType);
 		}
 
 		public void GetPosition (out int x, out int y, CoordType coordType)
 		{
-			proxy.getImagePosition (out x, out y, coordType);
+			proxy.GetImagePosition (out x, out y, coordType);
 		}
 
 		public void GetSize (out int width, out int height)
 		{
-			proxy.getImageSize (out width, out height);
+			proxy.GetImageSize (out width, out height);
 		}
 	}
 
 	[Interface ("org.freedesktop.atspi.Image")]
 	interface IImage : Introspectable
 	{
-		BoundingBox getImageExtents (CoordType coordType);
-		void getImagePosition (out int x, out int y, CoordType coordType);
-		void getImageSize (out int width, out int height);
+		BoundingBox GetImageExtents (CoordType coordType);
+		void GetImagePosition (out int x, out int y, CoordType coordType);
+		void GetImageSize (out int width, out int height);
 	}
 }

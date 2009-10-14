@@ -45,16 +45,16 @@ namespace Atspi
 			proxy = Registry.Bus.GetObject<ITree> (name, new ObjectPath ("/org/freedesktop/atspi/tree"));
 			accessibles = new Dictionary<string, Accessible> ();
 			accessibles ["/org/freedesktop/atspi/accessible/null"] = null;
-			proxy.updateAccessible += OnUpdateAccessible;
-			proxy.removeAccessible += OnRemoveAccessible;
-			properties = Registry.Bus.GetObject<Properties> (name, proxy.getRoot ());
-			AccessibleProxy [] elements = proxy.getTree ();
+			proxy.UpdateAccessible += OnUpdateAccessible;
+			proxy.RemoveAccessible += OnRemoveAccessible;
+			properties = Registry.Bus.GetObject<Properties> (name, proxy.GetRoot ());
+			AccessibleProxy [] elements = proxy.GetTree ();
 			AddAccessibles (elements);
 		}
 
 		~Application ()
 		{
-			proxy.updateAccessible -= OnUpdateAccessible;
+			proxy.UpdateAccessible -= OnUpdateAccessible;
 		}
 
 		void AddAccessibles (AccessibleProxy [] elements)
@@ -115,13 +115,13 @@ namespace Atspi
 
 		internal Accessible GetRoot ()
 		{
-			ObjectPath o = proxy.getRoot ();
+			ObjectPath o = proxy.GetRoot ();
 			return GetElement (o);
 		}
 
 		public string ToolkitName {
 			get {
-				return (string) properties.Get (IFACE, "toolkitName");
+				return (string) properties.Get (IFACE, "ToolkitName");
 			}
 		}
 	}
@@ -129,10 +129,10 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Tree")]
 	interface ITree : Introspectable
 	{
-		ObjectPath getRoot ();
-		AccessibleProxy [] getTree ();
-		event UpdateAccessibleHandler updateAccessible;
-		event RemoveAccessibleHandler removeAccessible;
+		ObjectPath GetRoot ();
+		AccessibleProxy [] GetTree ();
+		event UpdateAccessibleHandler UpdateAccessible;
+		event RemoveAccessibleHandler RemoveAccessible;
 	}
 
 	delegate void UpdateAccessibleHandler (AccessibleProxy nodeAdded);

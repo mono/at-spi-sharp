@@ -47,55 +47,55 @@ namespace Atspi
 		}
 
 		public int NSelectedChildren {
-			get { return (int) properties.Get (IFACE, "nSelectedChildren"); }
+			get { return (int) properties.Get (IFACE, "NSelectedChildren"); }
 		}
 
 		public Accessible GetSelectedChild (int selectedChildIndex)
 		{
-			ObjectPath o = proxy.getSelectedChild (selectedChildIndex);
+			ObjectPath o = proxy.GetSelectedChild (selectedChildIndex);
 			return accessible.application.GetElement (o);
 		}
 
 		public bool SelectChild (int childIndex)
 		{
-			return proxy.selectChild (childIndex);
+			return proxy.SelectChild (childIndex);
 		}
 
 		public bool DeselectSelectedChild (int selectedChildIndex)
 		{
-			return proxy.deselectSelectedChild (selectedChildIndex);
+			return proxy.DeselectSelectedChild (selectedChildIndex);
 		}
 
 		public bool IsChildSelected (int childIndex)
 		{
-			return proxy.isChildSelected (childIndex);
+			return proxy.IsChildSelected (childIndex);
 		}
 
 		public bool SelectAll ()
 		{
-			return proxy.selectAll ();
+			return proxy.SelectAll ();
 		}
 
 		public bool ClearSelection ()
 		{
-			return proxy.clearSelection ();
+			return proxy.ClearSelection ();
 		}
 
 		public bool DeselectChild (int childIndex)
 		{
-			return proxy.deselectChild (childIndex);
+			return proxy.DeselectChild (childIndex);
 		}
 	}
 
 	[Interface ("org.freedesktop.atspi.Selection")]
 	interface ISelection : Introspectable
 	{
-		ObjectPath getSelectedChild (int selectedChildIndex);
-		bool selectChild (int childIndex);
-		bool deselectSelectedChild (int selectedChildIndex);
-		bool isChildSelected (int childIndex);
-		bool selectAll ();
-		bool clearSelection ();
-		bool deselectChild (int childIndex);
+		ObjectPath GetSelectedChild (int selectedChildIndex);
+		bool SelectChild (int childIndex);
+		bool DeselectSelectedChild (int selectedChildIndex);
+		bool IsChildSelected (int childIndex);
+		bool SelectAll ();
+		bool ClearSelection ();
+		bool DeselectChild (int childIndex);
 	}
 }

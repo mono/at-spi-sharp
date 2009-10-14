@@ -19,54 +19,44 @@
 // 
 // Copyright (c) 2009 Novell, Inc. (http://www.novell.com) 
 // 
-// Authors:
-//      Mike Gorse <mgorse@novell.com>
+// Authors: 
+//	Mike Gorse <mgorse@novell.com>
 // 
 
 using System;
-using System.Collections.Generic;
 using NDesk.DBus;
-using org.freedesktop.DBus;
+using NUnit.Framework;
+using Atspi;
 
-namespace Atspi
+namespace AtSpiTest
 {
-	public class Value
+	[TestFixture]
+	public class UncachedChildrenTest : Base
 	{
-		private Properties properties;
+		Accessible frame = null;
+			Accessible treeTable = null;
 
-		private const string IFACE = "org.freedesktop.atspi.Value";
-
-		public Value (Accessible accessible)
+		[TestFixtureSetUp]
+		public void Init ()
 		{
-			ObjectPath op = new ObjectPath (accessible.path);
-			properties = Registry.Bus.GetObject<Properties> (accessible.application.name, op);
+			frame = GetFrame ("gtktreeview.py");
+
+			treeTable = FindByRole (frame, Role.TreeTable, true);
+			Assert.IsNotNull (treeTable, "Couldn't find the tree table");
 		}
 
-		public double MinimumValue {
-			get {
-				return (double) properties.Get (IFACE, "MinimumValue");
-			}
-		}
+		#region Test
 
-		public double MaximumValue {
-			get {
-				return (double) properties.Get (IFACE, "MaximumValue");
-			}
+		[Test]
+		public void NavigationTest ()
+		{
+			Assert.AreEqual (17, treeTable.Children.Count, "treeTable child count");
+			Accessible a1 = treeTable.Children [0];
+			Accessible a2 = treeTable.Children [1];
+			Assert.AreNotEqual (a1, a2, "Children [0] != Children [1]");
+			Assert.AreEqual (Role.TableColumnHeader, a1.Role, "Children [0].Role");
+			Assert.AreEqual (Role.TableCell, a2.Role, "Children [1].Role");
 		}
-
-		public double CurrentValue {
-			get {
-				return (double) properties.Get (IFACE, "CurrentValue");
-			}
-			set {
-				properties.Set (IFACE, "CurrentValue", value);
-			}
-		}
-
-		public double MinimumIncrement {
-			get {
-				return (double) properties.Get (IFACE, "MinimumIncrement");
-			}
-		}
+#endregion
 	}
 }

@@ -1,3 +1,15 @@
+2009-10-14  Mike Gorse  <mgorse@novell.com>
+
+	* Action.cs, Accessible.cs, Application.cs, Component.cs, Document.cs,
+	EditableText.cs, Hyperlink.cs, Hypertext.cs, Image.cs, Registry.cs,
+	Selection.cs, table.cs, Text.cs, Value.cs: Modify method and signal
+	names to correspond with DBus spec.
+
+	* Accessible.cs, Event.cs, Makefile.am: Add event bindings.
+
+	* Accessible.cs, UncachedChildren.cs, Makefile.am: Fetch children of
+	ManagesDescendants objects over the wire rather than relying on cache.
+
 2009-09-16  Mike Gorse  <mgorse@novell.com>
 
 	* Document.cs, Hyperlink.cs, Hypertext.cs, Table.cs, Accessible.cs,

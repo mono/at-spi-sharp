@@ -46,13 +46,13 @@ namespace Atspi
 
 		public int NLinks {
 			get {
-				return proxy.getNLinks ();
+				return proxy.GetNLinks ();
 			}
 		}
 
 		public Hyperlink GetLink (int linkIndex)
 		{
-			string path = proxy.getLink (linkIndex);
+			string path = proxy.GetLink (linkIndex);
 			if (path == "/org/freedesktop/atspi/accessible/null")
 				return null;
 			return new Hyperlink (accessible, path);
@@ -60,15 +60,15 @@ namespace Atspi
 
 		public int GetLinkIndex (int characterIndex)
 		{
-			return proxy.getLinkIndex (characterIndex);
+			return proxy.GetLinkIndex (characterIndex);
 		}
 	}
 
 	[Interface ("org.freedesktop.atspi.Hypertext")]
 	interface IHypertext : Introspectable
 	{
-		int getNLinks ();
-		string getLink (int linkIndex);
-		int getLinkIndex (int characterIndex);
+		int GetNLinks ();
+		string GetLink (int linkIndex);
+		int GetLinkIndex (int characterIndex);
 	}
 }

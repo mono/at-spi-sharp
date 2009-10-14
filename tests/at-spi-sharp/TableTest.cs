@@ -189,7 +189,7 @@ namespace AtSpiTest
 		}
 
 		[Test]
-		public void getRowColumnExtentsAtIndex ()
+		public void GetRowColumnExtentsAtIndex ()
 		{
 			int row, col, row_extents, col_extents;
 			bool is_selected;

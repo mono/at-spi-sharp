@@ -48,25 +48,25 @@ namespace Atspi
 
 		public int NAnchors {
 			get {
-				return (int) properties.Get (IFACE, "nAnchors");
+				return (int) properties.Get (IFACE, "NAnchors");
 			}
 		}
 
 		public int StartIndex {
 			get {
-				return (int) properties.Get (IFACE, "startIndex");
+				return (int) properties.Get (IFACE, "StartIndex");
 			}
 		}
 
 		public int EndIndex {
 			get {
-				return (int) properties.Get (IFACE, "endIndex");
+				return (int) properties.Get (IFACE, "EndIndex");
 			}
 		}
 
 		public Accessible GetObject (int index)
 		{
-			ObjectPath path = proxy.getObject (index);
+			ObjectPath path = proxy.GetObject (index);
 			Accessible ret = application.GetElement (path, true);
 			// hack -- we get an object which we may not have
 			// received an event for.
@@ -77,14 +77,14 @@ namespace Atspi
 
 		public string GetURI (int i)
 		{
-			return proxy.getURI (i);
+			return proxy.GetURI (i);
 		}
 	}
 
 	[Interface ("org.freedesktop.atspi.Hyperlink")]
 	interface IHyperlink : Introspectable
 	{
-			ObjectPath getObject (int index);
-			string getURI (int i);
+			ObjectPath GetObject (int index);
+			string GetURI (int i);
 	}
 }

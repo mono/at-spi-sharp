@@ -82,11 +82,11 @@ namespace Atspi
 			applications = new List<Application> ();
 			desktop = new Desktop ();
 			proxy = bus.GetObject<RegistryInterface> ("org.freedesktop.atspi.Registry", new ObjectPath ("/org/freedesktop/atspi/registry"));
-			proxy.updateApplications += OnUpdateApplications;
+			proxy.UpdateApplications += OnUpdateApplications;
 
 			BusG.Init ();
 
-			string [] appNames = proxy.getApplications ();
+			string [] appNames = proxy.GetApplications ();
 			foreach (string app in appNames) {
 				Application application = new Application (app);
 				applications.Add (application);
@@ -100,7 +100,7 @@ namespace Atspi
 
 		internal void TerminateInternal ()
 		{
-			proxy.updateApplications -= OnUpdateApplications;
+			proxy.UpdateApplications -= OnUpdateApplications;
 		}
 
 		void OnUpdateApplications (int added, string name)
@@ -126,8 +126,8 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Registry")]
 	interface RegistryInterface : Introspectable
 	{
-		string [] getApplications ();
-		event UpdateApplicationsHandler updateApplications;
+		string [] GetApplications ();
+		event UpdateApplicationsHandler UpdateApplications;
 	}
 
 	delegate void UpdateApplicationsHandler (int added, string name);

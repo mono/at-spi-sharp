@@ -1,32 +1,18 @@
 EXTRA_DIST =
 
-if ENABLE_DEBUG
 ASSEMBLY_COMPILER_COMMAND = gmcs
 #ASSEMBLY_COMPILER_FLAGS = -noconfig -codepage:utf8 -warn:4 -optimize+ -debug "-define:DEBUG" -keyfile:../mono-uia.snk -warnaserror
 ASSEMBLY_COMPILER_FLAGS = -noconfig -codepage:utf8 -warn:4 -optimize+ -debug "-define:DEBUG" -keyfile:../mono-uia.snk
 
-ASSEMBLY = bin/Debug/at-spi-sharp.dll
+ASSEMBLY = bin/at-spi-sharp.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
 PROJECT_REFERENCES = 
-BUILD_DIR = bin/Debug
+BUILD_DIR = bin
 
-ATSPISHARP_DLL_MDB_SOURCE=bin/Debug/at-spi-sharp.dll.mdb
+ATSPISHARP_DLL_MDB_SOURCE=bin/at-spi-sharp.dll.mdb
 ATSPISHARP_DLL_MDB=$(BUILD_DIR)/at-spi-sharp.dll.mdb
 
-endif
-
-if ENABLE_RELEASE
-ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS = -noconfig -codepage:utf8 -warn:4 -optimize+ -keyfile:../mono-uia.snk -warnaserror
-ASSEMBLY = bin/Release/at-spi-sharp.dll
-ASSEMBLY_MDB = 
-COMPILE_TARGET = library
-PROJECT_REFERENCES = 
-BUILD_DIR = bin/Release
-ATSPI_DLL_MDB=
-
-endif
 
 PACKAGE_FLAG = /package accessibility
 
@@ -51,6 +37,7 @@ FILES =  \
 	Desktop.cs \
 	Document.cs \
 	EditableText.cs \
+	Event.cs \
 	Hyperlink.cs \
 	Hypertext.cs \
 	Image.cs \
@@ -62,6 +49,7 @@ FILES =  \
 	StateType.cs \
 	Table.cs \
 	Text.cs \
+	UncachedChildren.cs \
 	Value.cs
 
 DATA_FILES = 

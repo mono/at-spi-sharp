@@ -43,24 +43,24 @@ namespace Atspi
 		}
 
 		public string Locale {
-			get { return proxy.getLocale (); }
+			get { return proxy.GetLocale (); }
 		}
 
 		public string GetAttributeValue (string attributeName)
 		{
-			return proxy.getAttributeValue (attributeName);
+			return proxy.GetAttributeValue (attributeName);
 		}
 
 		public IDictionary<string, string> Attributes {
-			get { return proxy.getAttributes (); }
+			get { return proxy.GetAttributes (); }
 		}
 	}
 
 	[Interface ("org.freedesktop.atspi.Document")]
 	interface IDocument : Introspectable
 	{
-		string getLocale ();
-		string getAttributeValue (string attributename);
-		IDictionary<string, string> getAttributes ();
+		string GetLocale ();
+		string GetAttributeValue (string attributename);
+		IDictionary<string, string> GetAttributes ();
 	}
 }

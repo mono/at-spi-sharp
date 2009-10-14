@@ -34,14 +34,24 @@ namespace Atspi
 	{
 		internal string path;
 		IAccessible proxy;
+		IEventObject objectEvents;
+		IEventWindow windowEvents;
+		IEventTerminal terminalEvents;
+		IEventDocument documentEvents;
+		IEventFocus focusEvents;
+
 		internal Application application;
-		internal List<Accessible> children;
+		protected IList<Accessible> children;
 		private Accessible parent;
 		private string name;
 		private string description;
 		private Role role;
 		private StateSet stateSet;
 		private Interfaces interfaces;
+
+		private Properties properties;
+
+		private const string IFACE = "org.freedesktop.atspi.Accessible";
 
 		internal Accessible (Application application, string path)
 		{
@@ -50,13 +60,16 @@ namespace Atspi
 			this.children = new List<Accessible> ();
 			if (application != null)
 				proxy = Registry.Bus.GetObject<IAccessible> (application.name, new ObjectPath (path));
+			if (path != null) {
+				ObjectPath op = new ObjectPath (path);
+				properties = Registry.Bus.GetObject<Properties> (application.name, op);
+			}
 		}
 
 		internal Accessible (Application application, AccessibleProxy e)
 		{
 			this.application = application;
 			this.path = e.path.ToString ();
-			this.children = new List<Accessible> ();
 			proxy = Registry.Bus.GetObject<IAccessible> (application.name, e.path);
 			Update (e);
 		}
@@ -79,9 +92,16 @@ namespace Atspi
 			foreach (string iface in e.interfaces)
 				AddInterface (iface);
 			stateSet = new StateSet (e.states);
-			children.Clear ();
-			foreach (ObjectPath path in e.children)
-				children.Add (application.GetElement (path, true));
+			if (stateSet.Contains (StateType.ManagesDescendants)) {
+				if (!(children is UncachedChildren))
+					children = new UncachedChildren (this);
+			} else {
+				if (!(children is List<Accessible>))
+					children = new List<Accessible> ();
+				children.Clear ();
+				foreach (ObjectPath path in e.children)
+					children.Add (application.GetElement (path, true));
+			}
 		}
 
 		internal void AddInterface (string name)
@@ -142,11 +162,33 @@ namespace Atspi
 			get { return children; }
 		}
 
+		public Accessible GetChildAtIndexNoCache (int index)
+		{
+			ObjectPath path = proxy.GetChildAtIndex (index);
+			return Application.GetElement (path);
+		}
+
 		public int IndexInParent {
 			get {
 				if (parent == null)
 					return -1;
 				return parent.children.IndexOf (this);
+			}
+		}
+
+		public int IndexInParentNoCache {
+			get {
+				if (parent == null)
+					return -1;
+				return parent.proxy.GetIndexInParent ();
+			}
+		}
+
+		public int ChildCountNoCache {
+			get {
+				if (path == null)
+					throw new NotSupportedException ();
+				return (int) properties.Get (IFACE, "ChildCount");
 			}
 		}
 
@@ -162,10 +204,10 @@ namespace Atspi
 			get {
 				if (proxy == null)
 					return new Relation [0];
-				DBusRelation [] drels = proxy.getRelationSet ();
-				Relation [] set = new Relation [drels.Length];
-				for (int i = 0; i < drels.Length; i++)
-					set [i] = new Relation (application, drels [i]);
+				DBusRelation [] dRels = proxy.GetRelationSet ();
+				Relation [] set = new Relation [dRels.Length];
+				for (int i = 0; i < dRels.Length; i++)
+					set [i] = new Relation (application, dRels [i]);
 				return set;
 			}
 		}
@@ -285,6 +327,46 @@ namespace Atspi
 				return new Value (this);
 			return null;
 		}
+
+		public IEventObject ObjectEvents {
+			get {
+				if (objectEvents == null)
+					objectEvents = Registry.Bus.GetObject<IEventObject> (application.name, new ObjectPath (path));
+				return objectEvents;
+			}
+		}
+
+		public IEventWindow WindowEvents {
+			get {
+				if (windowEvents == null)
+					windowEvents = Registry.Bus.GetObject<IEventWindow> (application.name, new ObjectPath (path));
+				return windowEvents;
+			}
+		}
+
+		public IEventTerminal TerminalEvents {
+			get {
+				if (terminalEvents == null)
+					terminalEvents = Registry.Bus.GetObject<IEventTerminal> (application.name, new ObjectPath (path));
+				return terminalEvents;
+			}
+		}
+
+		public IEventDocument DocumentEvents {
+			get {
+				if (documentEvents == null)
+					documentEvents = Registry.Bus.GetObject<IEventDocument> (application.name, new ObjectPath (path));
+				return documentEvents;
+			}
+		}
+
+		public IEventFocus FocusEvents {
+			get {
+				if (focusEvents == null)
+					focusEvents = Registry.Bus.GetObject<IEventFocus> (application.name, new ObjectPath (path));
+				return focusEvents;
+			}
+		}
 	}
 
 	public delegate bool FindPredicate (Accessible a, params object [] args);
@@ -308,6 +390,8 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Accessible")]
 	interface IAccessible : Introspectable
 	{
-		DBusRelation [] getRelationSet ();
+		DBusRelation [] GetRelationSet ();
+		int GetIndexInParent ();
+		ObjectPath GetChildAtIndex (int index);
 	}
 }

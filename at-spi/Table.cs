@@ -49,144 +49,144 @@ namespace Atspi
 
 		public int NRows {
 			get {
-				return (int) properties.Get (IFACE, "nRows");
+				return (int) properties.Get (IFACE, "NRows");
 			}
 		}
 
 		public int NColumns {
 			get {
-				return (int) properties.Get (IFACE, "nColumns");
+				return (int) properties.Get (IFACE, "NColumns");
 			}
 		}
 
 		public Accessible Caption {
 			get {
-				ObjectPath path = (ObjectPath) properties.Get (IFACE, "caption");
+				ObjectPath path = (ObjectPath) properties.Get (IFACE, "Caption");
 				return accessible.application.GetElement (path, true);
 			}
 		}
 
 		public Accessible Summary {
 			get {
-				ObjectPath path = (ObjectPath) properties.Get (IFACE, "summary");
+				ObjectPath path = (ObjectPath) properties.Get (IFACE, "Summary");
 				return accessible.application.GetElement (path, true);
 			}
 		}
 
 		public int NSelectedRows {
 			get {
-				return (int) properties.Get (IFACE, "nSelectedRows");
+				return (int) properties.Get (IFACE, "NSelectedRows");
 			}
 		}
 
 		public int NSelectedColumns {
 			get {
-				return (int) properties.Get (IFACE, "nSelectedColumns");
+				return (int) properties.Get (IFACE, "NSelectedColumns");
 			}
 		}
 
 		public Accessible GetAccessibleAt (int row, int column)
 		{
-			ObjectPath o = proxy.getAccessibleAt (row, column);
+			ObjectPath o = proxy.GetAccessibleAt (row, column);
 			return accessible.application.GetElement (o);
 		}
 
 		public int GetIndexAt (int row, int column)
 		{
-			return proxy.getIndexAt (row, column);
+			return proxy.GetIndexAt (row, column);
 		}
 
 		public int GetRowAtIndex (int index)
 		{
-			return proxy.getRowAtIndex (index);
+			return proxy.GetRowAtIndex (index);
 		}
 
 		public int GetColumnAtIndex (int index)
 		{
-			return proxy.getColumnAtIndex (index);
+			return proxy.GetColumnAtIndex (index);
 		}
 
 		public string GetRowDescription (int row)
 		{
-			return proxy.getRowDescription (row);
+			return proxy.GetRowDescription (row);
 		}
 
 		public string GetColumnDescription (int column)
 		{
-			return proxy.getColumnDescription (column);
+			return proxy.GetColumnDescription (column);
 		}
 
 		public int GetRowExtentAt (int row, int column)
 		{
-			return proxy.getRowExtentAt (row, column);
+			return proxy.GetRowExtentAt (row, column);
 		}
 
 		public int GetColumnExtentAt (int row, int column)
 		{
-			return proxy.getColumnExtentAt (row, column);
+			return proxy.GetColumnExtentAt (row, column);
 		}
 
 		public Accessible GetRowHeader (int row)
 		{
-			ObjectPath o = proxy.getRowHeader (row);
+			ObjectPath o = proxy.GetRowHeader (row);
 			return accessible.application.GetElement (o);
 		}
 
 		public Accessible GetColumnHeader (int column)
 		{
-			ObjectPath o = proxy.getColumnHeader (column);
+			ObjectPath o = proxy.GetColumnHeader (column);
 			return accessible.application.GetElement (o);
 		}
 
 		public int [] GetSelectedRows ()
 		{
-			return proxy.getSelectedRows ();
+			return proxy.GetSelectedRows ();
 		}
 
 		public int [] GetSelectedColumns ()
 		{
-			return proxy.getSelectedColumns ();
+			return proxy.GetSelectedColumns ();
 		}
 
 		public bool IsRowSelected (int row)
 		{
-			return proxy.isRowSelected (row);
+			return proxy.IsRowSelected (row);
 		}
 
 		public bool IsColumnSelected (int column)
 		{
-			return proxy.isColumnSelected (column);
+			return proxy.IsColumnSelected (column);
 		}
 
 		public bool IsSelected (int row, int column)
 		{
-			return proxy.isSelected (row, column);
+			return proxy.IsSelected (row, column);
 		}
 
 		public bool AddRowSelection (int row)
 		{
-			return proxy.addRowSelection (row);
+			return proxy.AddRowSelection (row);
 		}
 
 		public bool AddColumnSelection (int column)
 		{
-			return proxy.addColumnSelection (column);
+			return proxy.AddColumnSelection (column);
 		}
 
 		public bool RemoveRowSelection (int row)
 		{
-			return proxy.removeRowSelection (row);
+			return proxy.RemoveRowSelection (row);
 		}
 
 		public bool RemoveColumnSelection (int column)
 		{
-			return proxy.removeColumnSelection (column);
+			return proxy.RemoveColumnSelection (column);
 		}
 
 		public bool GetRowColumnExtentsAtIndex (int index, out int row, out int col, out int row_extents, out int col_extents, out bool is_selected)
 		{
 			bool ret;
-			proxy.getRowColumnExtentsAtIndex (index, out ret, out row, out col, out row_extents, out col_extents, out is_selected);
+			proxy.GetRowColumnExtentsAtIndex (index, out ret, out row, out col, out row_extents, out col_extents, out is_selected);
 			return ret;
 		}
 
@@ -195,25 +195,25 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Table")]
 	interface ITable : Introspectable
 	{
-		ObjectPath getAccessibleAt (int row, int column);
-		int getIndexAt (int row, int column);
-		int getRowAtIndex (int index);
-		int getColumnAtIndex (int index);
-		string getRowDescription (int row);
-		string getColumnDescription (int column);
-		int getRowExtentAt (int row, int column);
-		int getColumnExtentAt (int row, int column);
-		ObjectPath getRowHeader (int row);
-		ObjectPath getColumnHeader (int column);
-		int [] getSelectedRows ();
-		int [] getSelectedColumns ();
-		bool isRowSelected (int row);
-		bool isColumnSelected (int column);
-		bool isSelected (int row, int column);
-		bool addRowSelection (int row);
-		bool addColumnSelection (int column);
-		bool removeRowSelection (int row);
-		bool removeColumnSelection (int column);
-		void getRowColumnExtentsAtIndex (int index, out bool ret, out int row, out int col, out int row_extents, out int col_extents, out bool is_selected);
+		ObjectPath GetAccessibleAt (int row, int column);
+		int GetIndexAt (int row, int column);
+		int GetRowAtIndex (int index);
+		int GetColumnAtIndex (int index);
+		string GetRowDescription (int row);
+		string GetColumnDescription (int column);
+		int GetRowExtentAt (int row, int column);
+		int GetColumnExtentAt (int row, int column);
+		ObjectPath GetRowHeader (int row);
+		ObjectPath GetColumnHeader (int column);
+		int [] GetSelectedRows ();
+		int [] GetSelectedColumns ();
+		bool IsRowSelected (int row);
+		bool IsColumnSelected (int column);
+		bool IsSelected (int row, int column);
+		bool AddRowSelection (int row);
+		bool AddColumnSelection (int column);
+		bool RemoveRowSelection (int row);
+		bool RemoveColumnSelection (int column);
+		void GetRowColumnExtentsAtIndex (int index, out bool ret, out int row, out int col, out int row_extents, out int col_extents, out bool is_selected);
 	}
 }

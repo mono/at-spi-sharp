@@ -3,7 +3,7 @@
 DLL=at-spi-sharp-tests.dll
 
 TEST_DISPLAY=:99
-NUNIT_FLAGS="-nothread -noshadow"
+NUNIT_FLAGS="-nothread -noshadow -labels"
 
 while getopts c:xd:t:l o
 do case "$o" in
@@ -55,7 +55,7 @@ fi
 
 export GTK_MODULES=gail:/usr/local/lib/gtk-2.0/modules/libspiatk.so
 
-(cd bin/Debug; \
+(cd bin; \
 	@MONO@ --debug @NUNIT_PATH@/nunit-console.exe ${NUNIT_FLAGS} ${DLL} ${NUNIT_ARGS})
 
 if [ "x$xephyr" == "xyes" ]; then

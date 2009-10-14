@@ -21,7 +21,6 @@
 // 
 // Authors: 
 //      Mike Gorse <mgorse@novell.com>
-//      Mario Carrion <mcarrion@novell.com>
 // 
 
 
@@ -71,7 +70,7 @@ namespace AtSpiTest
 		[TestFixtureTearDown]
 		public virtual void TearDown ()
 		{
-			if (p != null)
+			if (p != null && !p.HasExited)
 				p.Kill ();
 			p = null;
 			Registry.Terminate ();
@@ -85,7 +84,7 @@ namespace AtSpiTest
 
 		public static string GetAppPath (string filename)
 		{
-			return "../../../apps/" + filename;
+			return "../../apps/" + filename;
 		}
 #endregion
 

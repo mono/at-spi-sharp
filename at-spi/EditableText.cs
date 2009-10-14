@@ -47,49 +47,49 @@ namespace Atspi
 		// although it ought to.
 		public bool SetTextContents (string newContents)
 		{
-			return proxy.setTextContents (newContents);
+			return proxy.SetTextContents (newContents);
 		}
 
 		public bool InsertText (int position, string text, int length)
 		{
-			return proxy.insertText (position, text, length);
+			return proxy.InsertText (position, text, length);
 		}
 
 		public bool SetAttributes (string attributes, int startPos, int endPos)
 		{
-			return proxy.setAttributes (attributes, startPos, endPos);
+			return proxy.SetAttributes (attributes, startPos, endPos);
 		}
 
 		public void CopyText (int startPos, int endPos)
 		{
-			proxy.copyText (startPos, endPos);
+			proxy.CopyText (startPos, endPos);
 		}
 
 		public bool CutText (int startPos, int endPos)
 		{
-			return proxy.cutText (startPos, endPos);
+			return proxy.CutText (startPos, endPos);
 		}
 
 		public bool DeleteText (int startPos, int endPos)
 		{
-			return proxy.deleteText (startPos, endPos);
+			return proxy.DeleteText (startPos, endPos);
 		}
 
 		public bool PasteText (int position)
 		{
-			return proxy.pasteText (position);
+			return proxy.PasteText (position);
 		}
 	}
 
 	[Interface ("org.freedesktop.atspi.EditableText")]
 	interface IEditableText : Introspectable
 	{
-		bool setTextContents (string newContents);
-		bool insertText (int position, string text, int length);
-		bool setAttributes (string attributes, int startPos, int endPos);
-		void copyText (int startPos, int endPos);
-		bool cutText (int startPos, int endPos);
-		bool deleteText (int startPos, int endPos);
-		bool pasteText (int position);
+		bool SetTextContents (string newContents);
+		bool InsertText (int position, string text, int length);
+		bool SetAttributes (string attributes, int startPos, int endPos);
+		void CopyText (int startPos, int endPos);
+		bool CutText (int startPos, int endPos);
+		bool DeleteText (int startPos, int endPos);
+		bool PasteText (int position);
 	}
 }

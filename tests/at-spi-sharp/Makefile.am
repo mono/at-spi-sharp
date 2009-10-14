@@ -1,41 +1,22 @@
 
 EXTRA_DIST =  
 
-if ENABLE_DEBUG
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS = -keyfile:../../mono-uia.snk -noconfig -codepage:utf8 -warn:4 -warnaserror -optimize+ -debug "-define:DEBUG"
 
-ASSEMBLY = bin/Debug/at-spi-sharp-tests.dll
+ASSEMBLY = bin/at-spi-sharp-tests.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
 PROJECT_REFERENCES =  \
-	../../at-spi/bin/Debug/at-spi-sharp.dll
-BUILD_DIR = bin/Debug
+	../../at-spi/bin/at-spi-sharp.dll
+BUILD_DIR = bin
 
-ATSPISHARP_DLL_SOURCE=../../at-spi/bin/Debug/at-spi-sharp.dll
-ATSPISHARPTESTS_DLL_MDB_SOURCE=bin/Debug/at-spiTests.dll.mdb
+ATSPISHARP_DLL_SOURCE=../../at-spi/bin/at-spi-sharp.dll
+ATSPISHARPTESTS_DLL_MDB_SOURCE=bin/at-spiTests.dll.mdb
 ATSPISHARPTESTS_DLL_MDB=$(BUILD_DIR)/at-spiTests.dll.mdb
-ATSPISHARP_DLL_MDB_SOURCE=../../at-spi/bin/Debug/at-spi-sharp.dll.mdb
+ATSPISHARP_DLL_MDB_SOURCE=../../at-spi/bin/at-spi-sharp.dll.mdb
 ATSPISHARP_DLL_MDB=$(BUILD_DIR)/at-spi-sharp.dll.mdb
 
-endif
-
-if ENABLE_RELEASE
-ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS = -keyfile:../../mono-uia.snk -noconfig -codepage:utf8 -warn:4 -warnaserror -optimize+
-ASSEMBLY = bin/Release/at-spiSharpTests.dll
-ASSEMBLY_MDB = 
-COMPILE_TARGET = library
-PROJECT_REFERENCES =  \
-	../../at-spi/bin/Release/at-spi-sharp.dll
-
-BUILD_DIR = bin/Release
-
-ATSPISHARP_DLL_SOURCE=../../at-spi/bin/Release/at-spi-sharp.dll
-ATSPISHARPTESTS_DLL_MDB=
-ATSPISHARP_DLL_MDB=
-
-endif
 
 #AL=al2
 #SATELLITE_ASSEMBLY_NAME=MonoTests.Mono.UIAutomation.Winforms.resources.dll
@@ -57,11 +38,13 @@ FILES =  \
 	Base.cs \
 	ComponentTest.cs \
 	DocumentTest.cs \
+	EventTest.cs \
 	HypertextTest.cs \
 	ImageTest.cs \
 	SelectionTest.cs \
 	TableTest.cs \
-	TextTest.cs
+	TextTest.cs \
+	UncachedChildrenTest.cs
 
 DATA_FILES = 
 
@@ -74,13 +57,13 @@ REFERENCES =  \
 	System.Data \
 	Mono.Posix \
 	-pkg:mono-nunit \
-	../../at-spi/bin/Debug/at-spi-sharp.dll \
+	../../at-spi/bin/at-spi-sharp.dll \
 	$(NDESK_DBUS_LIBS)
 
 DLL_REFERENCES = 
 
 CLEANFILES = $(PROGRAMFILES) \
-	bin/Debug/TestResult.xml
+	bin/TestResult.xml
 
 include $(top_srcdir)/Makefile.include
 

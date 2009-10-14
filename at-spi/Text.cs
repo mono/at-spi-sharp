@@ -46,117 +46,117 @@ namespace Atspi
 
 		public string GetText ()
 		{
-			return proxy.getText (0, -1);
+			return proxy.GetText (0, -1);
 		}
 
 		public string GetText (int startOffset, int endOffset)
 		{
-			return proxy.getText (startOffset, endOffset);
+			return proxy.GetText (startOffset, endOffset);
 		}
 
 		public bool SetCaretOffset (int offset)
 		{
-			return proxy.setCaretOffset (offset);
+			return proxy.SetCaretOffset (offset);
 		}
 
 		public string GetTextBeforeOffset (int offset, BoundaryType type, out int startOffset, out int endOffset)
 		{
 			string text;
-			proxy.getTextBeforeOffset (offset, type, out text, out startOffset, out endOffset);
+			proxy.GetTextBeforeOffset (offset, type, out text, out startOffset, out endOffset);
 			return text;
 		}
 
 		public string GetTextAtOffset (int offset, BoundaryType type, out int startOffset, out int endOffset)
 		{
 			string text;
-			proxy.getTextAtOffset (offset, type, out text, out startOffset, out endOffset);
+			proxy.GetTextAtOffset (offset, type, out text, out startOffset, out endOffset);
 			return text;
 		}
 
 		public string GetTextAfterOffset (int offset, BoundaryType type, out int startOffset, out int endOffset)
 		{
 			string text;
-			proxy.getTextAfterOffset (offset, type, out text, out startOffset, out endOffset);
+			proxy.GetTextAfterOffset (offset, type, out text, out startOffset, out endOffset);
 			return text;
 		}
 
 		public int GetCharacterAtOffset (int offset)
 		{
-			return proxy.getCharacterAtOffset (offset);
+			return proxy.GetCharacterAtOffset (offset);
 		}
 
 		public string GetAttributeValue (int offset, string attributeName, out int startOffset, out int endOffset, out bool defined)
 		{
 			string val;
-			proxy.getAttributeValue (offset, attributeName, out val, out startOffset, out endOffset, out defined);
+			proxy.GetAttributeValue (offset, attributeName, out val, out startOffset, out endOffset, out defined);
 			return val;
 		}
 
 		public void GetCharacterExtents (int offset, out int x, out int y, out int width, out int height, CoordType coordType)
 		{
-			proxy.getCharacterExtents (offset, out x, out y, out width, out height, coordType);
+			proxy.GetCharacterExtents (offset, out x, out y, out width, out height, coordType);
 		}
 
 		public int GetOffsetAtPoint (int x, int y, CoordType coordType)
 		{
-			return proxy.getOffsetAtPoint (x, y, coordType);
+			return proxy.GetOffsetAtPoint (x, y, coordType);
 		}
 
 		public int NSelections {
-			get { return proxy.getNSelections (); }
+			get { return proxy.GetNSelections (); }
 		}
 
 		public void GetSelection (int selectionNum, out int startOffset, out int endOffset)
 		{
-			proxy.getSelection (selectionNum, out startOffset, out endOffset);
+			proxy.GetSelection (selectionNum, out startOffset, out endOffset);
 		}
 
 		public bool AddSelection (int startOffset, int endOffset)
 		{
-			return proxy.addSelection (startOffset, endOffset);
+			return proxy.AddSelection (startOffset, endOffset);
 		}
 
 		public bool RemoveSelection (int selectionNum)
 		{
-			return proxy.removeSelection (selectionNum);
+			return proxy.RemoveSelection (selectionNum);
 		}
 
 		public bool SetSelection (int selectionNum, int startOffset, int endOffset)
 		{
-			return proxy.setSelection (selectionNum, startOffset, endOffset);
+			return proxy.SetSelection (selectionNum, startOffset, endOffset);
 		}
 
 		public void GetRangeExtents (int startOffset, int endOffset, out int x, out int y, out int width, out int height, CoordType coordType)
 		{
-			proxy.getRangeExtents (startOffset, endOffset, out x, out y, out width, out height, coordType);
+			proxy.GetRangeExtents (startOffset, endOffset, out x, out y, out width, out height, coordType);
 		}
 
 		public RangeList [] GetBoundedRanges (int x, int y, int width, int height, CoordType coordType, ClipType xClipType, ClipType yClipType)
 		{
-			return proxy.getBoundedRanges (x, y, width, height, coordType, xClipType, yClipType);
+			return proxy.GetBoundedRanges (x, y, width, height, coordType, xClipType, yClipType);
 		}
 
 		public IDictionary<string, string> GetAttributeRun (int offset, out int startOffset, out int endOffset, bool includeDefaults)
 		{
 			IDictionary<string, string> attributes;
-			proxy.getAttributeRun (offset, out attributes, out startOffset, out endOffset, includeDefaults);
+			proxy.GetAttributeRun (offset, out attributes, out startOffset, out endOffset, includeDefaults);
 			return attributes;
 		}
 
 		public IDictionary<string, string> GetDefaultAttributeSet ()
 		{
-			return proxy.getDefaultAttributeSet ();
+			return proxy.GetDefaultAttributeSet ();
 		}
 
 		public int CharacterCount {
 			get {
-				return (int) properties.Get (IFACE, "characterCount");
+				return (int) properties.Get (IFACE, "CharacterCount");
 			}
 		}
 
 		public int CaretOffset {
 			get {
-				return (int) properties.Get (IFACE, "caretOffset");
+				return (int) properties.Get (IFACE, "CaretOffset");
 			}
 		}
 	}
@@ -199,23 +199,23 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Text")]
 	interface IText : Introspectable
 	{
-		string getText (int startOffset, int endOffset);
-		bool setCaretOffset (int offset);
-		void getTextBeforeOffset (int offset, BoundaryType type, out string text, out int startOffset, out int endOffset);
-		void getTextAtOffset (int offset, BoundaryType type, out string text, out int startOffset, out int endOffset);
-		void getTextAfterOffset (int offset, BoundaryType type, out string text, out int startOffset, out int endOffset);
-		int getCharacterAtOffset (int offset);
-		void getAttributeValue (int offset, string attributeName, out string val, out int startOffset, out int endOffset, out bool defined);
-		void getCharacterExtents (int offset, out int x, out int y, out int width, out int height, CoordType coordType);
-		int getOffsetAtPoint (int x, int y, CoordType coordType);
-		int getNSelections ();
-		void getSelection (int selectionNum, out int startOffset, out int endOffset);
-		bool addSelection (int startOffset, int endOffset);
-		bool removeSelection (int selectionNum);
-		bool setSelection (int selectionNum, int startOffset, int endOffset);
-		void getRangeExtents (int startOffset, int endOffset, out int x, out int y, out int width, out int height, CoordType coordType);
-		RangeList [] getBoundedRanges (int x, int y, int width, int height, CoordType coordType, ClipType xClipType, ClipType yClipType);
-		void getAttributeRun (int offset, out IDictionary<string, string> attributes, out int startOffset, out int endOffset, bool includeDefaults);
-		IDictionary<string, string> getDefaultAttributeSet ();
+		string GetText (int startOffset, int endOffset);
+		bool SetCaretOffset (int offset);
+		void GetTextBeforeOffset (int offset, BoundaryType type, out string text, out int startOffset, out int endOffset);
+		void GetTextAtOffset (int offset, BoundaryType type, out string text, out int startOffset, out int endOffset);
+		void GetTextAfterOffset (int offset, BoundaryType type, out string text, out int startOffset, out int endOffset);
+		int GetCharacterAtOffset (int offset);
+		void GetAttributeValue (int offset, string attributeName, out string val, out int startOffset, out int endOffset, out bool defined);
+		void GetCharacterExtents (int offset, out int x, out int y, out int width, out int height, CoordType coordType);
+		int GetOffsetAtPoint (int x, int y, CoordType coordType);
+		int GetNSelections ();
+		void GetSelection (int selectionNum, out int startOffset, out int endOffset);
+		bool AddSelection (int startOffset, int endOffset);
+		bool RemoveSelection (int selectionNum);
+		bool SetSelection (int selectionNum, int startOffset, int endOffset);
+		void GetRangeExtents (int startOffset, int endOffset, out int x, out int y, out int width, out int height, CoordType coordType);
+		RangeList [] GetBoundedRanges (int x, int y, int width, int height, CoordType coordType, ClipType xClipType, ClipType yClipType);
+		void GetAttributeRun (int offset, out IDictionary<string, string> attributes, out int startOffset, out int endOffset, bool includeDefaults);
+		IDictionary<string, string> GetDefaultAttributeSet ();
 	}
 }

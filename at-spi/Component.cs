@@ -48,42 +48,42 @@ namespace Atspi
 
 		public Accessible GetAccessibleAtPoint (int x, int y, CoordType coordType)
 		{
-			ObjectPath o = proxy.getAccessibleAtPoint (x, y, coordType);
+			ObjectPath o = proxy.GetAccessibleAtPoint (x, y, coordType);
 			return accessible.application.GetElement (o);
 		}
 
 		public BoundingBox GetExtents (CoordType coordType)
 		{
-			return proxy.getExtents (coordType);
+			return proxy.GetExtents (coordType);
 		}
 
 		public void GetPosition (CoordType coordType, out int x, out int y)
 		{
-			proxy.getPosition (coordType, out x, out y);
+			proxy.GetPosition (coordType, out x, out y);
 		}
 
 		public void GetSize (out int x, out int y)
 		{
-			proxy.getSize (out x, out y);
+			proxy.GetSize (out x, out y);
 		}
 
 		public ComponentLayer Layer {
-			get { return proxy.getLayer (); }
+			get { return proxy.GetLayer (); }
 		}
 
 		public short MDIZOrder {
-			get { return proxy.getMDIZOrder (); }
+			get { return proxy.GetMDIZOrder (); }
 		}
 
 		public bool GrabFocus ()
 		{
-			return proxy.grabFocus ();
+			return proxy.GrabFocus ();
 		}
 
-		// TODO: register/deregister focus handler
+		// TODO: register/deregister Focus handler
 
 		public double Alpha {
-			get { return proxy.getAlpha (); }
+			get { return proxy.GetAlpha (); }
 		}
 	}
 
@@ -91,16 +91,16 @@ namespace Atspi
 	interface IComponent : Introspectable
 	{
 		bool contains (int x, int y, CoordType coord_type);
-		ObjectPath getAccessibleAtPoint (int x, int y, CoordType coord_type);
-		BoundingBox getExtents (CoordType coord_type);
-		void getPosition (CoordType coord_type, out int x, out int y);
-		void getSize (out int x, out int y);
-		ComponentLayer getLayer ();
-		short getMDIZOrder ();
-		bool grabFocus ();
+		ObjectPath GetAccessibleAtPoint (int x, int y, CoordType coord_type);
+		BoundingBox GetExtents (CoordType coord_type);
+		void GetPosition (CoordType coord_type, out int x, out int y);
+		void GetSize (out int x, out int y);
+		ComponentLayer GetLayer ();
+		short GetMDIZOrder ();
+		bool GrabFocus ();
 		void registerFocusHandler (ObjectPath handler);
 		void deregisterFocusHandler (ObjectPath handler);
-		double getAlpha ();
+		double GetAlpha ();
 	}
 
 	public enum ComponentLayer: uint

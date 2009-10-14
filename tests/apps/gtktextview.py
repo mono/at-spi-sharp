@@ -35,7 +35,7 @@ class TextView:
         self.window.show()
 
     def pulse_clicked(self, widget):
-        self.bar.pulse() 
+        self.bar.get_buffer().set_text("Button_clicked")
 
 
 def main():

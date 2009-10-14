@@ -46,32 +46,32 @@ namespace Atspi
 
 		public int NActions {
 			get {
-				return (int) properties.Get (IFACE, "nActions");
+				return (int) properties.Get (IFACE, "NActions");
 			}
 		}
 
 		public string GetDescription (int index)
 		{
-			return proxy.getDescription (index);
+			return proxy.GetDescription (index);
 		}
 
 		public string GetName (int index)
 		{
-			return proxy.getName (index);
+			return proxy.GetName (index);
 		}
 
 		public string GetKeyBinding (int index)
 		{
-			return proxy.getKeyBinding (index);
+			return proxy.GetKeyBinding (index);
 		}
 
 		public ActionDescription [] Actions {
-			get { return proxy.getActions (); }
+			get { return proxy.GetActions (); }
 		}
 
 		public bool DoAction (int index)
 		{
-			return proxy.doAction (index);
+			return proxy.DoAction (index);
 		}
 	}
 
@@ -85,11 +85,11 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Action")]
 	interface IAction : Introspectable
 	{
-		int nActions { get; }
-		string getDescription (int index);
-		string getName (int index);
-		string getKeyBinding (int index);
-		ActionDescription [] getActions ();
-		bool doAction (int index);
+		int NActions { get; }
+		string GetDescription (int index);
+		string GetName (int index);
+		string GetKeyBinding (int index);
+		ActionDescription [] GetActions ();
+		bool DoAction (int index);
 	}
 }
