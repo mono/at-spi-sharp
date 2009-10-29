@@ -30,7 +30,7 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	public class Application
+	public class Application : IDisposable
 	{
 		internal string name;
 		private ITree proxy;
@@ -52,7 +52,12 @@ namespace Atspi
 			AddAccessibles (elements);
 		}
 
-		~Application ()
+		public void Dispose ()
+		{
+			Dispose (true);
+		}
+
+		protected virtual void Dispose (bool disposing)
 		{
 			proxy.UpdateAccessible -= OnUpdateAccessible;
 		}
@@ -77,7 +82,6 @@ namespace Atspi
 		void OnUpdateAccessible (AccessibleProxy nodeAdded)
 		{
 			GetElement (nodeAdded);
-			// TODO: Send event
 		}
 
 		void OnRemoveAccessible (ObjectPath nodeRemoved)
@@ -148,5 +152,13 @@ namespace Atspi
 		public uint role;
 		public string description;
 		public uint [] states;	// 2 32-bit flags
+
+		public bool ContainsChild (string path)
+		{
+			foreach (ObjectPath child in children)
+				if (child.ToString () == path)
+					return true;
+			return false;
+		}
 	}
 }

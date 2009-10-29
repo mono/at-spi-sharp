@@ -1,3 +1,16 @@
+2009-10-29  Mike Gorse  <mgorse@novell.com>
+
+	* StateSet.cs: Add constructor and equality operators.
+
+	* StateSet.cs, Accessible.cs: AddState -> Add.
+
+	* Accessible.cs, Desktop.cs, Event.cs: Add ChildAdded, ChildRemoved,
+	NameChanged, RoleChanged, StateChanged, and DescriptionChanged.
+
+	* Accessible.cs, Application.cs: Add Dispose.
+
+	* Registry.cs: Dispose applications.
+
 2009-10-14  Mike Gorse  <mgorse@novell.com>
 
 	* Action.cs, Accessible.cs, Application.cs, Component.cs, Document.cs,

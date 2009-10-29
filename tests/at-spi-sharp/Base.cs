@@ -92,7 +92,14 @@ namespace AtSpiTest
 		
 		protected Accessible FindApplication (string name)
 		{
-			return Desktop.Instance.FindDescendant (new FindPredicate (CheckName), name);
+			return Desktop.Instance.FindDescendant (FindApplicationPredicate, name);
+		}
+
+		protected bool FindApplicationPredicate (Accessible a, object [] args)
+		{
+			return (a.Name == (string)args[0] &&
+				a.Role == Role.Application &&
+				a.Children.Count > 0);
 		}
 
 		protected bool CheckName (Accessible a, object [] args)

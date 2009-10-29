@@ -90,6 +90,33 @@ namespace TestDocument
 	class TestWindow: Gtk.Window
 	{
 		public TestWindow (string name) : base (name) { }
+		private Gtk.Button button;
+
+		public bool AddChild ()
+		{
+			if (button != null)
+				return false;
+			button = new Gtk.Button ("button");
+			Add (button);
+			GLib.Signal.Emit (Accessible,
+				"children_changed::add",
+				0u,
+				Accessible.RefAccessibleChild (0).Handle);
+			return true;
+		}
+
+		public bool RemoveChild ()
+		{
+			if (button == null)
+				return false;
+			GLib.Signal.Emit (Accessible,
+				"children_changed::remove",
+				(uint)0,
+				Accessible.RefAccessibleChild (0).Handle);
+			Remove (button);
+			button = null;
+			return true;
+		}
 	}
 
 	class TestWindowAccessible: Atk.Object, Atk.DocumentImplementor,
@@ -97,7 +124,7 @@ namespace TestDocument
 		Atk.EditableTextImplementor, Atk.ComponentImplementor,
 		Atk.TableImplementor
 	{
-		private Gtk.Window window;
+		private TestWindow window;
 		private Dictionary<string, string> attributes;
 		public List<Hyperlink> links;
 		private string text;
@@ -106,7 +133,7 @@ namespace TestDocument
 
 		public TestWindowAccessible (GLib.Object widget): base()
 		{
-			this.window = widget as Gtk.Window;
+			this.window = widget as TestWindow;
 			text = null;
 			Role = Atk.Role.Frame;
 			attributes = new Dictionary<string, string> ();
@@ -307,6 +334,10 @@ namespace TestDocument
 						break;
 					}
 
+					case "AddChild":
+						window.AddChild ();
+						break;
+
 					case "BoundsChanged": {
 						Atk.Rectangle bounds = new Atk.Rectangle ();
 						bounds.X = 10;
@@ -323,13 +354,17 @@ namespace TestDocument
 						GLib.Signal.Emit (this,
 							glibSignal,
 							2, 1);
-							break;
+						break;
 
 					case "ColumnInserted":
 						GLib.Signal.Emit (this,
 							glibSignal,
 							3, 2);
-							break;
+						break;
+
+					case "DescriptionChanged":
+						window.Accessible.Description = "plugh";
+						break;
 
 					case "Focus":
 						Atk.Focus.TrackerNotify (this);
@@ -339,25 +374,41 @@ namespace TestDocument
 						GLib.Signal.Emit (this,
 							glibSignal,
 							1);
-							break;
+						break;
+
+					case "NameChanged":
+						window.Accessible.Name = "xyzzy";
+						break;
+
+					case "RemoveChild":
+						window.RemoveChild ();
+						break;
+
+					case "RoleChanged":
+						window.Accessible.Role = Atk.Role.Dialog;
+						break;
 
 					case "RowDeleted":
 						GLib.Signal.Emit (this,
 							glibSignal,
 							4, 3);
-							break;
+						break;
 
 					case "RowInserted":
 						GLib.Signal.Emit (this,
 							glibSignal,
 							5, 4);
-							break;
+						break;
+
+					case "StateChanged":
+						window.Children [0].Sensitive = false;
+						break;
 
 					case "TextCaretMoved":
 						GLib.Signal.Emit (this,
 							glibSignal,
 							6);
-							break;
+						break;
 
 					case "TextChanged":
 						GLib.Signal.Emit (this,
@@ -627,14 +678,14 @@ namespace TestDocument
 
 		protected override int OnGetNChildren ()
 		{
-			return 1;
+			return window.Children.Length;
 		}
 
 		protected override Atk.Object OnRefChild (int index)
 		{
-			if (index != 0)
+			if (index < 0 || index >= window.Children.Length)
 				return null;
-			return window.Children [0].Accessible;
+			return window.Children [index].Accessible;
 		}
 	}
 
@@ -659,7 +710,7 @@ namespace TestDocument
 
 	public class TestMain
 	{
-		private Gtk.Window window;
+		private TestWindow window;
 
 		public static void Main (string[] args)
 		{
@@ -672,7 +723,7 @@ namespace TestDocument
 		{
 			TestWindowAccessibleFactory.Init ();
 			window = new TestWindow ("At-spi-sharp test application");
-			window.Add (new Gtk.Button ("button"));
+			window.AddChild ();
 			window.SetDefaultSize (600, 400);
 			window.DeleteEvent += new DeleteEventHandler (WindowDelete);
 

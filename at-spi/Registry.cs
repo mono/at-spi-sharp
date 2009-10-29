@@ -101,6 +101,9 @@ namespace Atspi
 		internal void TerminateInternal ()
 		{
 			proxy.UpdateApplications -= OnUpdateApplications;
+			foreach (Application app in applications)
+				app.Dispose ();
+			applications = null;
 		}
 
 		void OnUpdateApplications (int added, string name)
@@ -116,6 +119,7 @@ namespace Atspi
 					if (a.name == name) {
 						desktop.Remove (a);
 						applications.Remove (a);
+						a.Dispose ();
 						break;
 					}
 				}

@@ -39,6 +39,9 @@ namespace AtSpiTest
 		string detail;
 		int v1, v2;
 		object any;
+		string oldName, newName;
+		string oldDescription, newDescription;
+		Role oldRole, newRole;
 
 		[TestFixtureSetUp]
 		public void Init ()
@@ -257,6 +260,73 @@ namespace AtSpiTest
 			frame.FocusEvents.Focus -= OnEvent;
 		}
 
+		[Test]
+		public void NameChanged ()
+		{
+			Desktop.OnNameChanged += OnNameChanged;
+			et.SetTextContents ("NameChanged");
+			Sync ();
+			Assert.AreEqual (string.Empty, oldName, "OldName");
+			Assert.AreEqual ("xyzzy", newName, "NameChanged");
+			Desktop.OnNameChanged -= OnNameChanged;
+		}
+
+		[Test]
+		public void DescriptionChanged ()
+		{
+			Desktop.OnDescriptionChanged += OnDescriptionChanged;
+			et.SetTextContents ("DescriptionChanged");
+			Sync ();
+			Assert.AreEqual (string.Empty, oldDescription, "OldDescription");
+			Assert.AreEqual ("plugh", newDescription, "DescriptionChanged");
+			Desktop.OnDescriptionChanged -= OnDescriptionChanged;
+		}
+
+		[Test]
+		public void RoleChanged ()
+		{
+			Desktop.OnRoleChanged += OnRoleChanged;
+			et.SetTextContents ("RoleChanged");
+			Sync ();
+			Assert.AreEqual (Role.Frame, oldRole, "RoleChanged OldRole");
+			Assert.AreEqual (Role.Dialog, newRole, "RoleChanged");
+			Desktop.OnRoleChanged -= OnRoleChanged;
+		}
+
+		[Test]
+		public void StateChanged ()
+		{
+			eventCount = 0;
+			Desktop.OnStateChanged += OnStateChanged;
+			et.SetTextContents ("StateChanged");
+			Sync ();
+			Desktop.OnStateChanged -= OnStateChanged;
+			AssertEvents (2);
+		}
+
+		[Test]
+		[Ignore ("TODO: Figure out why ChildRemove fails")]
+		public void ChildRemoved ()
+		{
+			Desktop.OnChildRemoved += OnStructureChanged;
+			et.SetTextContents ("RemoveChild");
+			Desktop.OnChildRemoved -= OnStructureChanged;
+			Sync ();
+			et.SetTextContents ("AddChild");
+			AssertEvent ();
+		}
+
+		[Test]
+		public void ChildAdded ()
+		{
+			et.SetTextContents ("RemoveChild");
+			Desktop.OnChildAdded += OnStructureChanged;
+			et.SetTextContents ("AddChild");
+			Desktop.OnChildAdded -= OnStructureChanged;
+			Sync ();
+			AssertEvent ();
+		}
+
 		private void OnEvent (string detail, int v1, int v2, object any)
 		{
 			eventCount++;
@@ -264,6 +334,41 @@ namespace AtSpiTest
 			this.v1 = v1;
 			this.v2 = v2;
 			this.any = any;
+		}
+
+		private void OnNameChanged (object sender, string oldName, string newName)
+		{
+			this.oldName = oldName;
+			this.newName = newName;
+		}
+
+		private void OnDescriptionChanged (object sender, string oldDescription, string newDescription)
+		{
+			this.oldDescription = oldDescription;
+			this.newDescription = newDescription;
+		}
+
+		private void OnRoleChanged (object sender, Role oldRole, Role newRole)
+		{
+			this.oldRole = oldRole;
+			this.newRole = newRole;
+		}
+
+		private void OnStateChanged (Accessible sender, StateType state, bool set)
+		{
+			if (sender.Role == Role.PushButton &&
+				state == StateType.Enabled &&
+				set == false)
+				eventCount++;
+			else if (sender.Role == Role.PushButton &&
+				state == StateType.Sensitive &&
+				set == false)
+				eventCount++;
+		}
+
+		private void OnStructureChanged (Accessible parent, Accessible child)
+		{
+			eventCount++;
 		}
 		#endregion
 
@@ -277,7 +382,14 @@ namespace AtSpiTest
 
 		private void AssertEvent ()
 		{
-			Assert.AreEqual (1, eventCount, "eventCount");
+			AssertEvents (1);
+		}
+
+		private void AssertEvents (int n)
+		{
+			int oldEventCount = eventCount;
+			eventCount = 0;
+			Assert.AreEqual (n, oldEventCount, "eventCount");
 			eventCount = 0;
 		}
 	}

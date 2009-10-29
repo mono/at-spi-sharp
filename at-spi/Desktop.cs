@@ -36,6 +36,17 @@ namespace Atspi
 		private volatile static Desktop instance;
 		private static object sync = new Object ();
 
+		public delegate void StructureEventHandler (Accessible sender, Accessible child);
+		public delegate void PropertyChangedEventHandler<T> (object sender, T oldValue,  T newValue);
+		public delegate void StateChangedEventHandler (Accessible sender, StateType state, bool set);
+
+		public static event StructureEventHandler OnChildAdded;
+		public static event StructureEventHandler OnChildRemoved;
+		public static event PropertyChangedEventHandler<string> OnNameChanged;
+		public static event PropertyChangedEventHandler<string> OnDescriptionChanged;
+		public static event PropertyChangedEventHandler<Role> OnRoleChanged;
+		public static event StateChangedEventHandler OnStateChanged;
+
 		public static Desktop Instance {
 			get { return instance; }
 		}
@@ -52,15 +63,19 @@ namespace Atspi
 
 		internal void Add (Application app)
 		{
-			children.Add (app.GetRoot ());
+			lock (sync) {
+				children.Add (app.GetRoot ());
+			}
 		}
 
 		internal void Remove (Application app)
 		{
-			foreach (Accessible accessible in children) {
-				if (accessible.application == app) {
-					children.Remove (accessible);
-					return;
+			lock (sync) {
+				foreach (Accessible accessible in children) {
+					if (accessible.application == app) {
+						children.Remove (accessible);
+						return;
+					}
 				}
 			}
 		}
@@ -70,6 +85,42 @@ namespace Atspi
 			lock (sync) {
 				instance = null;
 			}
+		}
+
+		internal static void RaiseChildAdded (Accessible sender, Accessible child)
+		{
+			if (OnChildAdded != null)
+				OnChildAdded (sender, child);
+		}
+
+		internal static void RaiseChildRemoved (Accessible sender, Accessible child)
+		{
+			if (OnChildRemoved != null)
+				OnChildRemoved (sender, child);
+		}
+
+		internal static void RaiseNameChanged (Accessible sender, string oldName, string newName)
+		{
+			if (OnNameChanged != null)
+				OnNameChanged (sender, oldName, newName);
+		}
+
+		internal static void RaiseDescriptionChanged (Accessible sender, string oldDescription, string newDescription)
+		{
+			if (OnDescriptionChanged != null)
+				OnDescriptionChanged (sender, oldDescription, newDescription);
+		}
+
+		internal static void RaiseRoleChanged (Accessible sender, Role oldRole, Role newRole)
+		{
+			if (OnRoleChanged != null)
+				OnRoleChanged (sender, oldRole, newRole);
+		}
+
+		internal static void RaiseStateChanged (Accessible sender, StateType type, bool set)
+		{
+			if (OnStateChanged != null)
+				OnStateChanged (sender, type, set);
 		}
 	}
 }

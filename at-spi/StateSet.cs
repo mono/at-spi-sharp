@@ -34,6 +34,11 @@ namespace Atspi
 	{
 		private ulong states;
 
+		public StateSet ()
+		{
+			states = 0;
+		}
+
 		public StateSet (uint [] states)
 		{
 			if (states.Length != 2)
@@ -49,12 +54,40 @@ namespace Atspi
 			return (states & ((ulong)1 << n)) != 0? true: false;
 		}
 
-		public void AddState (StateType state)
+		public void Add (StateType state)
 		{
 			int n = (int)state;
 			if (n < 0 || n >= (int)Enum.GetValues (typeof (StateType)).Length)
 				throw new ArgumentOutOfRangeException ();
 			states |= ((ulong)1 << n);
+		}
+
+		public static bool operator == (StateSet left, StateSet right)
+		{
+			if ((object)left == null && (object)right == null)
+				return true;
+			if ((object)left == null || (object)right == null)
+				return false;
+			return left.states == right.states;
+		}
+
+		public static bool operator != (StateSet left, StateSet right)
+		{
+			if ((object)left == null && (object)right == null)
+				return false;
+			if ((object)left == null || (object)right == null)
+				return true;
+			return left.states != right.states;
+		}
+
+		public override bool Equals (object obj)
+		{
+			return this == obj;
+		}
+
+		public override int GetHashCode ()
+		{
+			return ((int)states) ^ (int)(states >> 32);
 		}
 	}
 }

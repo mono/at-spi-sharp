@@ -30,7 +30,7 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	public class Accessible
+	public class Accessible : IDisposable
 	{
 		internal string path;
 		IAccessible proxy;
@@ -74,33 +74,89 @@ namespace Atspi
 			Update (e);
 		}
 
-		internal void Dispose ()
+		public void Dispose ()
 		{
-			// TODO: Fire event
-			if (parent != null)
+			Dispose (true);
+		}
+
+		protected virtual  void Dispose (bool disposing)
+		{
+			if (parent != null) {
+				Desktop.RaiseChildRemoved (parent, this);
 				parent.children.Remove (this);
+			}
 			children.Clear ();
-			stateSet.AddState (StateType.Defunct);
+			stateSet.Add (StateType.Defunct);
 		}
 
 		internal void Update (AccessibleProxy e)
 		{
-			name = e.name;
-			parent = application.GetElement (e.parent, true);
-			role = (Role)e.role;
-			description = e.description;
+			bool initializing = (stateSet == null);
+			if (e.name != name) {
+				string oldName = name;
+				name = e.name;
+				if (!initializing)
+					Desktop.RaiseNameChanged (this, oldName, e.name);
+			}
+
+			Accessible newParent = application.GetElement (e.parent, true);
+			if (newParent != parent) {
+				Accessible oldParent = parent;
+				parent = newParent;
+				if (!initializing) {
+					Desktop.RaiseChildRemoved (oldParent, this);
+					Desktop.RaiseChildAdded (parent, this);
+				}
+			}
+
+			Role newRole = (Role)e.role;
+			if (newRole != role) {
+				Role oldRole = role;
+				role = newRole;
+				if (!initializing)
+					Desktop.RaiseRoleChanged (this, oldRole, newRole);
+			}
+
+			if (e.description != description) {
+				string oldDescription = description;
+				description = e.description;
+				if (!initializing)
+					Desktop.RaiseDescriptionChanged (this, oldDescription, e.description);
+			}
+
 			foreach (string iface in e.interfaces)
 				AddInterface (iface);
-			stateSet = new StateSet (e.states);
+
+			StateSet newStateSet = new StateSet (e.states);
+			if (newStateSet != stateSet) {
+				StateSet oldStateSet = stateSet;
+				stateSet = newStateSet;
+				if (!initializing)
+					foreach (StateType type in Enum.GetValues (typeof (StateType)))
+						if (oldStateSet.Contains (type) != newStateSet.Contains (type))
+							Desktop.RaiseStateChanged (this, type, newStateSet.Contains (type));
+			}
+
 			if (stateSet.Contains (StateType.ManagesDescendants)) {
 				if (!(children is UncachedChildren))
 					children = new UncachedChildren (this);
 			} else {
+				List<Accessible> oldChildren = children as List<Accessible>;
 				if (!(children is List<Accessible>))
 					children = new List<Accessible> ();
 				children.Clear ();
-				foreach (ObjectPath path in e.children)
-					children.Add (application.GetElement (path, true));
+				foreach (ObjectPath path in e.children) {
+					Accessible child = application.GetElement (path, true);
+					if (!initializing &&
+						(oldChildren == null ||
+						oldChildren.IndexOf (child) == -1))
+						Desktop.RaiseChildAdded (this, child);
+					children.Add (child);
+				}
+				if (!initializing && oldChildren != null)
+					foreach (Accessible child in oldChildren)
+						if (!e.ContainsChild (child.path))
+							Desktop.RaiseChildRemoved (this, child);
 			}
 		}
 
@@ -178,9 +234,7 @@ namespace Atspi
 
 		public int IndexInParentNoCache {
 			get {
-				if (parent == null)
-					return -1;
-				return parent.proxy.GetIndexInParent ();
+				return proxy.GetIndexInParent ();
 			}
 		}
 
@@ -338,7 +392,10 @@ namespace Atspi
 
 		public IEventWindow WindowEvents {
 			get {
-				if (windowEvents == null)
+				if (windowEvents == null &&
+					(Role == Role.Window ||
+					 Role == Role.Frame ||
+					 Role == Role.Dialog))
 					windowEvents = Registry.Bus.GetObject<IEventWindow> (application.name, new ObjectPath (path));
 				return windowEvents;
 			}
@@ -346,7 +403,7 @@ namespace Atspi
 
 		public IEventTerminal TerminalEvents {
 			get {
-				if (terminalEvents == null)
+				if (terminalEvents == null && Role == Role.Terminal)
 					terminalEvents = Registry.Bus.GetObject<IEventTerminal> (application.name, new ObjectPath (path));
 				return terminalEvents;
 			}

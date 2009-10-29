@@ -1,3 +1,11 @@
+2009-10-29  Mike Gorse  <mgorse@novell.com>
+
+	* apps/Document.cs, at-spi-sharp/Event.cs, Test ChildAdded, ChildRemoved,
+	NameChanged, RoleChanged, StateChanged, and DescriptionChanged.
+
+	* Base.cs: Avoid throwing an exception if an application has
+	0 children (although this should not happen).
+
 2009-10-14  Mike Gorse  <mgorse@novell.com>
 
 	* apps/Document.cs, at-spi-sharp/EventTest.cs: at-spi-sharp/Makefile.am:
