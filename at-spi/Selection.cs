@@ -52,7 +52,7 @@ namespace Atspi
 
 		public Accessible GetSelectedChild (int selectedChildIndex)
 		{
-			ObjectPath path = proxy.GetSelectedChild (selectedChildIndex);
+			AccessiblePath path = proxy.GetSelectedChild (selectedChildIndex);
 			return Registry.GetElement (path, accessible, true);
 		}
 
