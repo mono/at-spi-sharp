@@ -48,8 +48,8 @@ namespace Atspi
 
 		public Accessible GetAccessibleAtPoint (int x, int y, CoordType coordType)
 		{
-			ObjectPath o = proxy.GetAccessibleAtPoint (x, y, coordType);
-			return accessible.application.GetElement (o);
+			AccessiblePath path = proxy.GetAccessibleAtPoint (x, y, coordType);
+			return Registry.GetElement (path, accessible, true);
 		}
 
 		public BoundingBox GetExtents (CoordType coordType)
@@ -91,7 +91,7 @@ namespace Atspi
 	interface IComponent : Introspectable
 	{
 		bool contains (int x, int y, CoordType coord_type);
-		ObjectPath GetAccessibleAtPoint (int x, int y, CoordType coord_type);
+		AccessiblePath GetAccessibleAtPoint (int x, int y, CoordType coord_type);
 		BoundingBox GetExtents (CoordType coord_type);
 		void GetPosition (CoordType coord_type, out int x, out int y);
 		void GetSize (out int x, out int y);

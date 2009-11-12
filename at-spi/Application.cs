@@ -70,12 +70,8 @@ namespace Atspi
 
 		Accessible GetElement (AccessibleProxy e)
 		{
-			Accessible obj = GetElement (e.path, false);
-			if (obj == null) {
-				obj = new Accessible (this, e);
-				accessibles [e.path.ToString ()] = obj;
-			} else
-				obj.Update (e);
+			Accessible obj = GetElement (e.path, true);
+			obj.Update (e);
 			return obj;
 		}
 
@@ -142,11 +138,17 @@ namespace Atspi
 	delegate void UpdateAccessibleHandler (AccessibleProxy nodeAdded);
 	delegate void RemoveAccessibleHandler (ObjectPath nodeRemoved);
 
+	internal struct AccessiblePath
+	{
+		internal string bus_name;
+		internal ObjectPath path;
+	}
+
 	struct AccessibleProxy
 	{
 		public ObjectPath path;
-		public ObjectPath parent;
-		public ObjectPath [] children;
+		public AccessiblePath parent;
+		public AccessiblePath [] children;
 		public string [] interfaces;
 		public string name;
 		public uint role;
@@ -155,8 +157,8 @@ namespace Atspi
 
 		public bool ContainsChild (string path)
 		{
-			foreach (ObjectPath child in children)
-				if (child.ToString () == path)
+			foreach (AccessiblePath child in children)
+				if (child.bus_name == name && child.path.ToString () == path)
 					return true;
 			return false;
 		}

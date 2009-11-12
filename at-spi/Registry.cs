@@ -42,7 +42,7 @@ namespace Atspi
 		private volatile static Registry instance;
 		private Bus bus;
 		private RegistryInterface proxy;
-		private List<Application> applications;
+		private Dictionary<string, Application> applications;
 		private Desktop desktop;
 		private static object sync = new object ();
 
@@ -79,17 +79,16 @@ namespace Atspi
 			}
 
 			bus = Bus.Session;
-			applications = new List<Application> ();
+			applications = new Dictionary<string, Application> ();
 			desktop = new Desktop ();
 			proxy = bus.GetObject<RegistryInterface> ("org.freedesktop.atspi.Registry", new ObjectPath ("/org/freedesktop/atspi/registry"));
+			proxy.Introspect ();
 			proxy.UpdateApplications += OnUpdateApplications;
 
-			BusG.Init ();
-
 			string [] appNames = proxy.GetApplications ();
-			foreach (string app in appNames) {
-				Application application = new Application (app);
-				applications.Add (application);
+			foreach (string name in appNames) {
+				Application application = new Application (name);
+				applications [name] = application;
 				desktop.Add (application);
 			}
 		}
@@ -98,11 +97,28 @@ namespace Atspi
 			get { return Instance.desktop; }
 		}
 
+		internal static Accessible GetElement (AccessiblePath ap, Accessible reference, bool create)
+		{
+			Application application = (reference != null?
+					reference.application: null);
+			return GetElement (ap, application, create);
+		}
+
+		internal static Accessible GetElement (AccessiblePath ap, Application reference, bool create)
+		{
+			Application application;
+			application = (Instance.applications.ContainsKey (ap.bus_name)
+				? Instance.applications [ap.bus_name]
+				: reference);
+			if (application == null)
+				return null;
+			return application.GetElement (ap.path, create);
+		}
 		internal void TerminateInternal ()
 		{
 			proxy.UpdateApplications -= OnUpdateApplications;
-			foreach (Application app in applications)
-				app.Dispose ();
+			foreach (string bus_name in applications.Keys)
+				applications [bus_name].Dispose ();
 			applications = null;
 		}
 
@@ -111,18 +127,13 @@ namespace Atspi
 			// added is really a bool
 			if (added != 0) {
 				Application app = new Application (name);
-				applications.Add (app);
+				applications [name] = app;
 				desktop.Add (app);
-			}
-			else {
-				foreach (Application a in applications) {
-					if (a.name == name) {
-						desktop.Remove (a);
-						applications.Remove (a);
-						a.Dispose ();
-						break;
-					}
-				}
+			} else if (applications.ContainsKey (name)) {
+				Application application = applications [name];
+				desktop.Remove (application);
+				applications.Remove (name);
+				application.Dispose ();
 			}
 		}
 	}

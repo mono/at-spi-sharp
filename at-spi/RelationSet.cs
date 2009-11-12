@@ -74,13 +74,13 @@ namespace Atspi
 			type = rel.type;
 			targets = new Accessible [rel.targets.Length];
 			for (int i = 0; i < rel.targets.Length; i++)
-				targets [i] = application.GetElement (rel.targets [i], false);
+				targets [i] = Registry.GetElement (rel.targets [i], application, false);
 		}
 	}
 
 	struct DBusRelation
 	{
 		public RelationType type;
-		public string [] targets;
+		public AccessiblePath [] targets;
 	}
 }

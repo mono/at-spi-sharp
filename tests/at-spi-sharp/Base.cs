@@ -154,7 +154,7 @@ namespace AtSpiTest
 		protected Accessible Find (Accessible accessible, Role role, string name, bool wait)
 		{
 			for (;;) {
-				Accessible ret = Desktop.Instance.FindDescendant (new FindPredicate (Check), role, name);
+				Accessible ret = accessible.FindDescendant (Check, role, name);
 				if (ret != null)
 					return ret;
 				if (!wait)

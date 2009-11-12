@@ -52,8 +52,8 @@ namespace Atspi
 
 		public Accessible GetSelectedChild (int selectedChildIndex)
 		{
-			ObjectPath o = proxy.GetSelectedChild (selectedChildIndex);
-			return accessible.application.GetElement (o);
+			ObjectPath path = proxy.GetSelectedChild (selectedChildIndex);
+			return Registry.GetElement (path, accessible, true);
 		}
 
 		public bool SelectChild (int childIndex)
@@ -90,7 +90,7 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Selection")]
 	interface ISelection : Introspectable
 	{
-		ObjectPath GetSelectedChild (int selectedChildIndex);
+		AccessiblePath GetSelectedChild (int selectedChildIndex);
 		bool SelectChild (int childIndex);
 		bool DeselectSelectedChild (int selectedChildIndex);
 		bool IsChildSelected (int childIndex);

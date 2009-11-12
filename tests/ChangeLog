@@ -1,3 +1,10 @@
+2009-11-12  Mike Gorse  <mgorse@novell.com>
+
+	* at-spi-sharp/Base.cs: Fix Find to start from the given accessible.
+
+	* at-spi-sharp/atspitest.sh.in: Remove setting of GTK_MODULES.
+
+	* apps/gtkradiobutton.py: Added.
 2009-10-29  Mike Gorse  <mgorse@novell.com>
 
 	* apps/Document.cs, at-spi-sharp/Event.cs, Test ChildAdded, ChildRemoved,

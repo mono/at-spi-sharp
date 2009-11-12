@@ -1,3 +1,9 @@
+2009-11-12  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs, Component.cs, Selection.cs, Table.cs, RelationSet.cs,
+	Application.cs, Registry.cs: Track at-spi changes supporting
+	out-of-process accessibles.
+
 2009-10-29  Mike Gorse  <mgorse@novell.com>
 
 	* StateSet.cs: Add constructor and equality operators.

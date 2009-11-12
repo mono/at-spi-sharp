@@ -99,7 +99,7 @@ namespace Atspi
 					Desktop.RaiseNameChanged (this, oldName, e.name);
 			}
 
-			Accessible newParent = application.GetElement (e.parent, true);
+			Accessible newParent = Registry.GetElement (e.parent, this, true);
 			if (newParent != parent) {
 				Accessible oldParent = parent;
 				parent = newParent;
@@ -145,8 +145,8 @@ namespace Atspi
 				if (!(children is List<Accessible>))
 					children = new List<Accessible> ();
 				children.Clear ();
-				foreach (ObjectPath path in e.children) {
-					Accessible child = application.GetElement (path, true);
+				foreach (AccessiblePath path in e.children) {
+					Accessible child = Registry.GetElement (path, this, true);
 					if (!initializing &&
 						(oldChildren == null ||
 						oldChildren.IndexOf (child) == -1))
@@ -220,8 +220,8 @@ namespace Atspi
 
 		public Accessible GetChildAtIndexNoCache (int index)
 		{
-			ObjectPath path = proxy.GetChildAtIndex (index);
-			return Application.GetElement (path);
+			AccessiblePath path = proxy.GetChildAtIndex (index);
+			return Registry.GetElement (path, this, true);
 		}
 
 		public int IndexInParent {
@@ -449,6 +449,6 @@ namespace Atspi
 	{
 		DBusRelation [] GetRelationSet ();
 		int GetIndexInParent ();
-		ObjectPath GetChildAtIndex (int index);
+		AccessiblePath GetChildAtIndex (int index);
 	}
 }

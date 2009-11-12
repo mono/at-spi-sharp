@@ -61,15 +61,15 @@ namespace Atspi
 
 		public Accessible Caption {
 			get {
-				ObjectPath path = (ObjectPath) properties.Get (IFACE, "Caption");
-				return accessible.application.GetElement (path, true);
+				AccessiblePath path = (AccessiblePath) properties.Get (IFACE, "Caption");
+				return Registry.GetElement (path, accessible, true);
 			}
 		}
 
 		public Accessible Summary {
 			get {
-				ObjectPath path = (ObjectPath) properties.Get (IFACE, "Summary");
-				return accessible.application.GetElement (path, true);
+				AccessiblePath path = (AccessiblePath) properties.Get (IFACE, "Summary");
+				return Registry.GetElement (path, accessible, true);
 			}
 		}
 
@@ -87,8 +87,8 @@ namespace Atspi
 
 		public Accessible GetAccessibleAt (int row, int column)
 		{
-			ObjectPath o = proxy.GetAccessibleAt (row, column);
-			return accessible.application.GetElement (o);
+			AccessiblePath path = proxy.GetAccessibleAt (row, column);
+			return Registry.GetElement (path, accessible, true);
 		}
 
 		public int GetIndexAt (int row, int column)
@@ -128,14 +128,14 @@ namespace Atspi
 
 		public Accessible GetRowHeader (int row)
 		{
-			ObjectPath o = proxy.GetRowHeader (row);
-			return accessible.application.GetElement (o);
+			AccessiblePath path = proxy.GetRowHeader (row);
+			return Registry.GetElement (path, accessible, true);
 		}
 
 		public Accessible GetColumnHeader (int column)
 		{
-			ObjectPath o = proxy.GetColumnHeader (column);
-			return accessible.application.GetElement (o);
+			AccessiblePath path = proxy.GetColumnHeader (column);
+			return Registry.GetElement (path, accessible, true);
 		}
 
 		public int [] GetSelectedRows ()
@@ -195,7 +195,7 @@ namespace Atspi
 	[Interface ("org.freedesktop.atspi.Table")]
 	interface ITable : Introspectable
 	{
-		ObjectPath GetAccessibleAt (int row, int column);
+		AccessiblePath GetAccessibleAt (int row, int column);
 		int GetIndexAt (int row, int column);
 		int GetRowAtIndex (int index);
 		int GetColumnAtIndex (int index);
@@ -203,8 +203,8 @@ namespace Atspi
 		string GetColumnDescription (int column);
 		int GetRowExtentAt (int row, int column);
 		int GetColumnExtentAt (int row, int column);
-		ObjectPath GetRowHeader (int row);
-		ObjectPath GetColumnHeader (int column);
+		AccessiblePath GetRowHeader (int row);
+		AccessiblePath GetColumnHeader (int column);
 		int [] GetSelectedRows ();
 		int [] GetSelectedColumns ();
 		bool IsRowSelected (int row);
