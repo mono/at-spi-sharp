@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DLL=at-spi-sharp-tests.dll
+DLL=AtSpiSharpTests.dll
 
 TEST_DISPLAY=:99
 NUNIT_FLAGS="-nothread -noshadow -labels"

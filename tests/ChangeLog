@@ -1,3 +1,9 @@
+2009-11-12  Sandy Armstrong  <sanfordarmstrong@gmail.com>
+
+	* at-spi-sharp/Makefile.am:
+	* at-spi-sharp/atspitest.sh.in: Rename assembly to AtSpiSharpTests.dll.
+	Reference ndesk-dbus available internally in at-spi-sharp.dll.
+
 2009-11-12  Mike Gorse  <mgorse@novell.com>
 
 	* at-spi-sharp/Base.cs: Fix Find to start from the given accessible.

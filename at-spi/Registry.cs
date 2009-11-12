@@ -68,7 +68,7 @@ namespace Atspi
 			instance = null;
 		}
 
-		public static Bus Bus { get { return Instance.bus; } }
+		internal static Bus Bus { get { return Instance.bus; } }
 
 		internal Registry (bool startLoop)
 		{

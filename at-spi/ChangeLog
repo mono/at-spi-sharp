@@ -1,3 +1,10 @@
+2009-11-12  Sandy Armstrong  <sanfordarmstrong@gmail.com>
+
+	* Registry.cs: Bus property is now internal instead of public.
+	* Makefile.am:
+	* AssemblyInfo.cs: Bundle patched ndesk-dbus directly into at-spi-sharp
+	with all public types internalized. Set InternalsVisibleTo for tests.
+
 2009-11-12  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs, Component.cs, Selection.cs, Table.cs, RelationSet.cs,

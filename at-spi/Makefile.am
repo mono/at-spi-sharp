@@ -1,8 +1,8 @@
 EXTRA_DIST =
 
 ASSEMBLY_COMPILER_COMMAND = gmcs
-#ASSEMBLY_COMPILER_FLAGS = -noconfig -codepage:utf8 -warn:4 -optimize+ -debug "-define:DEBUG" -keyfile:../mono-uia.snk -warnaserror
-ASSEMBLY_COMPILER_FLAGS = -noconfig -codepage:utf8 -warn:4 -optimize+ -debug "-define:DEBUG" -keyfile:../mono-uia.snk
+#ASSEMBLY_COMPILER_FLAGS = -noconfig -unsafe -codepage:utf8 -warn:4 -optimize+ -debug "-define:DEBUG" -keyfile:$(top_srcdir)/mono-uia.snk -warnaserror
+ASSEMBLY_COMPILER_FLAGS = -noconfig -unsafe -codepage:utf8 -warn:4 -optimize+ -debug "-define:DEBUG" -keyfile:$(top_srcdir)/mono-uia.snk
 
 ASSEMBLY = bin/at-spi-sharp.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
@@ -28,7 +28,13 @@ RESGEN=resgen2
 #all: $(ASSEMBLY) $(PROGRAMFILES) $(ASSEMBLY).config
 all: $(ASSEMBLY) $(PROGRAMFILES)
 
-FILES =  \
+if ENABLE_EXTERNAL_NDESK_DBUS
+NDESK_DBUS_FILES =
+else
+NDESK_DBUS_FILES = $(top_srcdir)/ndesk-dbus/*.cs
+endif
+
+SOURCE_FILES =  \
 	Accessible.cs \
 	Action.cs \
 	Application.cs \
@@ -51,6 +57,10 @@ FILES =  \
 	Text.cs \
 	UncachedChildren.cs \
 	Value.cs
+
+FILES =  \
+	$(SOURCE_FILES) \
+	$(NDESK_DBUS_FILES)
 
 DATA_FILES = 
 

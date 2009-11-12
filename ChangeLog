@@ -1,3 +1,9 @@
+2009-11-12  Sandy Armstrong  <sanfordarmstrong@gmail.com>
+
+	* COPYING: 
+	* ndesk-dbus: 
+	* configure.ac: Bundle internalized and patched version of ndesk-dbus.
+
 2009-09-16  Mike Gorse  <mgorse@novell.com>
 
 	* configure.ac: Check for glib-sharp and gtk-sharp for tests.

@@ -2,13 +2,11 @@
 EXTRA_DIST =  
 
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS = -keyfile:../../mono-uia.snk -noconfig -codepage:utf8 -warn:4 -warnaserror -optimize+ -debug "-define:DEBUG"
+ASSEMBLY_COMPILER_FLAGS = -keyfile:$(top_srcdir)/mono-uia.snk -noconfig -codepage:utf8 -warn:4 -warnaserror -optimize+ -debug "-define:DEBUG"
 
-ASSEMBLY = bin/at-spi-sharp-tests.dll
+ASSEMBLY = bin/AtSpiSharpTests.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
-PROJECT_REFERENCES =  \
-	../../at-spi/bin/at-spi-sharp.dll
 BUILD_DIR = bin
 
 ATSPISHARP_DLL_SOURCE=../../at-spi/bin/at-spi-sharp.dll
@@ -57,8 +55,7 @@ REFERENCES =  \
 	System.Data \
 	Mono.Posix \
 	-pkg:mono-nunit \
-	../../at-spi/bin/at-spi-sharp.dll \
-	$(NDESK_DBUS_LIBS)
+	../../at-spi/bin/at-spi-sharp.dll
 
 DLL_REFERENCES = 
 
@@ -77,7 +74,7 @@ $(eval $(call emit_resgen_targets))
 $(build_xamlg_list): %.xaml.g.cs: %.xaml
 	xamlg '$<'
 
-$(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list) $(build_satellite_assembly_list)
+$(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(build_xamlg_list) $(build_satellite_assembly_list)
 	@mkdir -p $(shell dirname $(ASSEMBLY))
 	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)
 	@chmod +x atspitest.sh
