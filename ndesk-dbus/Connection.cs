@@ -378,9 +378,10 @@ namespace NDesk.DBus
 			rule.Interface = signal.Interface;
 			rule.Member = signal.Member;
 			rule.Path = signal.Path;
+			rule.Sender = signal.Sender;
 
 			Delegate dlg;
-			if (Handlers.TryGetValue (rule, out dlg)) {
+			if (Handlers.TryGetValue (rule, out dlg) && dlg != null) {
 				//dlg.DynamicInvoke (GetDynamicValues (msg));
 
 				MethodInfo mi = dlg.Method;

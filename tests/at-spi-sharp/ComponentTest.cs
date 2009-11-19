@@ -24,7 +24,6 @@
 // 
 
 using System;
-using NDesk.DBus;
 using NUnit.Framework;
 using Atspi;
 

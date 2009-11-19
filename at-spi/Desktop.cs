@@ -59,6 +59,7 @@ namespace Atspi
 				else
 					throw new Exception ("Attempt to create a second desktop");
 			}
+			role = Role.DesktopFrame;
 		}
 
 		internal void Add (Application app)

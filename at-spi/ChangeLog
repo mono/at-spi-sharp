@@ -1,3 +1,11 @@
+2009-11-19  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs, Desktop.cs: Set Desktop role.
+
+	* Registry.cs: Start an Iterate thread if startLoop set on init.
+
+	* Registry.cs: Set the Desktop instance as an Application's parent.
+
 2009-11-12  Sandy Armstrong  <sanfordarmstrong@gmail.com>
 
 	* Registry.cs: Bus property is now internal instead of public.

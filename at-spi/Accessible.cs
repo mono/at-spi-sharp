@@ -45,7 +45,7 @@ namespace Atspi
 		private Accessible parent;
 		private string name;
 		private string description;
-		private Role role;
+		protected Role role;
 		private StateSet stateSet;
 		private Interfaces interfaces;
 

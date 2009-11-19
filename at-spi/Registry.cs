@@ -45,6 +45,9 @@ namespace Atspi
 		private Dictionary<string, Application> applications;
 		private Desktop desktop;
 		private static object sync = new object ();
+		private static Thread loopThread;
+
+		private const string PATH_DESKTOP = "/org/freedesktop/atspi/accessible/desktop";
 
 		public static void Initialize ()
 		{
@@ -79,6 +82,12 @@ namespace Atspi
 			}
 
 			bus = Bus.Session;
+			if (startLoop && loopThread == null) {
+				loopThread = new Thread (new ThreadStart (Iterate));
+				loopThread.IsBackground = true;
+				loopThread.Start ();
+			}
+
 			applications = new Dictionary<string, Application> ();
 			desktop = new Desktop ();
 			proxy = bus.GetObject<RegistryInterface> ("org.freedesktop.atspi.Registry", new ObjectPath ("/org/freedesktop/atspi/registry"));
@@ -106,6 +115,8 @@ namespace Atspi
 
 		internal static Accessible GetElement (AccessiblePath ap, Application reference, bool create)
 		{
+			if (ap.path.ToString () == PATH_DESKTOP)
+				return Desktop.Instance;
 			Application application;
 			application = (Instance.applications.ContainsKey (ap.bus_name)
 				? Instance.applications [ap.bus_name]
@@ -135,6 +146,12 @@ namespace Atspi
 				applications.Remove (name);
 				application.Dispose ();
 			}
+		}
+
+		private void Iterate ()
+		{
+			for (;;)
+				bus.Iterate ();
 		}
 	}
 

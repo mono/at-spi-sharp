@@ -26,7 +26,6 @@
 
 using System;
 using System.Collections.Generic;
-using NDesk.DBus;
 using NUnit.Framework;
 using Atspi;
 
@@ -171,7 +170,7 @@ namespace AtSpiTest
 
 		protected void Iterate ()
 		{
-			Registry.Bus.Iterate ();
+			System.Threading.Thread.Sleep (100);
 		}
 		
 		public static void States (Accessible accessible, params StateType [] expected)

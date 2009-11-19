@@ -24,7 +24,6 @@
 // 
 
 using System;
-using NDesk.DBus;
 using NUnit.Framework;
 using Atspi;
 
@@ -78,6 +77,16 @@ namespace AtSpiTest
 			Assert.AreEqual (Role.Filler, parent.Role, "Parent Role");
 			Assert.AreEqual (0, parent.Children [0].IndexInParent, "IndexInParent (0)");
 			Assert.AreEqual (1, parent.Children [1].IndexInParent, "IndexInParent (1)");
+		}
+
+		[Test]
+		public void ParentOfApplication ()
+		{
+			Accessible application = frame.Parent;
+			Assert.AreEqual (Role.Application, application.Role, "Application Role");
+			Accessible parent = application.Parent;
+			Assert.IsNotNull (parent, "Parent of application should not be null");
+			Assert.AreEqual (Role.DesktopFrame, parent.Role, "Parent Role");
 		}
 		#endregion
 	}

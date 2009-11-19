@@ -24,7 +24,6 @@
 // 
 
 using System;
-using NDesk.DBus;
 using NUnit.Framework;
 using Atspi;
 
@@ -55,6 +54,7 @@ namespace AtSpiTest
 
 		// Object event tests
 		[Test]
+		[Ignore ("Hangs with ndesk-dbus 0.6")]
 		public void BoundsChanged ()
 		{
 			frame.ObjectEvents.BoundsChanged += OnEvent;

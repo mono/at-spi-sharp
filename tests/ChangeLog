@@ -1,3 +1,20 @@
+2009-11-19  Mike Gorse  <mgorse@novell.com>
+
+	* at-spi-sharp/ActionTest.cs, at-spi-sharp/DocumentTest.cs,
+	at-spi-sharp/EventTest.cs, at-spi-sharp/ImageTest.cs,
+	at-spi-sharp/UncachedChildrenTest.cs, at-spi-sharp/TextTest.cs,
+	at-spi-sharp/SelectionTest.cs, at-spi-sharp/TableTest.cs,
+	at-spi-sharp/HypertextTest.cs,, at-spi-sharp/AccessibleTest.cs,
+	at-spi-sharp/BaseTest.cs, at-spi-sharp/ComponentTest.cs:
+	Remove NDesk namespace.
+
+	* at-spi-sharp/EventTest.cs: ignore BoundsChanged test for now.
+
+	* at-spi-sharp/AccessibleTest.cs: Test that parent of an application
+	is the desktop.
+
+	* at-spi-sharp/Base.cs: Sleep instead of calling Bus.Iterate.
+
 2009-11-12  Sandy Armstrong  <sanfordarmstrong@gmail.com>
 
 	* at-spi-sharp/Makefile.am:
