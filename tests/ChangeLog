@@ -1,3 +1,11 @@
+2009-11-20  Mario Carrion  <mcarrion@novell.com>
+
+	* apps/gtkbutton.py: Using "add" instead of "pack_start", temporal
+	workaround to "fix" random deadlocks when running the tests, follow
+	this bug for more information: 
+	https://bugzilla.gnome.org/show_bug.cgi?id=577392. 
+	* at-spi-sharp/atspitest.sh.in: Namespace updated to match tests'.
+
 2009-11-19  Mike Gorse  <mgorse@novell.com>
 
 	* at-spi-sharp/ActionTest.cs, at-spi-sharp/DocumentTest.cs,

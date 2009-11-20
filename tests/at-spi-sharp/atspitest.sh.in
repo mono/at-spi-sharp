@@ -28,14 +28,14 @@ if [ "x$component" != "x" ]; then
 	echo "Running only the unit tests for $component..."
 	echo
 
-	NUNIT_ARGS="--fixture=MonoTests.org.freedesktop.atspi.${component}Test"
+	NUNIT_ARGS="--fixture=AtSpiTest.${component}Test"
 fi
 
 if [ "x$runtest" != "x" ]; then
 	echo "Running only the unit test $runtest from $component"
 	echo
 
-	NUNIT_ARGS="${NUNIT_ARGS} --run=MonoTests.org.freedesktop.atspi.${component}Test.${runtest}"
+	NUNIT_ARGS="${NUNIT_ARGS} --run=AtSpiTest.${component}Test.${runtest}"
 fi
 
 if [ "x$xephyr" == "xyes" ]; then
