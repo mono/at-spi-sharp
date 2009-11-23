@@ -616,16 +616,28 @@ namespace TestDocument
 		{
 		}
 
+		public int [] SelectedColumns {
+			get {
+				return new int [0];
+			}
+		}
+
+		public int [] SelectedRows {
+			get {
+				return new int [0];
+			}
+		}
+
+		// for compatibility with older gtk-sharp
 		public int GetSelectedColumns (out int selected)
 		{
-			// TODO: Fix next line when gtk-sharp is fixed
 			selected = 0;
 			return 0;
 		}
 
+		// for compatibility with older gtk-sharp
 		public int GetSelectedRows (out int selected)
 		{
-			// TODO: Fix next line when gtk-sharp is fixed
 			selected = 0;
 			return 0;
 		}

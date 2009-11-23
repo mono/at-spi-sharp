@@ -1,3 +1,7 @@
+2009-11-23  Mike Gorse  <mgorse@novell.com>
+
+	* apps/Document.cs: Fix to build with newest gtk-sharp 2-12 changes.
+
 2009-11-20  Mario Carrion  <mcarrion@novell.com>
 
 	* apps/gtkbutton.py: Using "add" instead of "pack_start", temporal
