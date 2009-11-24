@@ -90,32 +90,47 @@ namespace TestDocument
 	class TestWindow: Gtk.Window
 	{
 		public TestWindow (string name) : base (name) { }
-		private Gtk.Button button;
+		private Gtk.Button button1;
+		private Gtk.Button button2;
+		private Gtk.HBox box;
 
 		public bool AddChild ()
 		{
-			if (button != null)
+			if (box == null) {
+				box = new Gtk.HBox ();
+				Add (box);
+			}
+			if (box.Children.Length == 0) {
+				if (button1 == null)
+					button1 = new Gtk.Button ("button1");
+				box.Add (button1);
+				return true;
+			} else if (box.Children.Length == 1) {
+				if (button2 == null)
+					button2 = new Gtk.Button ("button2");
+				box.Add (button2);
+				return true;
+			} else
 				return false;
-			button = new Gtk.Button ("button");
-			Add (button);
-			GLib.Signal.Emit (Accessible,
-				"children_changed::add",
-				0u,
-				Accessible.RefAccessibleChild (0).Handle);
-			return true;
 		}
 
 		public bool RemoveChild ()
 		{
-			if (button == null)
+			if (box.Children.Length == 2) {
+				box.Remove (button2);
+				return true;
+			} else if (box.Children.Length == 1) {
+				box.Remove (button1);
+				return true;
+			} else
 				return false;
-			GLib.Signal.Emit (Accessible,
-				"children_changed::remove",
-				(uint)0,
-				Accessible.RefAccessibleChild (0).Handle);
-			Remove (button);
-			button = null;
-			return true;
+		}
+
+		public void ToggleButton ()
+		{
+			if (button1 == null)
+				AddChild ();
+			button1.Sensitive = !button1.Sensitive;
 		}
 	}
 
@@ -401,7 +416,7 @@ namespace TestDocument
 						break;
 
 					case "StateChanged":
-						window.Children [0].Sensitive = false;
+						window.ToggleButton ();
 						break;
 
 					case "TextCaretMoved":

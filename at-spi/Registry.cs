@@ -150,8 +150,15 @@ namespace Atspi
 
 		private void Iterate ()
 		{
+			// TODO: Make try optional; could affect performance
 			for (;;)
-				bus.Iterate ();
+			{
+				try {
+					bus.Iterate ();
+				} catch (Exception e) {
+					Console.WriteLine ("at-spi-sharp: Exception in Iterate: " + e);
+				}
+			}
 		}
 	}
 

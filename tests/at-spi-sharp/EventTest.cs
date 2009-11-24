@@ -35,6 +35,8 @@ namespace AtSpiTest
 		Accessible frame = null;
 		EditableText et = null;
 		int eventCount = 0;
+		int addEventCount = 0;
+		int removeEventCount = 0;
 		string detail;
 		int v1, v2;
 		object any;
@@ -54,7 +56,6 @@ namespace AtSpiTest
 
 		// Object event tests
 		[Test]
-		[Ignore ("Hangs with ndesk-dbus 0.6")]
 		public void BoundsChanged ()
 		{
 			frame.ObjectEvents.BoundsChanged += OnEvent;
@@ -305,26 +306,41 @@ namespace AtSpiTest
 		}
 
 		[Test]
-		[Ignore ("TODO: Figure out why ChildRemove fails")]
 		public void ChildRemoved ()
 		{
-			Desktop.OnChildRemoved += OnStructureChanged;
+			addEventCount = removeEventCount = 0;
+			Desktop.OnChildAdded += OnChildAdded;
+			Desktop.OnChildRemoved += OnChildRemoved;
 			et.SetTextContents ("RemoveChild");
-			Desktop.OnChildRemoved -= OnStructureChanged;
 			Sync ();
+			Assert.AreEqual (0, addEventCount, "addEvents when removing");
+			Assert.AreEqual (1, removeEventCount, "removeEvents");
+			Desktop.OnChildRemoved -= OnChildRemoved;
+			Desktop.OnChildAdded -= OnChildAdded;
 			et.SetTextContents ("AddChild");
-			AssertEvent ();
 		}
 
 		[Test]
 		public void ChildAdded ()
 		{
 			et.SetTextContents ("RemoveChild");
-			Desktop.OnChildAdded += OnStructureChanged;
-			et.SetTextContents ("AddChild");
-			Desktop.OnChildAdded -= OnStructureChanged;
 			Sync ();
-			AssertEvent ();
+			addEventCount = removeEventCount = 0;
+			Desktop.OnChildAdded += OnChildAdded;
+			Desktop.OnChildRemoved += OnChildRemoved;
+			et.SetTextContents ("AddChild");
+			Sync ();
+			Assert.AreEqual (1, addEventCount, "addEvents");
+			Assert.AreEqual (0, removeEventCount, "removeEvents when adding");
+			// Add a second child; ensure we don't get extra events
+			addEventCount = removeEventCount = 0;
+			et.SetTextContents ("AddChild");
+			Desktop.OnChildAdded -= OnChildAdded;
+			Sync ();
+			Assert.AreEqual (1, addEventCount, "addEvents #2");
+			Assert.AreEqual (0, removeEventCount, "removeEvents when adding #2");
+			Desktop.OnChildRemoved -= OnChildRemoved;
+			Desktop.OnChildAdded -= OnChildAdded;
 		}
 
 		private void OnEvent (string detail, int v1, int v2, object any)
@@ -366,18 +382,20 @@ namespace AtSpiTest
 				eventCount++;
 		}
 
-		private void OnStructureChanged (Accessible parent, Accessible child)
+		private void OnChildAdded (Accessible parent, Accessible child)
 		{
-			eventCount++;
+			addEventCount++;
+		}
+
+		private void OnChildRemoved (Accessible parent, Accessible child)
+		{
+			removeEventCount++;
 		}
 		#endregion
 
 		private void Sync ()
 		{
 			System.Threading.Thread.Sleep (500);
-			// Hack to force signal popping; we really
-			// shouldn't need this
-			frame.QueryText().GetText ();
 		}
 
 		private void AssertEvent ()

@@ -1,3 +1,13 @@
+2009-11-24  Mike Gorse  <mgorse@novell.com>
+
+	* apps/Document.cs, at-spi-sharp/EventTest.cs: Improve ChildAdded and
+	ChildRemoved tests; stop ignore ChildRemoved.
+
+	* at-spi-sharp/EventTest.cs: Stop ignoring BoundsChanged.
+
+	* at-spi-sharp/ComponentTest.cs: Fix GetAccessibleAtPoint and stop
+	ignoring.
+
 2009-11-23  Mike Gorse  <mgorse@novell.com>
 
 	* apps/Document.cs: Fix to build with newest gtk-sharp 2-12 changes.

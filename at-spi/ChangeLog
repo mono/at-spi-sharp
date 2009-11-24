@@ -1,3 +1,10 @@
+2009-11-24  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs: Fix firing of ChildAdded.
+
+	* Registry.cs: Try when iterating so that the thread does not
+	silently abort on an exception.
+
 2009-11-19  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs, Desktop.cs: Set Desktop role.

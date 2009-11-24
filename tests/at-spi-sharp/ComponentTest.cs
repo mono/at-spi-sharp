@@ -77,14 +77,16 @@ namespace AtSpiTest
 		}
 
 		[Test]
-		[Ignore ("crash")]
 		public void GetAccessibleAtPoint ()
 		{
 			Component component = frame.QueryComponent ();
-			BoundingBox buttonExtents;
-			buttonExtents = pushButton.QueryComponent().GetExtents (CoordType.Screen);
-			Accessible accessibleResult = component.GetAccessibleAtPoint (buttonExtents.X, buttonExtents.Y, CoordType.Screen);
-			Assert.AreEqual (accessibleResult, pushButton, "GetAccessibleAtPoint");
+			Accessible child = frame.Children [0];
+			BoundingBox childExtents;
+			childExtents = child.QueryComponent().GetExtents (CoordType.Screen);
+			Accessible accessibleResult = component.GetAccessibleAtPoint (childExtents.X, childExtents.Y, CoordType.Screen);
+			Assert.AreEqual (accessibleResult, child, "GetAccessibleAtPoint");
+			accessibleResult = component.GetAccessibleAtPoint (childExtents.X + childExtents.Width + 1, childExtents.Y, CoordType.Screen);
+			Assert.IsNull (accessibleResult, "GetAccessibleAtPoint OOR");
 		}
 
 		[Test]

@@ -141,15 +141,18 @@ namespace Atspi
 				if (!(children is UncachedChildren))
 					children = new UncachedChildren (this);
 			} else {
-				List<Accessible> oldChildren = children as List<Accessible>;
-				if (!(children is List<Accessible>))
+				Accessible [] oldChildren = null;
+				if (children is List<Accessible>) {
+					oldChildren = new Accessible [children.Count];
+					children.CopyTo (oldChildren, 0);
 					children = new List<Accessible> ();
+				}
 				children.Clear ();
 				foreach (AccessiblePath path in e.children) {
 					Accessible child = Registry.GetElement (path, this, true);
 					if (!initializing &&
 						(oldChildren == null ||
-						oldChildren.IndexOf (child) == -1))
+						Array.IndexOf (oldChildren, child) == -1))
 						Desktop.RaiseChildAdded (this, child);
 					children.Add (child);
 				}
