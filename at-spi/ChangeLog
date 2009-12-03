@@ -1,3 +1,7 @@
+2009-12-03  Mike Gorse  <mgorse@novell.com>
+
+	* Desktop.cs: Remove "On" prefix from event names.
+
 2009-11-24  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs: Fix firing of ChildAdded.

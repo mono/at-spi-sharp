@@ -1,3 +1,7 @@
+2009-12-03  Mike Gorse  <mgorse@novell.com>
+
+	* at-spi-sharp/EventTest.cs: Remove "On" prefix from event names.
+
 2009-11-24  Mike Gorse  <mgorse@novell.com>
 
 	* apps/Document.cs, at-spi-sharp/EventTest.cs: Improve ChildAdded and

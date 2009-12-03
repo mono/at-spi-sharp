@@ -40,12 +40,12 @@ namespace Atspi
 		public delegate void PropertyChangedEventHandler<T> (object sender, T oldValue,  T newValue);
 		public delegate void StateChangedEventHandler (Accessible sender, StateType state, bool set);
 
-		public static event StructureEventHandler OnChildAdded;
-		public static event StructureEventHandler OnChildRemoved;
-		public static event PropertyChangedEventHandler<string> OnNameChanged;
-		public static event PropertyChangedEventHandler<string> OnDescriptionChanged;
-		public static event PropertyChangedEventHandler<Role> OnRoleChanged;
-		public static event StateChangedEventHandler OnStateChanged;
+		public static event StructureEventHandler ChildAdded;
+		public static event StructureEventHandler ChildRemoved;
+		public static event PropertyChangedEventHandler<string> NameChanged;
+		public static event PropertyChangedEventHandler<string> DescriptionChanged;
+		public static event PropertyChangedEventHandler<Role> RoleChanged;
+		public static event StateChangedEventHandler StateChanged;
 
 		public static Desktop Instance {
 			get { return instance; }
@@ -90,38 +90,38 @@ namespace Atspi
 
 		internal static void RaiseChildAdded (Accessible sender, Accessible child)
 		{
-			if (OnChildAdded != null)
-				OnChildAdded (sender, child);
+			if (ChildAdded != null)
+				ChildAdded (sender, child);
 		}
 
 		internal static void RaiseChildRemoved (Accessible sender, Accessible child)
 		{
-			if (OnChildRemoved != null)
-				OnChildRemoved (sender, child);
+			if (ChildRemoved != null)
+				ChildRemoved (sender, child);
 		}
 
 		internal static void RaiseNameChanged (Accessible sender, string oldName, string newName)
 		{
-			if (OnNameChanged != null)
-				OnNameChanged (sender, oldName, newName);
+			if (NameChanged != null)
+				NameChanged (sender, oldName, newName);
 		}
 
 		internal static void RaiseDescriptionChanged (Accessible sender, string oldDescription, string newDescription)
 		{
-			if (OnDescriptionChanged != null)
-				OnDescriptionChanged (sender, oldDescription, newDescription);
+			if (DescriptionChanged != null)
+				DescriptionChanged (sender, oldDescription, newDescription);
 		}
 
 		internal static void RaiseRoleChanged (Accessible sender, Role oldRole, Role newRole)
 		{
-			if (OnRoleChanged != null)
-				OnRoleChanged (sender, oldRole, newRole);
+			if (RoleChanged != null)
+				RoleChanged (sender, oldRole, newRole);
 		}
 
 		internal static void RaiseStateChanged (Accessible sender, StateType type, bool set)
 		{
-			if (OnStateChanged != null)
-				OnStateChanged (sender, type, set);
+			if (StateChanged != null)
+				StateChanged (sender, type, set);
 		}
 	}
 }

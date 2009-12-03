@@ -264,44 +264,44 @@ namespace AtSpiTest
 		[Test]
 		public void NameChanged ()
 		{
-			Desktop.OnNameChanged += OnNameChanged;
+			Desktop.NameChanged += OnNameChanged;
 			et.SetTextContents ("NameChanged");
 			Sync ();
 			Assert.AreEqual (string.Empty, oldName, "OldName");
 			Assert.AreEqual ("xyzzy", newName, "NameChanged");
-			Desktop.OnNameChanged -= OnNameChanged;
+			Desktop.NameChanged -= OnNameChanged;
 		}
 
 		[Test]
 		public void DescriptionChanged ()
 		{
-			Desktop.OnDescriptionChanged += OnDescriptionChanged;
+			Desktop.DescriptionChanged += OnDescriptionChanged;
 			et.SetTextContents ("DescriptionChanged");
 			Sync ();
 			Assert.AreEqual (string.Empty, oldDescription, "OldDescription");
 			Assert.AreEqual ("plugh", newDescription, "DescriptionChanged");
-			Desktop.OnDescriptionChanged -= OnDescriptionChanged;
+			Desktop.DescriptionChanged -= OnDescriptionChanged;
 		}
 
 		[Test]
 		public void RoleChanged ()
 		{
-			Desktop.OnRoleChanged += OnRoleChanged;
+			Desktop.RoleChanged += OnRoleChanged;
 			et.SetTextContents ("RoleChanged");
 			Sync ();
 			Assert.AreEqual (Role.Frame, oldRole, "RoleChanged OldRole");
 			Assert.AreEqual (Role.Dialog, newRole, "RoleChanged");
-			Desktop.OnRoleChanged -= OnRoleChanged;
+			Desktop.RoleChanged -= OnRoleChanged;
 		}
 
 		[Test]
 		public void StateChanged ()
 		{
 			eventCount = 0;
-			Desktop.OnStateChanged += OnStateChanged;
+			Desktop.StateChanged += OnStateChanged;
 			et.SetTextContents ("StateChanged");
 			Sync ();
-			Desktop.OnStateChanged -= OnStateChanged;
+			Desktop.StateChanged -= OnStateChanged;
 			AssertEvents (2);
 		}
 
@@ -309,14 +309,14 @@ namespace AtSpiTest
 		public void ChildRemoved ()
 		{
 			addEventCount = removeEventCount = 0;
-			Desktop.OnChildAdded += OnChildAdded;
-			Desktop.OnChildRemoved += OnChildRemoved;
+			Desktop.ChildAdded += OnChildAdded;
+			Desktop.ChildRemoved += OnChildRemoved;
 			et.SetTextContents ("RemoveChild");
 			Sync ();
 			Assert.AreEqual (0, addEventCount, "addEvents when removing");
 			Assert.AreEqual (1, removeEventCount, "removeEvents");
-			Desktop.OnChildRemoved -= OnChildRemoved;
-			Desktop.OnChildAdded -= OnChildAdded;
+			Desktop.ChildRemoved -= OnChildRemoved;
+			Desktop.ChildAdded -= OnChildAdded;
 			et.SetTextContents ("AddChild");
 		}
 
@@ -326,8 +326,8 @@ namespace AtSpiTest
 			et.SetTextContents ("RemoveChild");
 			Sync ();
 			addEventCount = removeEventCount = 0;
-			Desktop.OnChildAdded += OnChildAdded;
-			Desktop.OnChildRemoved += OnChildRemoved;
+			Desktop.ChildAdded += OnChildAdded;
+			Desktop.ChildRemoved += OnChildRemoved;
 			et.SetTextContents ("AddChild");
 			Sync ();
 			Assert.AreEqual (1, addEventCount, "addEvents");
@@ -335,12 +335,12 @@ namespace AtSpiTest
 			// Add a second child; ensure we don't get extra events
 			addEventCount = removeEventCount = 0;
 			et.SetTextContents ("AddChild");
-			Desktop.OnChildAdded -= OnChildAdded;
+			Desktop.ChildAdded -= OnChildAdded;
 			Sync ();
 			Assert.AreEqual (1, addEventCount, "addEvents #2");
 			Assert.AreEqual (0, removeEventCount, "removeEvents when adding #2");
-			Desktop.OnChildRemoved -= OnChildRemoved;
-			Desktop.OnChildAdded -= OnChildAdded;
+			Desktop.ChildRemoved -= OnChildRemoved;
+			Desktop.ChildAdded -= OnChildAdded;
 		}
 
 		private void OnEvent (string detail, int v1, int v2, object any)
