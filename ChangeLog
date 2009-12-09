@@ -1,3 +1,7 @@
+2009-12-09  Stephen Shaw <sshaw@decriptor.com>
+
+	* configure.ac: Changed version to 0.9.1 
+
 2009-11-12  Sandy Armstrong  <sanfordarmstrong@gmail.com>
 
 	* COPYING: 
