@@ -105,6 +105,7 @@ Makefile
 at-spi/Makefile
 data/Makefile
 data/at-spi-sharp.pc.in
+data/at-spi-sharp.spec
 tests/Makefile
 tests/apps/Makefile
 tests/at-spi-sharp/Makefile
