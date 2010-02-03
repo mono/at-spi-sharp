@@ -30,14 +30,14 @@ class RadioButton:
         radio6 = gtk.RadioButton(radio4, "Foe")
         radio7 = gtk.RadioButton(radio4, "Fum")
 
-        vbox.pack_start(radio1, False, False, 0)
-        vbox.pack_start(radio2, False, False, 0)
-        vbox.pack_start(radio3, False, False, 0)
+        vbox.add(radio1)
+        vbox.add(radio2)
+        vbox.add(radio3)
 
-        vbox.pack_start(radio4, False, False, 0)
-        vbox.pack_start(radio5, False, False, 0)
-        vbox.pack_start(radio6, False, False, 0)
-        vbox.pack_start(radio7, False, False, 0)
+        vbox.add(radio4)
+        vbox.add(radio5)
+        vbox.add(radio6)
+        vbox.add(radio7)
 
         self.window.add(vbox)
 

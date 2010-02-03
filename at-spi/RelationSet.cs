@@ -74,7 +74,7 @@ namespace Atspi
 			type = rel.type;
 			targets = new Accessible [rel.targets.Length];
 			for (int i = 0; i < rel.targets.Length; i++)
-				targets [i] = Registry.GetElement (rel.targets [i], application, false);
+				targets [i] = Registry.GetElement (rel.targets [i], false);
 		}
 	}
 

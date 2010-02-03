@@ -43,7 +43,14 @@ SOURCE_FILES =  \
 	Desktop.cs \
 	Document.cs \
 	EditableText.cs \
-	Event.cs \
+	EventBase.cs \
+	EventDocument.cs \
+	EventFocus.cs \
+	EventKeyboard.cs \
+	EventMouse.cs \
+	EventObject.cs \
+	EventTerminal.cs \
+	EventWindow.cs \
 	Hyperlink.cs \
 	Hypertext.cs \
 	Image.cs \

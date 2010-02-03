@@ -1,3 +1,10 @@
+2010-02-03  Mike Gorse  <mgorse@novell.com>
+
+	* apps/gtkradiobutton.py: Do not call pack_start until BGO#577392
+	is fixed.
+
+	* at-spi-sharp/EventTest.cs: Track API refactoring.
+
 2009-12-03  Mike Gorse  <mgorse@novell.com>
 
 	* at-spi-sharp/EventTest.cs: Remove "On" prefix from event names.

@@ -1,3 +1,18 @@
+2010-02-03  Mike Gorse  <mgorse@novell.com>
+
+	* EventBase.cs, EventDocument.cs, EventFocus.cs, EventKeyboard.cs,
+	EventMouse.cs, EventObject.cs, EventTerminal.cs, EventWindow.cs,
+	Makefile.am: Track at-spi event api, and add wrappers to remove unused
+	parameters.
+
+	* StateSet.cs, StateType.cs: use [System.Flags]
+
+	* Table.cs: Fix Caption and Summary.
+
+	* Component.cs, RelationSet.cs, Selection.cs, Table.cs: Internal GetElement refactoring.
+
+	* Accessible.cs, Application.cs, Hypertext.cs: Track at-spi api.
+
 2009-12-03  Mike Gorse  <mgorse@novell.com>
 
 	* Desktop.cs: Remove "On" prefix from event names.

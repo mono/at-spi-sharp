@@ -32,13 +32,15 @@ namespace Atspi
 {
 	public class Accessible : IDisposable
 	{
+		private static Dictionary<string, StateType> stateMapping;
+
 		internal string path;
-		IAccessible proxy;
-		IEventObject objectEvents;
-		IEventWindow windowEvents;
-		IEventTerminal terminalEvents;
-		IEventDocument documentEvents;
-		IEventFocus focusEvents;
+		internal IAccessible proxy;
+		EventObject objectEvents;
+		EventWindow windowEvents;
+		EventTerminal terminalEvents;
+		EventDocument documentEvents;
+		EventFocus focusEvents;
 
 		internal Application application;
 		protected IList<Accessible> children;
@@ -46,7 +48,7 @@ namespace Atspi
 		private string name;
 		private string description;
 		protected Role role;
-		private StateSet stateSet;
+		internal StateSet stateSet;
 		private Interfaces interfaces;
 
 		private Properties properties;
@@ -57,7 +59,6 @@ namespace Atspi
 		{
 			this.application = application;
 			this.path = path;
-			this.children = new List<Accessible> ();
 			if (application != null)
 				proxy = Registry.Bus.GetObject<IAccessible> (application.name, new ObjectPath (path));
 			if (path != null) {
@@ -70,8 +71,64 @@ namespace Atspi
 		{
 			this.application = application;
 			this.path = e.path.ToString ();
-			proxy = Registry.Bus.GetObject<IAccessible> (application.name, e.path);
+			proxy = Registry.Bus.GetObject<IAccessible> (application.name, e.path.path);
 			Update (e);
+		}
+
+		internal void InitEvents ()
+		{
+			if (stateMapping == null)
+				InitStateMapping ();
+			if (objectEvents == null && ObjectEvents != null) {
+				ObjectEvents.StateChanged += OnStateChanged;
+				ObjectEvents.ChildrenChanged += OnChildrenChanged;
+				ObjectEvents.PropertyChange += OnPropertyChange;
+			}
+		}
+
+		private static void InitStateMapping ()
+		{
+			stateMapping = new Dictionary<string, StateType> ();
+			stateMapping ["active"] = StateType.Active;
+			stateMapping ["armed"] = StateType.Armed;
+			stateMapping ["busy"] = StateType.Busy;
+			stateMapping ["checked"] = StateType.Checked;
+			stateMapping ["collapsed"] = StateType.Collapsed;
+			stateMapping ["defunct"] = StateType.Defunct;
+			stateMapping ["editable"] = StateType.Editable;
+			stateMapping ["enabled"] = StateType.Enabled;
+			stateMapping ["expandable"] = StateType.Expandable;
+			stateMapping ["expanded"] = StateType.Expanded;
+			stateMapping ["focusable"] = StateType.Focusable;
+			stateMapping ["focused"] = StateType.Focused;
+			stateMapping ["has-tooltip"] = StateType.HasToolTip;
+			stateMapping ["horizontal"] = StateType.Horizontal;
+			stateMapping ["iconified"] = StateType.Iconified;
+			stateMapping ["modal"] = StateType.Modal;
+			stateMapping ["multi-line"] = StateType.MultiLine;
+			stateMapping ["multiselectable"] = StateType.Multiselectable;
+			stateMapping ["opaque"] = StateType.Opaque;
+			stateMapping ["pressed"] = StateType.Pressed;
+			stateMapping ["resizable"] = StateType.Resizable;
+			stateMapping ["selectable"] = StateType.Selectable;
+			stateMapping ["selected"] = StateType.Selected;
+			stateMapping ["sensitive"] = StateType.Sensitive;
+			stateMapping ["showing"] = StateType.Showing;
+			stateMapping ["single-line"] = StateType.SingleLine;
+			stateMapping ["stale"] = StateType.Stale;
+			stateMapping ["transient"] = StateType.Transient;
+			stateMapping ["vertical"] = StateType.Vertical;
+			stateMapping ["visible"] = StateType.Visible;
+			stateMapping ["manages-descendants"] = StateType.ManagesDescendants;
+			stateMapping ["indeterminate"] = StateType.Indeterminate;
+			stateMapping ["required"] = StateType.Required;
+			stateMapping ["truncated"] = StateType.Truncated;
+			stateMapping ["animated"] = StateType.Animated;
+			stateMapping ["invalid-entry"] = StateType.InvalidEntry;
+			stateMapping ["supports-autocompletion"] = StateType.SupportsAutocompletion;
+			stateMapping ["selectable-text"] = StateType.SelectableText;
+			stateMapping ["is-default"] = StateType.IsDefault;
+			stateMapping ["visited"] = StateType.Visited;
 		}
 
 		public void Dispose ()
@@ -86,7 +143,70 @@ namespace Atspi
 				parent.children.Remove (this);
 			}
 			children.Clear ();
-			stateSet.Add (StateType.Defunct);
+			if (stateSet != null)
+				stateSet.Add (StateType.Defunct);
+			if (ObjectEvents != null) {
+				ObjectEvents.PropertyChange -= OnPropertyChange;
+				ObjectEvents.ChildrenChanged -= OnChildrenChanged;
+				ObjectEvents.StateChanged -= OnStateChanged;
+			}
+		}
+
+		private void OnStateChanged (Accessible sender, string state, bool set)
+		{
+			if (stateMapping.ContainsKey (state)) {
+				StateType type = stateMapping [state];
+				if (set)
+					StateSet.Add (type);
+				else
+					StateSet.Remove (type);
+				Desktop.RaiseStateChanged (this, type, set);
+			}
+		}
+
+		private void OnChildrenChanged (Accessible sender, string detail, int n, Accessible child)
+		{
+			bool added = (detail == "add");
+			if (!added && this is Desktop) {
+				if (child != null)
+					Registry.Instance.RemoveApplication (child.application.name);
+			}
+			else if (children is List<Accessible>) {
+				if (added) {
+					if (!(this is Desktop))
+						children.Insert (n, child);
+				}
+				else if (child != null)
+					children.Remove (child);
+				else if (n >= 0 && n < children.Count)
+					children.RemoveAt (n);
+			}
+			if (added)
+				Desktop.RaiseChildAdded (this, child);
+			else
+				Desktop.RaiseChildRemoved (this, child);
+		}
+
+		private void OnPropertyChange (Accessible sender, string property, object value)
+		{
+			if (property == "accessible-name") {
+				string oldName = name;
+				name = value as string;
+				Desktop.RaiseNameChanged (sender, oldName, name);
+			}
+			else if (property == "accessible-description") {
+				string oldDescription = description;
+				description = value as string;
+				Desktop.RaiseDescriptionChanged (sender, oldDescription, description);
+			}
+			else if (property == "accessible-parent" && value is Accessible) {
+				parent = (Accessible)value;
+			}
+			else if (property == "accessible-role" && value is uint) {
+				Role oldRole = role;
+				role = (Role) (uint) value;
+				Desktop.RaiseRoleChanged (sender, oldRole, role);
+			}
 		}
 
 		internal void Update (AccessibleProxy e)
@@ -99,15 +219,11 @@ namespace Atspi
 					Desktop.RaiseNameChanged (this, oldName, e.name);
 			}
 
-			Accessible newParent = Registry.GetElement (e.parent, this, true);
-			if (newParent != parent) {
-				Accessible oldParent = parent;
-				parent = newParent;
-				if (!initializing) {
-					Desktop.RaiseChildRemoved (oldParent, this);
-					Desktop.RaiseChildAdded (parent, this);
-				}
-			}
+			parent = Registry.GetElement (e.parent, true);
+			// Assuming that old and new parents are also
+			// going to send ChildrenChanged signals, so
+			// not going to update their caches or send
+			// add/remove notifications here.
 
 			Role newRole = (Role)e.role;
 			if (newRole != role) {
@@ -127,17 +243,24 @@ namespace Atspi
 			foreach (string iface in e.interfaces)
 				AddInterface (iface);
 
-			StateSet newStateSet = new StateSet (e.states);
-			if (newStateSet != stateSet) {
-				StateSet oldStateSet = stateSet;
-				stateSet = newStateSet;
-				if (!initializing)
-					foreach (StateType type in Enum.GetValues (typeof (StateType)))
-						if (oldStateSet.Contains (type) != newStateSet.Contains (type))
-							Desktop.RaiseStateChanged (this, type, newStateSet.Contains (type));
-			}
+			stateSet = new StateSet (e.states);
+			// Using at-spi StateChanged events to broadcast
+			// changes for now; needed for gail Focused handling
+			UpdateChildren (e.children);
+		}
 
-			if (stateSet.Contains (StateType.ManagesDescendants)) {
+		private bool PathListContains (AccessiblePath [] paths, string bus_name, string path)
+		{
+			foreach (AccessiblePath child in paths)
+				if (child.bus_name == bus_name && child.path.ToString () == path)
+					return true;
+			return false;
+		}
+
+		private void UpdateChildren (AccessiblePath [] childPaths)
+		{
+			bool initializing = (children == null);
+			if (StateSet.Contains (StateType.ManagesDescendants)) {
 				if (!(children is UncachedChildren))
 					children = new UncachedChildren (this);
 			} else {
@@ -145,11 +268,11 @@ namespace Atspi
 				if (children is List<Accessible>) {
 					oldChildren = new Accessible [children.Count];
 					children.CopyTo (oldChildren, 0);
-					children = new List<Accessible> ();
 				}
+				children = new List<Accessible> ();
 				children.Clear ();
-				foreach (AccessiblePath path in e.children) {
-					Accessible child = Registry.GetElement (path, this, true);
+				foreach (AccessiblePath path in childPaths) {
+					Accessible child = Registry.GetElement (path, true);
 					if (!initializing &&
 						(oldChildren == null ||
 						Array.IndexOf (oldChildren, child) == -1))
@@ -158,7 +281,7 @@ namespace Atspi
 				}
 				if (!initializing && oldChildren != null)
 					foreach (Accessible child in oldChildren)
-						if (!e.ContainsChild (child.path))
+						if (!PathListContains (childPaths, child.application.name, child.path))
 							Desktop.RaiseChildRemoved (this, child);
 			}
 		}
@@ -218,13 +341,25 @@ namespace Atspi
 		}
 
 		public IList<Accessible> Children {
-			get { return children; }
+			get {
+				if (children == null) {
+					AccessiblePath [] childPaths;
+					try {
+						childPaths = proxy.GetChildren ();
+					} catch (System.Exception) {
+						children = new List<Accessible> ();
+						return children;
+					}
+					UpdateChildren (childPaths);
+				}
+				return children;
+			}
 		}
 
 		public Accessible GetChildAtIndexNoCache (int index)
 		{
 			AccessiblePath path = proxy.GetChildAtIndex (index);
-			return Registry.GetElement (path, this, true);
+			return Registry.GetElement (path, true);
 		}
 
 		public int IndexInParent {
@@ -250,11 +385,28 @@ namespace Atspi
 		}
 
 		public Role Role {
-			get { return role; }
+			get {
+				if (role == Role.Invalid)
+					role = (Role) proxy.GetRole ();
+				return role;
+			}
 		}
 
 		public StateSet StateSet {
-			get { return stateSet; }
+			get {
+				if (stateSet == null) {
+					uint [] states;
+					try {
+						states = proxy.GetState ();
+					} catch (System.Exception) {
+						stateSet = new StateSet ();
+						stateSet.Add (StateType.Defunct);
+						return stateSet;
+					}
+					stateSet = new StateSet (states);
+				}
+				return stateSet;
+			}
 		}
 
 		public Relation [] RelationSet {
@@ -292,7 +444,11 @@ namespace Atspi
 
 		private Accessible FindDescendantDepthFirst (FindPredicate d, object [] args)
 		{
-			foreach (Accessible a in children) {
+			if (StateSet.Contains (StateType.ManagesDescendants))
+				return null;
+			Accessible [] childrenCopy = new Accessible [Children.Count];
+			children.CopyTo (childrenCopy, 0);
+			foreach (Accessible a in childrenCopy) {
 				if (d (a, args))
 					return a;
 				Accessible ret = a.FindDescendantDepthFirst (d, args);
@@ -304,10 +460,14 @@ namespace Atspi
 
 		private Accessible FindDescendantBreadthFirst (FindPredicate d, object [] args)
 		{
-			foreach (Accessible a in children)
+			if (stateSet.Contains (StateType.ManagesDescendants))
+				return null;
+			Accessible [] childrenCopy = new Accessible [children.Count];
+			children.CopyTo (childrenCopy, 0);
+			foreach (Accessible a in childrenCopy)
 				if (d (a, args))
 					return a;
-			foreach (Accessible a in children) {
+			foreach (Accessible a in childrenCopy) {
 				Accessible ret = a.FindDescendantBreadthFirst (d, args);
 				if (ret != null)
 					return ret;
@@ -385,45 +545,49 @@ namespace Atspi
 			return null;
 		}
 
-		public IEventObject ObjectEvents {
+		public EventObject ObjectEvents {
 			get {
-				if (objectEvents == null)
-					objectEvents = Registry.Bus.GetObject<IEventObject> (application.name, new ObjectPath (path));
+				if (objectEvents == null && application != null)
+					objectEvents = new EventObject (this);
 				return objectEvents;
 			}
 		}
 
-		public IEventWindow WindowEvents {
+		public EventWindow WindowEvents {
 			get {
 				if (windowEvents == null &&
+					application != null &&
 					(Role == Role.Window ||
 					 Role == Role.Frame ||
 					 Role == Role.Dialog))
-					windowEvents = Registry.Bus.GetObject<IEventWindow> (application.name, new ObjectPath (path));
+					windowEvents = new EventWindow (this);
 				return windowEvents;
 			}
 		}
 
-		public IEventTerminal TerminalEvents {
+		public EventTerminal TerminalEvents {
 			get {
-				if (terminalEvents == null && Role == Role.Terminal)
-					terminalEvents = Registry.Bus.GetObject<IEventTerminal> (application.name, new ObjectPath (path));
+				if (terminalEvents == null &&
+					application != null &&
+					Role == Role.Terminal)
+					terminalEvents = new EventTerminal (this);
 				return terminalEvents;
 			}
 		}
 
-		public IEventDocument DocumentEvents {
+		public EventDocument DocumentEvents {
 			get {
-				if (documentEvents == null)
-					documentEvents = Registry.Bus.GetObject<IEventDocument> (application.name, new ObjectPath (path));
+				if (documentEvents == null &&
+					application != null)
+					documentEvents = new EventDocument (this);
 				return documentEvents;
 			}
 		}
 
-		public IEventFocus FocusEvents {
+		public EventFocus FocusEvents {
 			get {
-				if (focusEvents == null)
-					focusEvents = Registry.Bus.GetObject<IEventFocus> (application.name, new ObjectPath (path));
+				if (focusEvents == null && application != null)
+					focusEvents = new EventFocus (this);
 				return focusEvents;
 			}
 		}
@@ -453,5 +617,8 @@ namespace Atspi
 		DBusRelation [] GetRelationSet ();
 		int GetIndexInParent ();
 		AccessiblePath GetChildAtIndex (int index);
+		AccessiblePath [] GetChildren ();
+		uint GetRole ();
+		uint [] GetState ();
 	}
 }

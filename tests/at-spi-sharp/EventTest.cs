@@ -58,138 +58,177 @@ namespace AtSpiTest
 		[Test]
 		public void BoundsChanged ()
 		{
-			frame.ObjectEvents.BoundsChanged += OnEvent;
+			frame.ObjectEvents.BoundsChanged += OnEventR;
 			et.SetTextContents ("BoundsChanged");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.BoundsChanged -= OnEvent;
+			frame.ObjectEvents.BoundsChanged -= OnEventR;
+			et.SetTextContents ("BoundsChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void LinkSelected ()
 		{
-			frame.ObjectEvents.LinkSelected += OnEvent;
+			frame.ObjectEvents.LinkSelected += OnEventI;
 			et.SetTextContents ("LinkSelected");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.LinkSelected -= OnEvent;
+			frame.ObjectEvents.LinkSelected -= OnEventI;
+			et.SetTextContents ("LinkSelected");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void VisibleDataChanged ()
 		{
-			frame.ObjectEvents.VisibleDataChanged += OnEvent;
+			frame.ObjectEvents.VisibleDataChanged += OnEventSimple;
 			et.SetTextContents ("VisibleDataChanged");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.VisibleDataChanged -= OnEvent;
+			frame.ObjectEvents.VisibleDataChanged -= OnEventSimple;
+			et.SetTextContents ("VisibleDataChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		[Ignore ("TODO: SelectionChanged")]
 		public void SelectionChanged ()
 		{
-			frame.ObjectEvents.SelectionChanged += OnEvent;
+			frame.ObjectEvents.SelectionChanged += OnEventSimple;
 			et.SetTextContents ("SelectionChanged");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.SelectionChanged -= OnEvent;
+			frame.ObjectEvents.SelectionChanged -= OnEventSimple;
+			et.SetTextContents ("SelectionChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void ModelChanged ()
 		{
-			frame.ObjectEvents.ModelChanged += OnEvent;
+			frame.ObjectEvents.ModelChanged += OnEventSimple;
 			et.SetTextContents ("ModelChanged");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.ModelChanged -= OnEvent;
+			frame.ObjectEvents.ModelChanged -= OnEventSimple;
+			et.SetTextContents ("ModelChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void ActiveDescendantChanged ()
 		{
-			frame.ObjectEvents.ActiveDescendantChanged += OnEvent;
+			frame.ObjectEvents.ActiveDescendantChanged += OnEventO;
 			et.SetTextContents ("ActiveDescendantChanged");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.ActiveDescendantChanged -= OnEvent;
+			frame.ObjectEvents.ActiveDescendantChanged -= OnEventO;
+			et.SetTextContents ("ActiveDescendantChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void RowInserted ()
 		{
-			frame.ObjectEvents.RowInserted += OnEvent;
+			frame.ObjectEvents.RowInserted += OnEventII;
 			et.SetTextContents ("RowInserted");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.RowInserted -= OnEvent;
+			frame.ObjectEvents.RowInserted -= OnEventII;
+			et.SetTextContents ("RowInserted");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void RowReordered ()
 		{
-			frame.ObjectEvents.RowReordered += OnEvent;
+			frame.ObjectEvents.RowReordered += OnEventSimple;
 			et.SetTextContents ("RowReordered");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.RowReordered -= OnEvent;
+			frame.ObjectEvents.RowReordered -= OnEventSimple;
+			et.SetTextContents ("RowReordered");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void RowDeleted ()
 		{
-			frame.ObjectEvents.RowDeleted += OnEvent;
+			frame.ObjectEvents.RowDeleted += OnEventII;
 			et.SetTextContents ("RowDeleted");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.RowDeleted -= OnEvent;
+			frame.ObjectEvents.RowDeleted -= OnEventII;
+			et.SetTextContents ("RowDeleted");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void ColumnInserted ()
 		{
-			frame.ObjectEvents.ColumnInserted += OnEvent;
+			frame.ObjectEvents.ColumnInserted += OnEventII;
 			et.SetTextContents ("ColumnInserted");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.ColumnInserted -= OnEvent;
+			frame.ObjectEvents.ColumnInserted -= OnEventII;
+			et.SetTextContents ("ColumnInserted");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void ColumnReordered ()
 		{
-			frame.ObjectEvents.ColumnReordered += OnEvent;
+			frame.ObjectEvents.ColumnReordered += OnEventSimple;
 			et.SetTextContents ("ColumnReordered");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.ColumnReordered -= OnEvent;
+			frame.ObjectEvents.ColumnReordered -= OnEventSimple;
+			et.SetTextContents ("ColumnReordered");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void ColumnDeleted ()
 		{
-			frame.ObjectEvents.ColumnDeleted += OnEvent;
+			frame.ObjectEvents.ColumnDeleted += OnEventII;
 			et.SetTextContents ("ColumnDeleted");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.ColumnDeleted -= OnEvent;
+			frame.ObjectEvents.ColumnDeleted -= OnEventII;
+			et.SetTextContents ("ColumnDeleted");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void TextSelectionChanged ()
 		{
-			frame.ObjectEvents.TextSelectionChanged += OnEvent;
+			frame.ObjectEvents.TextSelectionChanged += OnEventSimple;
 			et.SetTextContents ("TextSelectionChanged");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.TextSelectionChanged -= OnEvent;
+			frame.ObjectEvents.TextSelectionChanged -= OnEventSimple;
+			et.SetTextContents ("TextSelectionChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void TextChanged ()
 		{
-			frame.ObjectEvents.TextChanged += OnEvent;
+			frame.ObjectEvents.TextChanged += OnEventSIIS;
 			et.SetTextContents ("TextChanged");
 			Sync ();
 			AssertEvent ();
@@ -197,68 +236,89 @@ namespace AtSpiTest
 			Assert.AreEqual (11, v2, "TextChanged v2");
 			Assert.AreEqual ("insert", detail, "TextChanged detail");
 			Assert.AreEqual ("TextChanged", any, "TextChanged any");
-			frame.ObjectEvents.TextChanged -= OnEvent;
+			frame.ObjectEvents.TextChanged -= OnEventSIIS;
+			et.SetTextContents ("TextChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void TextAttributesChanged ()
 		{
-			frame.ObjectEvents.TextAttributesChanged += OnEvent;
+			frame.ObjectEvents.TextAttributesChanged += OnEventSimple;
 			et.SetTextContents ("TextAttributesChanged");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.TextAttributesChanged -= OnEvent;
+			frame.ObjectEvents.TextAttributesChanged -= OnEventSimple;
+			et.SetTextContents ("TextAttributesChanged");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void TextCaretMoved ()
 		{
-			frame.ObjectEvents.TextCaretMoved += OnEvent;
+			frame.ObjectEvents.TextCaretMoved += OnEventI;
 			et.SetTextContents ("TextCaretMoved");
 			Sync ();
 			AssertEvent ();
-			frame.ObjectEvents.TextCaretMoved -= OnEvent;
+			frame.ObjectEvents.TextCaretMoved -= OnEventI;
+			et.SetTextContents ("TextCaretMoved");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		// Document event tests
 		[Test]
 		public void LoadComplete ()
 		{
-			frame.DocumentEvents.LoadComplete += OnEvent;
+			frame.DocumentEvents.LoadComplete += OnEventSimple;
 			et.SetTextContents ("LoadComplete");
 			Sync ();
 			AssertEvent ();
-			frame.DocumentEvents.LoadComplete -= OnEvent;
+			frame.DocumentEvents.LoadComplete -= OnEventSimple;
+			et.SetTextContents ("LoadComplete");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void Reload ()
 		{
-			frame.DocumentEvents.Reload += OnEvent;
+			frame.DocumentEvents.Reload += OnEventSimple;
 			et.SetTextContents ("Reload");
 			Sync ();
 			AssertEvent ();
-			frame.DocumentEvents.Reload -= OnEvent;
+			frame.DocumentEvents.Reload -= OnEventSimple;
+			et.SetTextContents ("Reload");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void LoadStopped ()
 		{
-			frame.DocumentEvents.LoadStopped += OnEvent;
+			frame.DocumentEvents.LoadStopped += OnEventSimple;
 			et.SetTextContents ("LoadStopped");
 			Sync ();
 			AssertEvent ();
-			frame.DocumentEvents.LoadStopped -= OnEvent;
+			frame.DocumentEvents.LoadStopped -= OnEventSimple;
+			et.SetTextContents ("LoadStopped");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
 		public void Focus ()
 		{
-			frame.FocusEvents.Focus += OnEvent;
+			frame.FocusEvents.Focus += OnEventSimple;
 			et.SetTextContents ("Focus");
 			Sync ();
 			AssertEvent ();
-			frame.FocusEvents.Focus -= OnEvent;
+			frame.FocusEvents.Focus -= OnEventSimple;
+			et.SetTextContents ("Focus");
+			Sync ();
+			AssertNoEvent ();
 		}
 
 		[Test]
@@ -335,21 +395,86 @@ namespace AtSpiTest
 			// Add a second child; ensure we don't get extra events
 			addEventCount = removeEventCount = 0;
 			et.SetTextContents ("AddChild");
-			Desktop.ChildAdded -= OnChildAdded;
 			Sync ();
+			Desktop.ChildAdded -= OnChildAdded;
 			Assert.AreEqual (1, addEventCount, "addEvents #2");
 			Assert.AreEqual (0, removeEventCount, "removeEvents when adding #2");
 			Desktop.ChildRemoved -= OnChildRemoved;
-			Desktop.ChildAdded -= OnChildAdded;
 		}
 
-		private void OnEvent (string detail, int v1, int v2, object any)
+		private void OnEventI (Accessible sender, int v1)
+		{
+			eventCount++;
+			this.v1 = v1;
+		}
+
+		private void OnEventII (Accessible sender, int v1, int v2)
+		{
+			eventCount++;
+			this.v1 = v1;
+			this.v2 = v2;
+		}
+
+		private void OnEventO (Accessible sender, Accessible obj)
+		{
+			eventCount++;
+			this.any = obj;
+		}
+
+		private void OnEventR (Accessible sender, BoundingBox rect)
+		{
+			eventCount++;
+			this.any = rect;
+		}
+
+		/*
+		private void OnEventSB (Accessible sender, string detail, bool val)
+		{
+			eventCount++;
+			this.detail = detail;
+			this.v1 = (val? 1: 0);
+		}
+		*/
+
+		/*
+		private void OnEventSII (Accessible sender, string detail, int v1, int v2)
+		{
+			eventCount++;
+			this.detail = detail;
+			this.v1 = v1;
+			this.v2 = v2;
+		}
+		*/
+
+		private void OnEventSIIS (Accessible sender, string detail, int v1, int v2, string any)
 		{
 			eventCount++;
 			this.detail = detail;
 			this.v1 = v1;
 			this.v2 = v2;
 			this.any = any;
+		}
+
+		/*
+		private void OnEventSIO (Accessible sender, string detail, int v1, Accessible obj)
+		{
+			eventCount++;
+			this.detail = detail;
+			this.v1 = v1;
+			this.any = obj;
+		}
+
+		private void OnEventSV (Accessible sender, string detail, object any)
+		{
+			eventCount++;
+			this.detail = detail;
+			this.any = any;
+		}
+		*/
+
+		private void OnEventSimple (Accessible sender)
+		{
+			eventCount++;
 		}
 
 		private void OnNameChanged (object sender, string oldName, string newName)
@@ -403,12 +528,16 @@ namespace AtSpiTest
 			AssertEvents (1);
 		}
 
+		private void AssertNoEvent ()
+		{
+			AssertEvents (0);
+		}
+
 		private void AssertEvents (int n)
 		{
 			int oldEventCount = eventCount;
 			eventCount = 0;
 			Assert.AreEqual (n, oldEventCount, "eventCount");
-			eventCount = 0;
 		}
 	}
 }

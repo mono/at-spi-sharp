@@ -32,12 +32,10 @@ namespace Atspi
 {
 	public class Component
 	{
-		private Accessible accessible;
 		private IComponent proxy;
 
 		public Component (Accessible accessible)
 		{
-			this.accessible = accessible;
 			proxy = Registry.Bus.GetObject<IComponent> (accessible.application.name, new ObjectPath (accessible.path));
 		}
 
@@ -49,7 +47,7 @@ namespace Atspi
 		public Accessible GetAccessibleAtPoint (int x, int y, CoordType coordType)
 		{
 			AccessiblePath path = proxy.GetAccessibleAtPoint (x, y, coordType);
-			return Registry.GetElement (path, accessible, true);
+			return Registry.GetElement (path, true);
 		}
 
 		public BoundingBox GetExtents (CoordType coordType)

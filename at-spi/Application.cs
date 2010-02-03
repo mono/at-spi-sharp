@@ -30,26 +30,48 @@ using org.freedesktop.DBus;
 
 namespace Atspi
 {
+
 	public class Application : IDisposable
 	{
+		internal const string SPI_PATH_ROOT = "/org/freedesktop/atspi/accessible/root";
+		internal const string SPI_PATH_NULL = "/org/freedesktop/atspi/null";
+
 		internal string name;
-		private ITree proxy;
+		private ICache proxy;
 		private Properties properties;
-		private Dictionary<string, Accessible> accessibles;
+		protected Dictionary<string, Accessible> accessibles;
+
+		public bool Disposed {
+			get; private set;
+		}
 
 		private const string IFACE = "org.freedesktop.atspi.Application";
 
 		internal Application (string name)
 		{
 			this.name = name;
-			proxy = Registry.Bus.GetObject<ITree> (name, new ObjectPath ("/org/freedesktop/atspi/tree"));
 			accessibles = new Dictionary<string, Accessible> ();
-			accessibles ["/org/freedesktop/atspi/accessible/null"] = null;
-			proxy.UpdateAccessible += OnUpdateAccessible;
+			accessibles [SPI_PATH_NULL] = null;
+		}
+
+		internal void PostInit ()
+		{
+			proxy = Registry.Bus.GetObject<ICache> (name, new ObjectPath ("/org/at_spi/cache"));
+
+			proxy.AddAccessible += OnAddAccessible;
 			proxy.RemoveAccessible += OnRemoveAccessible;
-			properties = Registry.Bus.GetObject<Properties> (name, proxy.GetRoot ());
-			AccessibleProxy [] elements = proxy.GetTree ();
-			AddAccessibles (elements);
+			ObjectPath op = new ObjectPath (SPI_PATH_ROOT);
+			properties = Registry.Bus.GetObject<Properties> (name, op);
+
+			if (!(this is Registry)) {
+				AccessibleProxy [] elements;
+				try {
+					elements = proxy.GetItems ();
+				} catch (System.Exception) {
+					return;
+				}
+				AddAccessibles (elements);
+			}
 		}
 
 		public void Dispose ()
@@ -59,7 +81,11 @@ namespace Atspi
 
 		protected virtual void Dispose (bool disposing)
 		{
-			proxy.UpdateAccessible -= OnUpdateAccessible;
+			if (!Disposed) {
+				proxy.RemoveAccessible -= OnRemoveAccessible;
+				proxy.AddAccessible -= OnAddAccessible;
+				Disposed = true;
+			}
 		}
 
 		void AddAccessibles (AccessibleProxy [] elements)
@@ -70,12 +96,12 @@ namespace Atspi
 
 		Accessible GetElement (AccessibleProxy e)
 		{
-			Accessible obj = GetElement (e.path, true);
+			Accessible obj = GetElement (e.path.path, true);
 			obj.Update (e);
 			return obj;
 		}
 
-		void OnUpdateAccessible (AccessibleProxy nodeAdded)
+		void OnAddAccessible (AccessibleProxy nodeAdded)
 		{
 			GetElement (nodeAdded);
 		}
@@ -96,6 +122,9 @@ namespace Atspi
 				return null;
 			obj = new Accessible (this, path);
 			accessibles [path] = obj;
+			// Events must be initialized after insertion into
+			// hash, since we need to gracefully handle reentrancy
+			obj.InitEvents ();
 			return obj;
 		}
 
@@ -113,10 +142,10 @@ namespace Atspi
 			get { return name; }
 		}
 
-		internal Accessible GetRoot ()
-		{
-			ObjectPath o = proxy.GetRoot ();
-			return GetElement (o);
+		internal Accessible Root  {
+			get {
+				return GetElement ("/org/freedesktop/atspi/accessible/root", true);
+			}
 		}
 
 		public string ToolkitName {
@@ -126,16 +155,15 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Tree")]
-	interface ITree : Introspectable
+	[Interface ("org.freedesktop.atspi.Cache")]
+	interface ICache : Introspectable
 	{
-		ObjectPath GetRoot ();
-		AccessibleProxy [] GetTree ();
-		event UpdateAccessibleHandler UpdateAccessible;
+		AccessibleProxy [] GetItems ();
+		event AddAccessibleHandler AddAccessible;
 		event RemoveAccessibleHandler RemoveAccessible;
 	}
 
-	delegate void UpdateAccessibleHandler (AccessibleProxy nodeAdded);
+	delegate void AddAccessibleHandler (AccessibleProxy nodeAdded);
 	delegate void RemoveAccessibleHandler (ObjectPath nodeRemoved);
 
 	internal struct AccessiblePath
@@ -146,7 +174,8 @@ namespace Atspi
 
 	struct AccessibleProxy
 	{
-		public ObjectPath path;
+		public AccessiblePath path;
+		public AccessiblePath app_root;
 		public AccessiblePath parent;
 		public AccessiblePath [] children;
 		public string [] interfaces;
@@ -154,13 +183,5 @@ namespace Atspi
 		public uint role;
 		public string description;
 		public uint [] states;	// 2 32-bit flags
-
-		public bool ContainsChild (string path)
-		{
-			foreach (AccessiblePath child in children)
-				if (child.bus_name == name && child.path.ToString () == path)
-					return true;
-			return false;
-		}
 	}
 }

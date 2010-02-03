@@ -25,13 +25,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
 namespace Atspi
 {
-	public class Registry
+	public class Registry : Application
 	{
 		public static Registry Instance {
 			get {
@@ -41,13 +42,10 @@ namespace Atspi
 
 		private volatile static Registry instance;
 		private Bus bus;
-		private RegistryInterface proxy;
 		private Dictionary<string, Application> applications;
 		private Desktop desktop;
 		private static object sync = new object ();
 		private static Thread loopThread;
-
-		private const string PATH_DESKTOP = "/org/freedesktop/atspi/accessible/desktop";
 
 		public static void Initialize ()
 		{
@@ -74,6 +72,7 @@ namespace Atspi
 		internal static Bus Bus { get { return Instance.bus; } }
 
 		internal Registry (bool startLoop)
+				: base ("org.freedesktop.atspi.Registry")
 		{
 			lock (sync) {
 				if (instance != null)
@@ -81,7 +80,10 @@ namespace Atspi
 				instance = this;
 			}
 
-			bus = Bus.Session;
+			bus = GetAtspiBus ();
+			if (bus == null)
+				bus = Bus.Session;
+
 			if (startLoop && loopThread == null) {
 				loopThread = new Thread (new ThreadStart (Iterate));
 				loopThread.IsBackground = true;
@@ -89,60 +91,97 @@ namespace Atspi
 			}
 
 			applications = new Dictionary<string, Application> ();
-			desktop = new Desktop ();
-			proxy = bus.GetObject<RegistryInterface> ("org.freedesktop.atspi.Registry", new ObjectPath ("/org/freedesktop/atspi/registry"));
-			proxy.Introspect ();
-			proxy.UpdateApplications += OnUpdateApplications;
+			applications [name] = this;
+			desktop = new Desktop (this);
+			accessibles [SPI_PATH_ROOT] = desktop;
 
-			string [] appNames = proxy.GetApplications ();
-			foreach (string name in appNames) {
-				Application application = new Application (name);
-				applications [name] = application;
-				desktop.Add (application);
+			PostInit ();
+			desktop.PostInit ();
+		}
+
+		[DllImport("libX11.so.6")]
+		static extern IntPtr XOpenDisplay (string name);
+		[DllImport("libX11.so.6")]
+		static extern IntPtr XDefaultRootWindow (IntPtr display);
+		[DllImport("libX11.so.6")]
+		static extern IntPtr XInternAtom (IntPtr display, string atom_name, int only_if_eists);
+		[DllImport("libX11.so.6")]
+		static extern int XGetWindowProperty (IntPtr display, IntPtr w, IntPtr property, IntPtr long_offset, IntPtr long_length, int delete, IntPtr req_type, out IntPtr actual_type_return, out int actual_format_return, out IntPtr nitems_return, out IntPtr bytes_after_return, out string prop_return);
+
+		public static Bus GetAtspiBus ()
+		{
+			string displayName = Environment.GetEnvironmentVariable ("AT_SPI_DISPLAY");
+			if (displayName == null || displayName == String.Empty)
+				displayName = Environment.GetEnvironmentVariable ("DISPLAY");
+			if (displayName == null || displayName == String.Empty)
+				displayName = ":0";
+			for (int i = displayName.Length - 1; i >= 0; i--) {
+				if (displayName [i] == '.') {
+					displayName = displayName.Substring (0, i);
+					break;
+				} else if (displayName [i] == ':')
+					break;
 			}
+			IntPtr display = XOpenDisplay (displayName);
+			if (display == IntPtr.Zero)
+				return null;
+			IntPtr atSpiBus = XInternAtom (display, "AT_SPI_BUS", 0);
+			IntPtr actualType, nItems, leftOver;
+			int actualFormat;
+			string data;
+			XGetWindowProperty (display,
+				XDefaultRootWindow (display),
+					atSpiBus, (IntPtr) 0,
+					(IntPtr) 2048, 0,
+				(IntPtr) 31, out actualType, out actualFormat,
+				out nItems, out leftOver, out data);
+			if (data == null)
+				return null;
+			return Bus.Open (data);
+		}
+
+		internal Application GetApplication (string name)
+		{
+			return GetApplication (name, true);
+		}
+
+		internal Application GetApplication (string name, bool create)
+		{
+			if (!applications.ContainsKey (name)) {
+				applications [name] = new Application (name);
+				desktop.Add (applications [name]);
+				applications [name].PostInit ();
+			}
+			if (applications.ContainsKey (name))
+				return applications [name];
+			return null;
 		}
 
 		public static Desktop Desktop {
 			get { return Instance.desktop; }
 		}
 
-		internal static Accessible GetElement (AccessiblePath ap, Accessible reference, bool create)
+		internal static Accessible GetElement (AccessiblePath ap, bool create)
 		{
-			Application application = (reference != null?
-					reference.application: null);
-			return GetElement (ap, application, create);
-		}
-
-		internal static Accessible GetElement (AccessiblePath ap, Application reference, bool create)
-		{
-			if (ap.path.ToString () == PATH_DESKTOP)
-				return Desktop.Instance;
 			Application application;
-			application = (Instance.applications.ContainsKey (ap.bus_name)
-				? Instance.applications [ap.bus_name]
-				: reference);
+			application = Instance.GetApplication (ap.bus_name, create);
 			if (application == null)
 				return null;
 			return application.GetElement (ap.path, create);
 		}
+
 		internal void TerminateInternal ()
 		{
-			proxy.UpdateApplications -= OnUpdateApplications;
 			foreach (string bus_name in applications.Keys)
 				applications [bus_name].Dispose ();
 			applications = null;
 		}
 
-		void OnUpdateApplications (int added, string name)
+		internal void RemoveApplication (string name)
 		{
-			// added is really a bool
-			if (added != 0) {
-				Application app = new Application (name);
-				applications [name] = app;
-				desktop.Add (app);
-			} else if (applications.ContainsKey (name)) {
+			if (applications.ContainsKey (name)) {
 				Application application = applications [name];
-				desktop.Remove (application);
+				Desktop.Remove (application);
 				applications.Remove (name);
 				application.Dispose ();
 			}
@@ -161,13 +200,4 @@ namespace Atspi
 			}
 		}
 	}
-
-	[Interface ("org.freedesktop.atspi.Registry")]
-	interface RegistryInterface : Introspectable
-	{
-		string [] GetApplications ();
-		event UpdateApplicationsHandler UpdateApplications;
-	}
-
-	delegate void UpdateApplicationsHandler (int added, string name);
 }

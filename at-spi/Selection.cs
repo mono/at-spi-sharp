@@ -32,7 +32,6 @@ namespace Atspi
 {
 	public class Selection
 	{
-		private Accessible accessible;
 		private ISelection proxy;
 		private Properties properties;
 
@@ -40,7 +39,6 @@ namespace Atspi
 
 		public Selection (Accessible accessible)
 		{
-			this.accessible = accessible;
 			ObjectPath op = new ObjectPath (accessible.path);
 			proxy = Registry.Bus.GetObject<ISelection> (accessible.application.name, op);
 			properties = Registry.Bus.GetObject<Properties> (accessible.application.name, op);
@@ -53,7 +51,7 @@ namespace Atspi
 		public Accessible GetSelectedChild (int selectedChildIndex)
 		{
 			AccessiblePath path = proxy.GetSelectedChild (selectedChildIndex);
-			return Registry.GetElement (path, accessible, true);
+			return Registry.GetElement (path, true);
 		}
 
 		public bool SelectChild (int childIndex)

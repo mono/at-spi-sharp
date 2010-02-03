@@ -52,10 +52,10 @@ namespace Atspi
 
 		public Hyperlink GetLink (int linkIndex)
 		{
-			string path = proxy.GetLink (linkIndex);
-			if (path == "/org/freedesktop/atspi/accessible/null")
+			AccessiblePath path = proxy.GetLink (linkIndex);
+			if (path.path.ToString() == Application.SPI_PATH_NULL)
 				return null;
-			return new Hyperlink (accessible, path);
+			return new Hyperlink (accessible, path.path.ToString ());
 		}
 
 		public int GetLinkIndex (int characterIndex)
@@ -68,7 +68,7 @@ namespace Atspi
 	interface IHypertext : Introspectable
 	{
 		int GetNLinks ();
-		string GetLink (int linkIndex);
+		AccessiblePath GetLink (int linkIndex);
 		int GetLinkIndex (int characterIndex);
 	}
 }

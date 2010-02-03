@@ -51,7 +51,7 @@ namespace Atspi
 			get { return instance; }
 		}
 
-		internal Desktop (): base (null, null)
+		internal Desktop (Application registry) : base (registry, "/org/freedesktop/atspi/accessible/root")
 		{
 			lock (sync) {
 				if (instance == null)
@@ -60,12 +60,28 @@ namespace Atspi
 					throw new Exception ("Attempt to create a second desktop");
 			}
 			role = Role.DesktopFrame;
+			children = new List<Accessible> ();
+
+			stateSet = new StateSet ();
+			stateSet.Add (StateType.Enabled);
+			stateSet.Add (StateType.Sensitive);
+			stateSet.Add (StateType.Showing);
+			stateSet.Add (StateType.Visible);
+
+			InitEvents ();
+		}
+
+		internal void PostInit ()
+		{
+			AccessiblePath [] childPaths = proxy.GetChildren ();
+			foreach (AccessiblePath path in childPaths)
+				Registry.Instance.GetApplication (path.bus_name);
 		}
 
 		internal void Add (Application app)
 		{
 			lock (sync) {
-				children.Add (app.GetRoot ());
+				children.Add (app.Root);
 			}
 		}
 
@@ -90,12 +106,16 @@ namespace Atspi
 
 		internal static void RaiseChildAdded (Accessible sender, Accessible child)
 		{
+			if (sender == null)
+				return;
 			if (ChildAdded != null)
 				ChildAdded (sender, child);
 		}
 
 		internal static void RaiseChildRemoved (Accessible sender, Accessible child)
 		{
+			if (sender == null)
+				return;
 			if (ChildRemoved != null)
 				ChildRemoved (sender, child);
 		}

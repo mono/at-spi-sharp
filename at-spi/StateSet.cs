@@ -48,18 +48,17 @@ namespace Atspi
 
 		public bool Contains (StateType state)
 		{
-			int n = (int)state;
-			if (n < 0 || n >= (int)Enum.GetValues (typeof (StateType)).Length)
-				throw new ArgumentOutOfRangeException ();
-			return (states & ((ulong)1 << n)) != 0? true: false;
+			return (states & (ulong)state) != 0? true: false;
 		}
 
 		public void Add (StateType state)
 		{
-			int n = (int)state;
-			if (n < 0 || n >= (int)Enum.GetValues (typeof (StateType)).Length)
-				throw new ArgumentOutOfRangeException ();
-			states |= ((ulong)1 << n);
+			states |= (ulong)state;
+		}
+
+		public void Remove (StateType state)
+		{
+			states &= ~(ulong)state;
 		}
 
 		public static bool operator == (StateSet left, StateSet right)

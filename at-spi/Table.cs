@@ -32,7 +32,6 @@ namespace Atspi
 {
 	public class Table
 	{
-		private Accessible accessible;
 		private ITable proxy;
 		private Properties properties;
 
@@ -40,7 +39,6 @@ namespace Atspi
 
 		public Table (Accessible accessible)
 		{
-			this.accessible = accessible;
 			proxy = Registry.Bus.GetObject<ITable> (accessible.application.name, new ObjectPath (accessible.path));
 
 			ObjectPath op = new ObjectPath (accessible.path);
@@ -61,15 +59,17 @@ namespace Atspi
 
 		public Accessible Caption {
 			get {
-				AccessiblePath path = (AccessiblePath) properties.Get (IFACE, "Caption");
-				return Registry.GetElement (path, accessible, true);
+				object o = properties.Get (IFACE, "Caption");
+				AccessiblePath path = (AccessiblePath) Convert.ChangeType (o, typeof (AccessiblePath));
+				return Registry.GetElement (path, true);
 			}
 		}
 
 		public Accessible Summary {
 			get {
-				AccessiblePath path = (AccessiblePath) properties.Get (IFACE, "Summary");
-				return Registry.GetElement (path, accessible, true);
+				object o = properties.Get (IFACE, "Summary");
+				AccessiblePath path = (AccessiblePath) Convert.ChangeType (o, typeof (AccessiblePath));
+				return Registry.GetElement (path, true);
 			}
 		}
 
@@ -88,7 +88,7 @@ namespace Atspi
 		public Accessible GetAccessibleAt (int row, int column)
 		{
 			AccessiblePath path = proxy.GetAccessibleAt (row, column);
-			return Registry.GetElement (path, accessible, true);
+			return Registry.GetElement (path, true);
 		}
 
 		public int GetIndexAt (int row, int column)
@@ -129,13 +129,13 @@ namespace Atspi
 		public Accessible GetRowHeader (int row)
 		{
 			AccessiblePath path = proxy.GetRowHeader (row);
-			return Registry.GetElement (path, accessible, true);
+			return Registry.GetElement (path, true);
 		}
 
 		public Accessible GetColumnHeader (int column)
 		{
 			AccessiblePath path = proxy.GetColumnHeader (column);
-			return Registry.GetElement (path, accessible, true);
+			return Registry.GetElement (path, true);
 		}
 
 		public int [] GetSelectedRows ()
