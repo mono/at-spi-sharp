@@ -108,7 +108,7 @@ namespace Atspi
 		[DllImport("libX11.so.6")]
 		static extern int XGetWindowProperty (IntPtr display, IntPtr w, IntPtr property, IntPtr long_offset, IntPtr long_length, int delete, IntPtr req_type, out IntPtr actual_type_return, out int actual_format_return, out IntPtr nitems_return, out IntPtr bytes_after_return, out string prop_return);
 
-		public static Bus GetAtspiBus ()
+		internal static Bus GetAtspiBus ()
 		{
 			string displayName = Environment.GetEnvironmentVariable ("AT_SPI_DISPLAY");
 			if (displayName == null || displayName == String.Empty)
@@ -147,6 +147,8 @@ namespace Atspi
 
 		internal Application GetApplication (string name, bool create)
 		{
+			if (string.IsNullOrEmpty (name))
+				return null;
 			if (!applications.ContainsKey (name)) {
 				applications [name] = new Application (name);
 				desktop.Add (applications [name]);

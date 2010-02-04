@@ -33,7 +33,7 @@ namespace AtSpiTest
 	public class UncachedChildrenTest : Base
 	{
 		Accessible frame = null;
-			Accessible treeTable = null;
+		Accessible treeTable = null;
 
 		[TestFixtureSetUp]
 		public void Init ()
@@ -55,6 +55,13 @@ namespace AtSpiTest
 			Assert.AreNotEqual (a1, a2, "Children [0] != Children [1]");
 			Assert.AreEqual (Role.TableColumnHeader, a1.Role, "Children [0].Role");
 			Assert.AreEqual (Role.TableCell, a2.Role, "Children [1].Role");
+		}
+
+		[Test]
+		public void ParentTest ()
+		{
+			Assert.IsNotNull (treeTable.Children [0], "TreeTable should have a child");
+			Assert.AreEqual (treeTable, treeTable.Children [0].Parent, "treeTable Children[0].Parent");
 		}
 #endregion
 	}

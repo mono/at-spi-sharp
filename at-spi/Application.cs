@@ -82,8 +82,10 @@ namespace Atspi
 		protected virtual void Dispose (bool disposing)
 		{
 			if (!Disposed) {
-				proxy.RemoveAccessible -= OnRemoveAccessible;
-				proxy.AddAccessible -= OnAddAccessible;
+				if (proxy != null) {
+					proxy.RemoveAccessible -= OnRemoveAccessible;
+					proxy.AddAccessible -= OnAddAccessible;
+				}
 				Disposed = true;
 			}
 		}

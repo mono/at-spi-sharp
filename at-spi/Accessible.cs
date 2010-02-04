@@ -143,8 +143,9 @@ namespace Atspi
 				parent.children.Remove (this);
 			}
 			children.Clear ();
-			if (stateSet != null)
-				stateSet.Add (StateType.Defunct);
+			if (stateSet == null)
+				stateSet = new StateSet ();
+			stateSet.Add (StateType.Defunct);
 			if (ObjectEvents != null) {
 				ObjectEvents.PropertyChange -= OnPropertyChange;
 				ObjectEvents.ChildrenChanged -= OnChildrenChanged;
@@ -337,7 +338,14 @@ namespace Atspi
 		}
 
 		public Accessible Parent {
-			get { return parent; }
+			get {
+				if (parent == null && !(this is Desktop)) {
+					object o = properties.Get (IFACE, "Parent");
+					AccessiblePath path = (AccessiblePath) Convert.ChangeType (o, typeof (AccessiblePath));
+					parent = Registry.GetElement (path, true);
+				}
+				return parent;
+			}
 		}
 
 		public IList<Accessible> Children {
@@ -422,11 +430,24 @@ namespace Atspi
 		}
 
 		public string Name {
-			get { return name; }
+			get {
+				if (name == null) {
+					try {
+						name = (string) properties.Get (IFACE, "Name");
+					} catch (System.Exception) {
+						return null;
+					}
+				}
+				return name;
+			}
 		}
 
 		public string Description {
-			get { return description; }
+			get {
+				if (description == null)
+					description = (string) properties.Get (IFACE, "Description");
+				return description;
+			}
 		}
 
 		public Accessible FindDescendant (FindPredicate d, params object [] args)

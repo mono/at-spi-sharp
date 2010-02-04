@@ -1,3 +1,16 @@
+2010-02-04  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs: Fetch Parent, Name, and Description if we do not
+	have cached data for them.
+
+	* Accessible.cs, Application.cs: Fix several exceptions.
+
+	* Registry.cs: Do not create an appliation for an element with no bus
+	name.
+
+	* Registry.cs: Make GetAtspiBus internal to be compatible with
+	our ndesk-dbus fork.
+
 2010-02-03  Mike Gorse  <mgorse@novell.com>
 
 	* EventBase.cs, EventDocument.cs, EventFocus.cs, EventKeyboard.cs,
