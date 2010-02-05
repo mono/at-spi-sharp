@@ -84,12 +84,6 @@ namespace Atspi
 			if (bus == null)
 				bus = Bus.Session;
 
-			if (startLoop && loopThread == null) {
-				loopThread = new Thread (new ThreadStart (Iterate));
-				loopThread.IsBackground = true;
-				loopThread.Start ();
-			}
-
 			applications = new Dictionary<string, Application> ();
 			applications [name] = this;
 			desktop = new Desktop (this);
@@ -97,6 +91,12 @@ namespace Atspi
 
 			PostInit ();
 			desktop.PostInit ();
+
+			if (startLoop && loopThread == null) {
+				loopThread = new Thread (new ThreadStart (Iterate));
+				loopThread.IsBackground = true;
+				loopThread.Start ();
+			}
 		}
 
 		[DllImport("libX11.so.6")]
@@ -149,7 +149,7 @@ namespace Atspi
 		{
 			if (string.IsNullOrEmpty (name))
 				return null;
-			if (!applications.ContainsKey (name)) {
+			if (!applications.ContainsKey (name) && create) {
 				applications [name] = new Application (name);
 				desktop.Add (applications [name]);
 				applications [name].PostInit ();
@@ -174,8 +174,13 @@ namespace Atspi
 
 		internal void TerminateInternal ()
 		{
+			List<string> dispose = new List<string> ();
 			foreach (string bus_name in applications.Keys)
-				applications [bus_name].Dispose ();
+				dispose.Add (bus_name);
+			// TODO: Thread safety
+			foreach (string bus_name in dispose)
+				if (applications.ContainsKey (bus_name))
+					applications [bus_name].Dispose ();
 			applications = null;
 		}
 
@@ -196,6 +201,8 @@ namespace Atspi
 			{
 				try {
 					bus.Iterate ();
+				} catch (System.Threading.ThreadAbortException) {
+					return;
 				} catch (Exception e) {
 					Console.WriteLine ("at-spi-sharp: Exception in Iterate: " + e);
 				}

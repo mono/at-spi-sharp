@@ -65,6 +65,7 @@ namespace Atspi
 				ObjectPath op = new ObjectPath (path);
 				properties = Registry.Bus.GetObject<Properties> (application.name, op);
 			}
+			interfaces = Interfaces.Invalid;
 		}
 
 		internal Accessible (Application application, AccessibleProxy e)
@@ -138,11 +139,14 @@ namespace Atspi
 
 		protected virtual  void Dispose (bool disposing)
 		{
+			if (stateSet != null && stateSet.Contains (StateType.Defunct))
+				return;
 			if (parent != null) {
 				Desktop.RaiseChildRemoved (parent, this);
 				parent.children.Remove (this);
 			}
-			children.Clear ();
+			if (children is List<Accessible>)
+				children.Clear ();
 			if (stateSet == null)
 				stateSet = new StateSet ();
 			stateSet.Add (StateType.Defunct);
@@ -220,7 +224,9 @@ namespace Atspi
 					Desktop.RaiseNameChanged (this, oldName, e.name);
 			}
 
-			parent = Registry.GetElement (e.parent, true);
+			parent = Registry.GetElement (e.parent, false);
+			if (parent == null && role == Role.Application)
+				parent = Desktop.Instance;
 			// Assuming that old and new parents are also
 			// going to send ChildrenChanged signals, so
 			// not going to update their caches or send
@@ -241,6 +247,7 @@ namespace Atspi
 					Desktop.RaiseDescriptionChanged (this, oldDescription, e.description);
 			}
 
+			interfaces = 0;
 			foreach (string iface in e.interfaces)
 				AddInterface (iface);
 
@@ -342,7 +349,9 @@ namespace Atspi
 				if (parent == null && !(this is Desktop)) {
 					object o = properties.Get (IFACE, "Parent");
 					AccessiblePath path = (AccessiblePath) Convert.ChangeType (o, typeof (AccessiblePath));
-					parent = Registry.GetElement (path, true);
+					parent = Registry.GetElement (path, false);
+					if (parent == null && Role == Role.Application)
+						parent = Desktop.Instance;
 				}
 				return parent;
 			}
@@ -394,8 +403,11 @@ namespace Atspi
 
 		public Role Role {
 			get {
-				if (role == Role.Invalid)
-					role = (Role) proxy.GetRole ();
+				if (role == Role.Invalid) {
+					try {
+						role = (Role) proxy.GetRole ();
+					} catch (System.Exception) { }
+				}
 				return role;
 			}
 		}
@@ -450,6 +462,18 @@ namespace Atspi
 			}
 		}
 
+		internal Interfaces Interfaces {
+			get {
+				if ((interfaces & Interfaces.Invalid) != 0) {
+					string [] ifaces = proxy.GetInterfaces ();
+					interfaces = 0;
+					foreach (string iface in ifaces)
+						AddInterface (iface);
+				}
+				return interfaces;
+			}
+		}
+
 		public Accessible FindDescendant (FindPredicate d, params object [] args)
 		{
 			return FindDescendantDepthFirst (d, args);
@@ -498,70 +522,70 @@ namespace Atspi
 
 		public Action QueryAction ()
 		{
-			if ((interfaces & Interfaces.Action) != 0)
+			if ((Interfaces & Interfaces.Action) != 0)
 				return new Action (this);
 			return null;
 		}
 
 		public Component QueryComponent ()
 		{
-			if ((interfaces & Interfaces.Component) != 0)
+			if ((Interfaces & Interfaces.Component) != 0)
 				return new Component (this);
 			return null;
 		}
 
 		public Document QueryDocument ()
 		{
-			if ((interfaces & Interfaces.Document) != 0)
+			if ((Interfaces & Interfaces.Document) != 0)
 				return new Document (this);
 			return null;
 		}
 
 		public EditableText QueryEditableText ()
 		{
-			if ((interfaces & Interfaces.EditableText) != 0)
+			if ((Interfaces & Interfaces.EditableText) != 0)
 				return new EditableText (this);
 			return null;
 		}
 
 		public Hypertext QueryHypertext ()
 		{
-			if ((interfaces & Interfaces.Hypertext) != 0)
+			if ((Interfaces & Interfaces.Hypertext) != 0)
 				return new Hypertext (this);
 			return null;
 		}
 
 		public Image QueryImage ()
 		{
-			if ((interfaces & Interfaces.Image) != 0)
+			if ((Interfaces & Interfaces.Image) != 0)
 				return new Image (this);
 			return null;
 		}
 
 		public Selection QuerySelection ()
 		{
-			if ((interfaces & Interfaces.Selection) != 0)
+			if ((Interfaces & Interfaces.Selection) != 0)
 				return new Selection (this);
 			return null;
 		}
 
 		public Table QueryTable ()
 		{
-			if ((interfaces & Interfaces.Table) != 0)
+			if ((Interfaces & Interfaces.Table) != 0)
 				return new Table (this);
 			return null;
 		}
 
 		public Text QueryText ()
 		{
-			if ((interfaces & Interfaces.Text) != 0)
+			if ((Interfaces & Interfaces.Text) != 0)
 				return new Text (this);
 			return null;
 		}
 
 		public Value QueryValue ()
 		{
-			if ((interfaces & Interfaces.Value) != 0)
+			if ((Interfaces & Interfaces.Value) != 0)
 				return new Value (this);
 			return null;
 		}
@@ -617,7 +641,7 @@ namespace Atspi
 	public delegate bool FindPredicate (Accessible a, params object [] args);
 
 	[System.Flags]
-	public enum Interfaces
+	public enum Interfaces : uint
 	{
 		Action = 0x0001,
 		Component = 0x0002,
@@ -629,7 +653,8 @@ namespace Atspi
 		StreamableContent = 0x0080,
 		Table = 0x0100,
 		Text = 0x0200,
-		Value = 0x0400
+		Value = 0x0400,
+		Invalid = 0x80000000
 	}
 
 	[Interface ("org.freedesktop.atspi.Accessible")]
@@ -639,6 +664,7 @@ namespace Atspi
 		int GetIndexInParent ();
 		AccessiblePath GetChildAtIndex (int index);
 		AccessiblePath [] GetChildren ();
+		string [] GetInterfaces ();
 		uint GetRole ();
 		uint [] GetState ();
 	}

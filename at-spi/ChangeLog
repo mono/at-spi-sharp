@@ -1,3 +1,11 @@
+2010-02-05  Mike Gorse  <mgorse@novell.com>
+
+	* EventBase.cs: Track at-spi2 api.
+
+	* Accessible.cs: Fetch interfaces when unknown.
+
+	* Accessible.cs, Registry.cs: Fix some crashes.
+
 2010-02-04  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs: Fetch Parent, Name, and Description if we do not

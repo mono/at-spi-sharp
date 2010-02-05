@@ -50,70 +50,70 @@ namespace Atspi
 		// TODO: Remove unused delegates
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, v1);
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, v1);
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventII value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, v1, v2);
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, v1, v2);
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventO value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, MarshallAccessible (any));
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, MarshallAccessible (any));
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventR value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, (BoundingBox)Convert.ChangeType (any, typeof(BoundingBox)));
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, (BoundingBox)Convert.ChangeType (any, typeof(BoundingBox)));
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventSB value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, detail, v1 == 1);
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, detail, v1 == 1);
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventSII value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, detail, v1, v2);
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, detail, v1, v2);
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventSIIS value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, detail, v1, v2, (string)any);
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, detail, v1, v2, (string)any);
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventSIO value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, detail, v1, MarshallAccessible (any, detail != "removed", true));
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, detail, v1, MarshallAccessible (any, detail == "remove", true));
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventSV value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible, detail, MarshallVariant (any));
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, detail, MarshallVariant (any));
 			return delegates [value];
 		}
 
 		internal AtspiEventHandler GetDelegate (EventSimple value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (app_root, detail, v1, v2, any) => value (accessible);
+				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible);
 			return delegates [value];
 		}
 
@@ -148,7 +148,7 @@ namespace Atspi
 		}
 	}
 
-	internal delegate void AtspiEventHandler (AccessiblePath app_root, string detail, int v1, int v2, object any);
+	internal delegate void AtspiEventHandler (string detail, int v1, int v2, object any, AccessiblePath app_root);
 
 	public delegate void EventI (Accessible sender, int v);
 	public delegate void EventII (Accessible sender, int v1, int v2);
