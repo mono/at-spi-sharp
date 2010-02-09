@@ -1,7 +1,0 @@
-2009-11-19  Mike Gorse  <mgorse@novell.com>
-
-	* PendingCall.cs: Threading fixes, backported from git master.
-
-	* Connection.cs: Fix possible NRE when removing a signal.
-
-	* Connection.cs, BusObject.cs: Match sender when relaying signals.

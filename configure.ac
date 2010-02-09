@@ -59,7 +59,7 @@ if test "x$has_ndesk_dbus" = "xno"; then
 	enable_external_ndesk_dbus=no
 fi
 if test "x$enable_external_ndesk_dbus" = "xno"; then
-	NDESK_DBUS_LIBS="System System.Xml Mono.Posix"
+	NDESK_DBUS_LIBS="System System.Core System.Xml Mono.Posix"
 	AC_SUBST(NDESK_DBUS_LIBS)
 fi
 AM_CONDITIONAL(ENABLE_EXTERNAL_NDESK_DBUS, test "x$enable_external_ndesk_dbus" = "xyes")

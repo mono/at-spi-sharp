@@ -1,3 +1,8 @@
+2010-02-09  Sandy Armstrong  <sanfordarmstrong@gmail.com>
+
+	* Makefile.am:
+	* at-spi-sharp.dll.config.in: Add a .dll.config file for ndesk-dbus.
+
 2010-02-05  Mike Gorse  <mgorse@novell.com>
 
 	* EventBase.cs: Track at-spi2 api.

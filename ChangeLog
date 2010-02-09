@@ -1,6 +1,12 @@
+2010-02-09  Sandy Armstrong  <sanfordarmstrong@gmail.com>
+
+	* ndesk-dbus: Delete copy of ndesk-dbus source from SVN.
+	* autogen.sh: Pull ndesk-dbus from our git branch during autogen.
+	* configure.ac: Latest ndesk-dbus requires System.Core.
+
 2010-02-03  Matt Guo  <matt@mattguo.com>
 
-        * ndesk-dbus/Mapper.cs: Fix dbus thread safety issues
+	* ndesk-dbus/Mapper.cs: Fix dbus thread safety issues
 
 2009-12-09  Stephen Shaw <sshaw@decriptor.com>
 
