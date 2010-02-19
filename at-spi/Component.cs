@@ -85,7 +85,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Component")]
+	[Interface ("org.a11y.atspi.Component")]
 	interface IComponent : Introspectable
 	{
 		bool contains (int x, int y, CoordType coord_type);

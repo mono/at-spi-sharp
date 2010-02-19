@@ -35,7 +35,7 @@ namespace Atspi
 		private Accessible accessible;
 		private IHypertext proxy;
 
-		private const string IFACE = "org.freedesktop.atspi.Hypertext";
+		private const string IFACE = "org.a11y.atspi.Hypertext";
 
 		public Hypertext (Accessible accessible)
 		{
@@ -64,7 +64,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Hypertext")]
+	[Interface ("org.a11y.atspi.Hypertext")]
 	interface IHypertext : Introspectable
 	{
 		int GetNLinks ();

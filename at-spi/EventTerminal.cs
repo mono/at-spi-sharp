@@ -85,7 +85,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Event.Terminal")]
+	[Interface ("org.a11y.atspi.Event.Terminal")]
 	internal interface IEventTerminal
 	{
 		event AtspiEventHandler LineChanged;

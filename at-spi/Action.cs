@@ -35,7 +35,7 @@ namespace Atspi
 		private IAction proxy;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Action";
+		private const string IFACE = "org.a11y.atspi.Action";
 
 		public Action (Accessible accessible)
 		{
@@ -82,7 +82,7 @@ namespace Atspi
 		public string KeyBinding;
 	}
 
-	[Interface ("org.freedesktop.atspi.Action")]
+	[Interface ("org.a11y.atspi.Action")]
 	interface IAction : Introspectable
 	{
 		int NActions { get; }

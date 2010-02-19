@@ -49,7 +49,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Event.Focus")]
+	[Interface ("org.a11y.atspi.Event.Focus")]
 	internal interface IEventFocus
 	{
 		event AtspiEventHandler Focus;

@@ -35,7 +35,7 @@ namespace Atspi
 		private IImage proxy;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Image";
+		private const string IFACE = "org.a11y.atspi.Image";
 
 		public Image (Accessible accessible)
 		{
@@ -72,7 +72,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Image")]
+	[Interface ("org.a11y.atspi.Image")]
 	interface IImage : Introspectable
 	{
 		BoundingBox GetImageExtents (CoordType coordType);

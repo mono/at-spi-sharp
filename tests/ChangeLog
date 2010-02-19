@@ -1,3 +1,10 @@
+2010-02-19  Mike Gorse  <mgorse@novell.com>
+
+	* DeviceEventControllerTest.cs, Makefile.am:
+	Add DeviceEventControllerTest.
+
+	* Makefile.am: Copy at-spi-sharp.dll.config.
+
 2010-02-04  Mike Gorse  <mgorse@novell.com>
 
 	* at-spi-sharp/UncachedChildren.cs: Test that the parent of a table cell is set.

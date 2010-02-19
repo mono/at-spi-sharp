@@ -233,7 +233,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Event.Object")]
+	[Interface ("org.a11y.atspi.Event.Object")]
 	internal interface IEventObject : Introspectable
 	{
 		event AtspiEventHandler PropertyChange;

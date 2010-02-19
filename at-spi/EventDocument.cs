@@ -85,7 +85,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Event.Document")]
+	[Interface ("org.a11y.atspi.Event.Document")]
 	internal interface IEventDocument
 	{
 		event AtspiEventHandler LoadComplete;

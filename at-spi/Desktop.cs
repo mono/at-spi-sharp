@@ -51,7 +51,7 @@ namespace Atspi
 			get { return instance; }
 		}
 
-		internal Desktop (Application registry) : base (registry, "/org/freedesktop/atspi/accessible/root")
+		internal Desktop (Application registry) : base (registry, "/org/a11y/atspi/accessible/root")
 		{
 			lock (sync) {
 				if (instance == null)

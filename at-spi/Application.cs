@@ -33,8 +33,8 @@ namespace Atspi
 
 	public class Application : IDisposable
 	{
-		internal const string SPI_PATH_ROOT = "/org/freedesktop/atspi/accessible/root";
-		internal const string SPI_PATH_NULL = "/org/freedesktop/atspi/null";
+		internal const string SPI_PATH_ROOT = "/org/a11y/atspi/accessible/root";
+		internal const string SPI_PATH_NULL = "/org/a11y/atspi/null";
 
 		internal string name;
 		private ICache proxy;
@@ -45,7 +45,7 @@ namespace Atspi
 			get; private set;
 		}
 
-		private const string IFACE = "org.freedesktop.atspi.Application";
+		private const string IFACE = "org.a11y.atspi.Application";
 
 		internal Application (string name)
 		{
@@ -149,7 +149,7 @@ namespace Atspi
 
 		internal Accessible Root  {
 			get {
-				return GetElement ("/org/freedesktop/atspi/accessible/root", true);
+				return GetElement ("/org/a11y/atspi/accessible/root", true);
 			}
 		}
 
@@ -158,9 +158,15 @@ namespace Atspi
 				return (string) properties.Get (IFACE, "ToolkitName");
 			}
 		}
+
+		public uint Pid {
+			get {
+				return Registry.BusProxy.GetConnectionUnixProcessID (name);
+			}
+		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Cache")]
+	[Interface ("org.a11y.atspi.Cache")]
 	interface ICache : Introspectable
 	{
 		AccessibleProxy [] GetItems ();

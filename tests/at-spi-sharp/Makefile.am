@@ -12,6 +12,8 @@ BUILD_DIR = bin
 ATSPISHARP_DLL_SOURCE=../../at-spi/bin/at-spi-sharp.dll
 ATSPISHARPTESTS_DLL_MDB_SOURCE=bin/at-spiTests.dll.mdb
 ATSPISHARPTESTS_DLL_MDB=$(BUILD_DIR)/at-spiTests.dll.mdb
+ATSPISHARP_DLL_CONFIG=$(BUILD_DIR)/at-spi-sharp.dll.config
+ATSPISHARP_DLL_CONFIG_SOURCE=../../at-spi/bin/at-spi-sharp.dll.config
 ATSPISHARP_DLL_MDB_SOURCE=../../at-spi/bin/at-spi-sharp.dll.mdb
 ATSPISHARP_DLL_MDB=$(BUILD_DIR)/at-spi-sharp.dll.mdb
 
@@ -22,6 +24,7 @@ ATSPISHARP_DLL_MDB=$(BUILD_DIR)/at-spi-sharp.dll.mdb
 PROGRAMFILES = \
 	$(ATSPISHARP_DLL) \
 	$(ATSPITESTS_DLL_MDB) \
+	$(ATSPISHARP_DLL_CONFIG)  
 	$(ATSPISHARP_DLL_MDB)  
 
 
@@ -35,6 +38,7 @@ FILES =  \
 	ActionTest.cs \
 	Base.cs \
 	ComponentTest.cs \
+	DeviceEventControllerTest.cs \
 	DocumentTest.cs \
 	EventTest.cs \
 	HypertextTest.cs \
@@ -67,6 +71,7 @@ include $(top_srcdir)/Makefile.include
 ATSPISHARP_DLL = $(BUILD_DIR)/at-spi-sharp.dll
 
 $(eval $(call emit-deploy-target,ATSPISHARP_DLL))
+$(eval $(call emit-deploy-target,ATSPISHARP_DLL_CONFIG))
 $(eval $(call emit-deploy-target,ATSPISHARP_DLL_MDB))
 
 

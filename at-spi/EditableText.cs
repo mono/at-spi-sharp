@@ -34,7 +34,7 @@ namespace Atspi
 	{
 		private IEditableText proxy;
 
-		private const string IFACE = "org.freedesktop.atspi.EditableText";
+		private const string IFACE = "org.a11y.atspi.EditableText";
 
 		public EditableText (Accessible accessible)
 		{
@@ -81,7 +81,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.EditableText")]
+	[Interface ("org.a11y.atspi.EditableText")]
 	interface IEditableText : Introspectable
 	{
 		bool SetTextContents (string newContents);

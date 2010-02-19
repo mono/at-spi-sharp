@@ -35,7 +35,7 @@ namespace Atspi
 		private ISelection proxy;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Selection";
+		private const string IFACE = "org.a11y.atspi.Selection";
 
 		public Selection (Accessible accessible)
 		{
@@ -85,7 +85,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Selection")]
+	[Interface ("org.a11y.atspi.Selection")]
 	interface ISelection : Introspectable
 	{
 		AccessiblePath GetSelectedChild (int selectedChildIndex);

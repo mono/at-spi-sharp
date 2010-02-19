@@ -1,3 +1,18 @@
+2010-02-17  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs, Action.cs, Application.cs, Component.cs, Desktop.cs,
+	Document.cs, EditableText.cs, EventDocument.cs, EventFocus.cs,
+	EventKeyboard.cs, EventMouse.cs, EventObject.cs, EventTerminal.cs,
+	EventWindow.cs, Hyperlink.cs, Hypertext.cs, Image.cs, Registry.cs,
+	Selection.cs, Table.cs, Text.cs, Value.cs: org.freedesktop -> org.a11y
+	to match at-spi2 0.1.7.
+
+	* Application.cs, Registry.cs: Add Pid property (used by
+	AtspiUiaSource).
+
+	* DeviceEventController.cs, Registry.cs, Makefile.am:
+	Add DeviceEventController.
+
 2010-02-09  Sandy Armstrong  <sanfordarmstrong@gmail.com>
 
 	* Makefile.am:

@@ -67,7 +67,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Event.Mouse")]
+	[Interface ("org.a11y.atspi.Event.Mouse")]
 	internal interface IEventMouse
 	{
 		event AtspiEventHandler Abs;

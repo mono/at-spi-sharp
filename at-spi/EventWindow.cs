@@ -211,7 +211,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Event.Window")]
+	[Interface ("org.a11y.atspi.Event.Window")]
 	internal interface IEventWindow
 	{
 		event AtspiEventHandler PropertyChange;

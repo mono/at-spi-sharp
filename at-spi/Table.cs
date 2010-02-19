@@ -35,7 +35,7 @@ namespace Atspi
 		private ITable proxy;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Table";
+		private const string IFACE = "org.a11y.atspi.Table";
 
 		public Table (Accessible accessible)
 		{
@@ -192,7 +192,7 @@ namespace Atspi
 
 	}
 
-	[Interface ("org.freedesktop.atspi.Table")]
+	[Interface ("org.a11y.atspi.Table")]
 	interface ITable : Introspectable
 	{
 		AccessiblePath GetAccessibleAt (int row, int column);

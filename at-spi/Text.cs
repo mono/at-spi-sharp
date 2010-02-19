@@ -35,7 +35,7 @@ namespace Atspi
 		private IText proxy;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Text";
+		private const string IFACE = "org.a11y.atspi.Text";
 
 		public Text (Accessible accessible)
 		{
@@ -196,7 +196,7 @@ namespace Atspi
 		public object unused;
 	}
 
-	[Interface ("org.freedesktop.atspi.Text")]
+	[Interface ("org.a11y.atspi.Text")]
 	interface IText : Introspectable
 	{
 		string GetText (int startOffset, int endOffset);

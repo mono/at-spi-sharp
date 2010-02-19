@@ -36,7 +36,7 @@ namespace Atspi
 		private Application application;
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Hyperlink";
+		private const string IFACE = "org.a11y.atspi.Hyperlink";
 
 		public Hyperlink (Accessible accessible, string path)
 		{
@@ -71,7 +71,7 @@ namespace Atspi
 			// hack -- we get an object which we may not have
 			// received an event for.
 			if (ret != null)
-				ret.AddInterface ("org.freedesktop.atspi.Action");
+				ret.AddInterface ("org.a11y.atspi.Action");
 			return ret;
 		}
 
@@ -81,7 +81,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Hyperlink")]
+	[Interface ("org.a11y.atspi.Hyperlink")]
 	interface IHyperlink : Introspectable
 	{
 			ObjectPath GetObject (int index);

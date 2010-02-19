@@ -40,6 +40,7 @@ SOURCE_FILES =  \
 	AssemblyInfo.cs \
 	Component.cs \
 	Desktop.cs \
+	DeviceEventController.cs \
 	Document.cs \
 	EditableText.cs \
 	EventBase.cs \

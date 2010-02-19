@@ -42,6 +42,7 @@ namespace Atspi
 
 		private volatile static Registry instance;
 		private Bus bus;
+		private IBus busProxy;
 		private Dictionary<string, Application> applications;
 		private Desktop desktop;
 		private static object sync = new object ();
@@ -71,8 +72,14 @@ namespace Atspi
 
 		internal static Bus Bus { get { return Instance.bus; } }
 
+		internal static IBus BusProxy {
+			get {
+				return instance.busProxy;
+			}
+		}
+
 		internal Registry (bool startLoop)
-				: base ("org.freedesktop.atspi.Registry")
+				: base ("org.a11y.atspi.Registry")
 		{
 			lock (sync) {
 				if (instance != null)
@@ -91,6 +98,11 @@ namespace Atspi
 
 			PostInit ();
 			desktop.PostInit ();
+
+			if (DeviceEventController.Instance == null)
+				new DeviceEventController ();
+
+			busProxy = Bus.GetObject<IBus> ("org.freedesktop.DBus", new ObjectPath ("/org/freedesktop/DBus"));
 
 			if (startLoop && loopThread == null) {
 				loopThread = new Thread (new ThreadStart (Iterate));

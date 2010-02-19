@@ -19,54 +19,56 @@
 // 
 // Copyright (c) 2009 Novell, Inc. (http://www.novell.com) 
 // 
-// Authors:
-//      Mike Gorse <mgorse@novell.com>
+// Authors: 
+//	Mike Gorse <mgorse@novell.com>
 // 
 
 using System;
-using System.Collections.Generic;
+using System.Threading;
 using NDesk.DBus;
-using org.freedesktop.DBus;
+using NUnit.Framework;
+using Atspi;
 
-namespace Atspi
+namespace AtSpiTest
 {
-	public class Value
+	[TestFixture]
+	public class DeviceEventControllerTest : Base
 	{
-		private Properties properties;
+		Accessible frame = null;
 
-		private const string IFACE = "org.a11y.atspi.Value";
-
-		public Value (Accessible accessible)
+		public DeviceEventControllerTest ()
 		{
-			ObjectPath op = new ObjectPath (accessible.path);
-			properties = Registry.Bus.GetObject<Properties> (accessible.application.name, op);
+			// We need a gtk app so that our keystrokes have a
+			// place to land where they will be ricocheted
+			// back to our listener.
+			frame = GetFrame ("gtktextview.py");
+			Assert.IsNotNull (frame, "Couldn't open gtktextview.py");
 		}
 
-		public double MinimumValue {
-			get {
-				return (double) properties.Get (IFACE, "MinimumValue");
-			}
+		#region Test
+		[Test]
+		public void BasicKeyListenerTest ()
+		{
+			TestKeyListener l = new TestKeyListener ();
+			l.Register (KeyDefinition.All, ControllerEventMask.Unmodified, EventType.All, true, true, false);
+			DeviceEventController.Instance.GenerateKeyboardEvent (65, "", KeySynthType.KeyPressRelease);
+			Thread.Sleep (500);
+			Assert.AreEqual (2, l.Count, "Event count");
+			Assert.AreEqual (65, l.LastEvent.HwCode, "LastEvent HwCode");
 		}
+#endregion
+	}
 
-		public double MaximumValue {
-			get {
-				return (double) properties.Get (IFACE, "MaximumValue");
-			}
-		}
+	class TestKeyListener: KeystrokeListener
+	{
+		public DeviceEvent LastEvent;
+		public int Count = 0;
 
-		public double CurrentValue {
-			get {
-				return (double) properties.Get (IFACE, "CurrentValue");
-			}
-			set {
-				properties.Set (IFACE, "CurrentValue", value);
-			}
-		}
-
-		public double MinimumIncrement {
-			get {
-				return (double) properties.Get (IFACE, "MinimumIncrement");
-			}
+		public override bool NotifyEvent (DeviceEvent ev)
+		{
+			LastEvent = ev;
+			Count++;
+			return true;
 		}
 	}
 }

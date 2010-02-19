@@ -34,7 +34,7 @@ namespace Atspi
 	{
 		private IDocument proxy;
 
-		private const string IFACE = "org.freedesktop.atspi.Document";
+		private const string IFACE = "org.a11y.atspi.Document";
 
 		public Document (Accessible accessible)
 		{
@@ -56,7 +56,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Document")]
+	[Interface ("org.a11y.atspi.Document")]
 	interface IDocument : Introspectable
 	{
 		string GetLocale ();

@@ -53,7 +53,7 @@ namespace Atspi
 
 		private Properties properties;
 
-		private const string IFACE = "org.freedesktop.atspi.Accessible";
+		private const string IFACE = "org.a11y.atspi.Accessible";
 
 		internal Accessible (Application application, string path)
 		{
@@ -303,31 +303,31 @@ namespace Atspi
 		{
 			Interfaces flag = 0;
 
-			if (name == "org.freedesktop.atspi.Accessible") {
+			if (name == "org.a11y.atspi.Accessible") {
 				// All objects should support this
-			} else if (name == "org.freedesktop.atspi.Action") {
+			} else if (name == "org.a11y.atspi.Action") {
 				flag = Interfaces.Action;
-			} else if (name == "org.freedesktop.atspi.Collection") {
+			} else if (name == "org.a11y.atspi.Collection") {
 				// All objects should support this
-			} else if (name == "org.freedesktop.atspi.Component") {
+			} else if (name == "org.a11y.atspi.Component") {
 				flag = Interfaces.Component;
-			} else if (name == "org.freedesktop.atspi.Document") {
+			} else if (name == "org.a11y.atspi.Document") {
 				flag = Interfaces.Document;
-			} else if (name == "org.freedesktop.atspi.EditableText") {
+			} else if (name == "org.a11y.atspi.EditableText") {
 				flag = Interfaces.EditableText;
-			} else if (name == "org.freedesktop.atspi.Hypertext") {
+			} else if (name == "org.a11y.atspi.Hypertext") {
 				flag = Interfaces.Hypertext;
-			} else if (name == "org.freedesktop.atspi.Image") {
+			} else if (name == "org.a11y.atspi.Image") {
 				flag = Interfaces.Image;
-			} else if (name == "org.freedesktop.atspi.Selection") {
+			} else if (name == "org.a11y.atspi.Selection") {
 				flag = Interfaces.Selection;
-			} else if (name == "org.freedesktop.atspi.StreamableContent") {
+			} else if (name == "org.a11y.atspi.StreamableContent") {
 				flag = Interfaces.StreamableContent;
-			} else if (name == "org.freedesktop.atspi.Table") {
+			} else if (name == "org.a11y.atspi.Table") {
 				flag = Interfaces.Table;
-			} else if (name == "org.freedesktop.atspi.Text") {
+			} else if (name == "org.a11y.atspi.Text") {
 				flag = Interfaces.Text;
-			} else if (name == "org.freedesktop.atspi.Value") {
+			} else if (name == "org.a11y.atspi.Value") {
 				flag = Interfaces.Value;
 			} else
 				// TODO: Don't release with this exception
@@ -657,7 +657,7 @@ namespace Atspi
 		Invalid = 0x80000000
 	}
 
-	[Interface ("org.freedesktop.atspi.Accessible")]
+	[Interface ("org.a11y.atspi.Accessible")]
 	interface IAccessible : Introspectable
 	{
 		DBusRelation [] GetRelationSet ();

@@ -49,7 +49,7 @@ namespace Atspi
 		}
 	}
 
-	[Interface ("org.freedesktop.atspi.Event.Keyboard")]
+	[Interface ("org.a11y.atspi.Event.Keyboard")]
 	internal interface IEventKeyboard
 	{
 		event AtspiEventHandler Modifiers;
