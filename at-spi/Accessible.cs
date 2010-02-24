@@ -78,6 +78,12 @@ namespace Atspi
 
 		internal void InitEvents ()
 		{
+			if (Registry.SuspendDBusCalls) {
+				Registry.pendingCalls.Enqueue (() =>
+					InitEvents ());
+				return;
+			}
+
 			if (stateMapping == null)
 				InitStateMapping ();
 			if (objectEvents == null && ObjectEvents != null) {

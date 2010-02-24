@@ -45,8 +45,10 @@ namespace Atspi
 		private IBus busProxy;
 		private Dictionary<string, Application> applications;
 		private Desktop desktop;
+		private bool suspendDBusCalls;
 		private static object sync = new object ();
 		private static Thread loopThread;
+		internal static Queue<System.Action> pendingCalls = new Queue<System.Action> ();
 
 		public static void Initialize ()
 		{
@@ -204,6 +206,25 @@ namespace Atspi
 				applications.Remove (name);
 				application.Dispose ();
 			}
+		}
+
+		internal static bool SuspendDBusCalls {
+			get {
+				return instance.suspendDBusCalls;
+			}
+			set {
+				if (instance.suspendDBusCalls && !value) {
+					instance.suspendDBusCalls = value;
+					instance.ProcessPendingCalls ();
+				} else
+					instance.suspendDBusCalls = value;
+			}
+		}
+
+		private void ProcessPendingCalls ()
+		{
+			while (pendingCalls.Count > 0)
+				pendingCalls.Dequeue ()();
 		}
 
 		private void Iterate ()

@@ -33,6 +33,8 @@ namespace Atspi
 	public class EventBase
 	{
 		private static Dictionary<object, AtspiEventHandler> delegates;
+		private static Queue<System.Action> childEventQueue = new Queue<System.Action> ();
+		private static int childrenChangedNestLevel;
 
 		protected Accessible accessible;
 
@@ -96,11 +98,27 @@ namespace Atspi
 			return delegates [value];
 		}
 
-		internal AtspiEventHandler GetDelegate (EventSIO value)
+		internal AtspiEventHandler GetChildrenChangedDelegate (EventSIO value)
 		{
 			if (!delegates.ContainsKey (value))
-				delegates [value] = (detail, v1, v2, any, app_root) => value (accessible, detail, v1, MarshallAccessible (any, detail == "remove", true));
+				delegates [value] = (detail, v1, v2, any, app_root) => EmitChildrenChanged (value, accessible, detail, v1, any);
 			return delegates [value];
+		}
+
+		private void EmitChildrenChanged (EventSIO d, Accessible sender, string detail, int n, object childObject)
+		{
+			bool remove = (detail == "remove");
+			childrenChangedNestLevel++;
+			Registry.SuspendDBusCalls = true;
+			Accessible child = MarshallAccessible (childObject, remove, true);
+			childEventQueue.Enqueue (() =>
+				d (sender, detail, n, child));
+			Registry.SuspendDBusCalls = false;
+			childrenChangedNestLevel--;
+			if (childrenChangedNestLevel == 0) {
+				while (childEventQueue.Count > 0)
+					childEventQueue.Dequeue ()();
+			}
 		}
 
 		internal AtspiEventHandler GetDelegate (EventSV value)

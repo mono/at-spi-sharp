@@ -56,6 +56,12 @@ namespace Atspi
 
 		internal void PostInit ()
 		{
+			if (Registry.SuspendDBusCalls) {
+				Registry.pendingCalls.Enqueue (() =>
+					PostInit ());
+				return;
+			}
+
 			proxy = Registry.Bus.GetObject<ICache> (name, new ObjectPath ("/org/at_spi/cache"));
 
 			proxy.AddAccessible += OnAddAccessible;

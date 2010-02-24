@@ -1,3 +1,9 @@
+2010-02-24  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs, Application.cs, EventBase.cs,, EventObject.cs,
+	Registry.cs: Queue calls that could cause dbus events when firing
+	ChildrenChanged events so that they are fired in order.
+
 2010-02-17  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs, Action.cs, Application.cs, Component.cs, Desktop.cs,

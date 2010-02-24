@@ -81,10 +81,10 @@ namespace Atspi
 
 		public event EventSIO ChildrenChanged {
 			add {
-				proxy.ChildrenChanged += GetDelegate (value);
+				proxy.ChildrenChanged += GetChildrenChangedDelegate (value);
 			}
 			remove {
-				proxy.ChildrenChanged -= GetDelegate (value);
+				proxy.ChildrenChanged -= GetChildrenChangedDelegate (value);
 			}
 		}
 
