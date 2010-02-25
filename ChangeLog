@@ -1,3 +1,7 @@
+2010-02-25  Sandy Armstrong  <sanfordarmstrong@gmail.com>
+
+	* autogen.sh: Fix ndesk-dbus build on Mono 2.4.
+
 2010-02-09  Sandy Armstrong  <sanfordarmstrong@gmail.com>
 
 	* ndesk-dbus: Delete copy of ndesk-dbus source from SVN.
