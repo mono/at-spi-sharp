@@ -10,9 +10,9 @@ Group:          System/Libraries
 URL:            http://www.mono-project.com/Accessibility
 Source0:        %{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Requires:       mono-core >= 2.6
-BuildRequires:	mono-devel >= 2.6
-BuildRequires:	mono-uia >= 1.8.90
+Requires:       mono-core >= 2.4
+BuildRequires:	mono-devel >= 2.4
+BuildRequires:	mono-uia >= 2.0
 BuildRequires:	ndesk-dbus-glib-devel
 BuildRequires:	pkg-config
 
@@ -34,7 +34,8 @@ Devel package that contains the pc file for at-spi-sharp
 
 %build
 %configure --disable-tests
-make %{?_smp_mflags}
+#make %{?_smp_flags}
+make
 
 %install
 %makeinstall
