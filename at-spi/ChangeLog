@@ -1,3 +1,7 @@
+2010-03-01  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs: Bind GetAttributes.
+
 2010-02-24  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs, Application.cs, EventBase.cs,, EventObject.cs,

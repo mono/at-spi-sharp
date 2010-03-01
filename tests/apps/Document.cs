@@ -149,7 +149,7 @@ namespace TestDocument
 		public TestWindowAccessible (GLib.Object widget): base()
 		{
 			this.window = widget as TestWindow;
-			text = null;
+			text = string.Empty;
 			Role = Atk.Role.Frame;
 			attributes = new Dictionary<string, string> ();
 			attributes ["left-margin"] = "2.0";
@@ -180,6 +180,22 @@ namespace TestDocument
 			get {
 				return IntPtr.Zero;
 			}
+		}
+
+		protected override Atk.Attribute [] OnGetAttributes ()
+		{
+			Atk.Attribute [] ret = new Atk.Attribute [attributes.Count + 1];
+			int i = 0;
+			foreach (string s in attributes.Keys) {
+				ret [i] = new Atk.Attribute ();
+				ret [i].Name = s;
+				ret [i].Value = attributes [s];
+				i++;
+			}
+			ret [i] = new Atk.Attribute ();
+			ret [i].Name = "attribute-interface";
+			ret [i].Value = "org.a11y.Accessible";
+			return ret;
 		}
 
 		Atk.Attribute [] Atk.DocumentImplementor.Attributes {

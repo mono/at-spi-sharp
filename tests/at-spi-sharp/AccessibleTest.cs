@@ -24,6 +24,7 @@
 // 
 
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Atspi;
 
@@ -33,6 +34,7 @@ namespace AtSpiTest
 	public class AccessibleTest : Base
 	{
 		Accessible frame = null;
+		Accessible documentFrame = null;
 		Accessible radioButton = null;
 
 		public AccessibleTest ()
@@ -40,6 +42,7 @@ namespace AtSpiTest
 			frame = GetFrame ("gtkradiobutton.py");
 			radioButton = FindByRole (frame, Role.RadioButton, true);
 			Assert.IsNotNull (radioButton, "Find radioButton");
+			documentFrame = GetFrame ("DocumentTest.exe", "DocumentTest");
 		}
 
 		#region Test
@@ -87,6 +90,15 @@ namespace AtSpiTest
 			Accessible parent = application.Parent;
 			Assert.IsNotNull (parent, "Parent of application should not be null");
 			Assert.AreEqual (Role.DesktopFrame, parent.Role, "Parent Role");
+		}
+
+		[Test]
+		public void GetAttributes ()
+		{
+			IDictionary<string, string> attributes = documentFrame.GetAttributes ();
+			Assert.AreEqual (2, attributes.Count, "Document Attributes.Count");
+			Assert.AreEqual ("2.0", attributes ["left-margin"], "Document Attributes[\"left-margin\"]");
+			Assert.AreEqual ("org.a11y.Accessible", attributes ["attribute-interface"], "Document Attributes[\"left-margin\"]");
 		}
 		#endregion
 	}

@@ -42,7 +42,7 @@ namespace AtSpiTest
 		
 		#region Private Fields
 		
-		private static System.Diagnostics.Process p = null;
+		private Queue<System.Diagnostics.Process> openProcesses = new Queue<System.Diagnostics.Process> ();
 
 		#endregion
 		
@@ -50,12 +50,8 @@ namespace AtSpiTest
 
 		public virtual void StartApplication (string name)
 		{
-			if (p != null) {
-				Console.WriteLine ("WARNING: StartApplication called when we already have a process: killing and moving on");
-				TearDown ();
-			}
 			Registry.Initialize (true);
-			p = new System.Diagnostics.Process ();
+			System.Diagnostics.Process p = new System.Diagnostics.Process ();
 			// TODO: It would be better to look at the first line
 			// of the file, rather than infer from the name.
 			// How to do this?
@@ -64,14 +60,17 @@ namespace AtSpiTest
 			p.StartInfo.UseShellExecute = false;
 			p.StartInfo.CreateNoWindow = true;
 			p.Start ();
+			openProcesses.Enqueue (p);
 		}
 		
 		[TestFixtureTearDown]
 		public virtual void TearDown ()
 		{
-			if (p != null && !p.HasExited)
-				p.Kill ();
-			p = null;
+			while (openProcesses.Count > 0) {
+				System.Diagnostics.Process p = openProcesses.Dequeue ();
+				if (!p.HasExited)
+					p.Kill ();
+			}
 			Registry.Terminate ();
 			// give the registry daemon time to process the signal
 			System.Threading.Thread.Sleep (100);

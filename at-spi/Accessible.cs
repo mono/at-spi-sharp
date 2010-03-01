@@ -447,6 +447,11 @@ namespace Atspi
 			}
 		}
 
+		public IDictionary<string, string> GetAttributes ()
+		{
+			return proxy.GetAttributes ();
+		}
+
 		public string Name {
 			get {
 				if (name == null) {
@@ -666,6 +671,7 @@ namespace Atspi
 	[Interface ("org.a11y.atspi.Accessible")]
 	interface IAccessible : Introspectable
 	{
+		IDictionary<string, string> GetAttributes ();
 		DBusRelation [] GetRelationSet ();
 		int GetIndexInParent ();
 		AccessiblePath GetChildAtIndex (int index);

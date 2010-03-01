@@ -1,3 +1,9 @@
+2010-03-01  Mike Gorse  <mgorse@novell.com>
+
+	* at-spi-sharp/Base.cs: Allow a fixture to open multiple apps.
+
+	* apps/Document.cs, at-spi-sharp/AccessibleTest.cs: Test GetAttributes.
+
 2010-02-19  Mike Gorse  <mgorse@novell.com>
 
 	* DeviceEventControllerTest.cs, Makefile.am:
