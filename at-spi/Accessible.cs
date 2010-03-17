@@ -178,6 +178,8 @@ namespace Atspi
 		private void OnChildrenChanged (Accessible sender, string detail, int n, Accessible child)
 		{
 			bool added = (detail == "add");
+			if (added && child == null)
+				return;
 			if (!added && this is Desktop) {
 				if (child != null)
 					Registry.Instance.RemoveApplication (child.application.name);
@@ -313,6 +315,8 @@ namespace Atspi
 				// All objects should support this
 			} else if (name == "org.a11y.atspi.Action") {
 				flag = Interfaces.Action;
+			} else if (name == "org.a11y.atspi.Application") {
+				flag = Interfaces.Application;
 			} else if (name == "org.a11y.atspi.Collection") {
 				// All objects should support this
 			} else if (name == "org.a11y.atspi.Component") {
@@ -336,8 +340,7 @@ namespace Atspi
 			} else if (name == "org.a11y.atspi.Value") {
 				flag = Interfaces.Value;
 			} else
-				// TODO: Don't release with this exception
-				throw new ArgumentException ("Invalid interface name \"" + name + "\"");
+				Console.WriteLine ("at-spi-sharp: Warning: Unknown interface name \"" + name + "\"");
 			if (val)
 				interfaces |= flag;
 			else
@@ -655,16 +658,17 @@ namespace Atspi
 	public enum Interfaces : uint
 	{
 		Action = 0x0001,
-		Component = 0x0002,
-		Document = 0x0004,
-		EditableText = 0x0008,
-		Hypertext = 0x0010,
-		Image = 0x0020,
-		Selection = 0x0040,
-		StreamableContent = 0x0080,
-		Table = 0x0100,
-		Text = 0x0200,
-		Value = 0x0400,
+		Application = 0x0002,
+		Component = 0x0004,
+		Document = 0x0008,
+		EditableText = 0x0010,
+		Hypertext = 0x0020,
+		Image = 0x0040,
+		Selection = 0x0080,
+		StreamableContent = 0x0100,
+		Table = 0x0200,
+		Text = 0x0400,
+		Value = 0x0800,
 		Invalid = 0x80000000
 	}
 

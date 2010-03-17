@@ -1,3 +1,11 @@
+2010-03-17  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs: Recognize Application interface, and warn rather
+	than throw an exception for unknown interfaces.
+
+	* Accessible.cs, Registry.cs: Ignore our own process for now to
+	avoid deadlock.
+
 2010-03-01  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs: Bind GetAttributes.

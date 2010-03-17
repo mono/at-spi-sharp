@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using NDesk.DBus;
@@ -98,13 +99,13 @@ namespace Atspi
 			desktop = new Desktop (this);
 			accessibles [SPI_PATH_ROOT] = desktop;
 
+			busProxy = Bus.GetObject<IBus> ("org.freedesktop.DBus", new ObjectPath ("/org/freedesktop/DBus"));
+
 			PostInit ();
 			desktop.PostInit ();
 
 			if (DeviceEventController.Instance == null)
 				new DeviceEventController ();
-
-			busProxy = Bus.GetObject<IBus> ("org.freedesktop.DBus", new ObjectPath ("/org/freedesktop/DBus"));
 
 			if (startLoop && loopThread == null) {
 				loopThread = new Thread (new ThreadStart (Iterate));
@@ -164,6 +165,10 @@ namespace Atspi
 			if (string.IsNullOrEmpty (name))
 				return null;
 			if (!applications.ContainsKey (name) && create) {
+				// TODO: Perhaps allow reentering GLib main
+				// loop to support inspecting our own window
+				if (BusProxy.GetConnectionUnixProcessID (name) == Process.GetCurrentProcess ().Id)
+					return null;
 				applications [name] = new Application (name);
 				desktop.Add (applications [name]);
 				applications [name].PostInit ();
