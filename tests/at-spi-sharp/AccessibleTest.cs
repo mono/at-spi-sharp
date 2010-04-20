@@ -61,6 +61,16 @@ namespace AtSpiTest
 		}
 
 		[Test]
+		public void Bug596801 ()
+		{
+			EditableText et = documentFrame.QueryEditableText ();
+			Accessible child = documentFrame.Children [0].Children [0];
+			Assert.IsTrue (child.StateSet.Contains (StateType.Enabled), "Enabled");
+			et.SetTextContents ("StateChanged");
+			Assert.IsFalse (child.StateSet.Contains (StateType.Enabled), "Not enabled after disabling");
+		}
+
+		[Test]
 		public void Relations ()
 		{
 			Relation [] set = radioButton.RelationSet;

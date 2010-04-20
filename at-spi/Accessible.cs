@@ -259,7 +259,7 @@ namespace Atspi
 			foreach (string iface in e.interfaces)
 				AddInterface (iface);
 
-			stateSet = new StateSet (e.states);
+			stateSet = new StateSet (this, e.states);
 			// Using at-spi StateChanged events to broadcast
 			// changes for now; needed for gail Focused handling
 			UpdateChildren (e.children);
@@ -432,7 +432,7 @@ namespace Atspi
 						stateSet.Add (StateType.Defunct);
 						return stateSet;
 					}
-					stateSet = new StateSet (states);
+					stateSet = new StateSet (this, states);
 				}
 				return stateSet;
 			}

@@ -245,7 +245,11 @@ namespace TestDocument
 		{
 			if (end_offset == -1)
 				end_offset = text.Length - start_offset;
-			return text.Substring (start_offset, end_offset);
+			if (end_offset > text.Length)
+				end_offset = text.Length;
+			if (end_offset < start_offset)
+				end_offset = start_offset;
+			return text.Substring (start_offset, end_offset - start_offset);
 		}
 
 		public string GetTextAfterOffset (int offset, Atk.TextBoundary boundary_type, out int start_offset, out int end_offset)

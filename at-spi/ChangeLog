@@ -1,3 +1,8 @@
+2010-04-20  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs, StateSet.cs: Make StateSet cache its accessible and
+	do not trust cache for StateType.Enabled (bug 596801)
+
 2010-03-17  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs: Recognize Application interface, and warn rather
