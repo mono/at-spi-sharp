@@ -15,7 +15,6 @@ Requires:       mono-core >= 2.4
 BuildRequires:	mono-devel >= 2.4
 BuildRequires:	mono-uia >= 2.0
 BuildRequires:	ndesk-dbus-glib-devel
-BuildRequires:	pkg-config
 
 Summary:        C# bindings for at-spi
 
