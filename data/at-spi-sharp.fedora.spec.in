@@ -4,7 +4,7 @@
 #
 
 Name:           at-spi-sharp
-Version:        1.0.1
+Version:        @VERSION@
 Release:        1
 License:        MIT
 Group:          System/Libraries
