@@ -1,0 +1,3 @@
+What's new in at-spi-sharp 1.0.90:
+
+* Children of Fillers are not cached, to work around a gail bug.

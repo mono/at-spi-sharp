@@ -1,3 +1,8 @@
+2010-05-12  Mike Gorse  <mgorse@novell.com>
+
+	* NEWS: Added.
+	* configure.ac: Bump version to 1.0.90.
+
 2010-02-25  Sandy Armstrong  <sanfordarmstrong@gmail.com>
 
 	* autogen.sh: Fix ndesk-dbus build on Mono 2.4.
