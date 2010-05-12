@@ -19,12 +19,11 @@ ATSPISHARP_DLL_MDB=$(BUILD_DIR)/at-spi-sharp.dll.mdb
 
 
 #AL=al2
-#SATELLITE_ASSEMBLY_NAME=MonoTests.Mono.UIAutomation.Winforms.resources.dll
 
 PROGRAMFILES = \
 	$(ATSPISHARP_DLL) \
 	$(ATSPITESTS_DLL_MDB) \
-	$(ATSPISHARP_DLL_CONFIG)  
+	$(ATSPISHARP_DLL_CONFIG) \
 	$(ATSPISHARP_DLL_MDB)  
 
 

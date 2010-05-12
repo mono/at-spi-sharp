@@ -149,7 +149,8 @@ namespace Atspi
 				return;
 			if (parent != null) {
 				Desktop.RaiseChildRemoved (parent, this);
-				parent.children.Remove (this);
+				if (parent.children != null)
+					parent.children.Remove (this);
 			}
 			if (children is List<Accessible>)
 				children.Clear ();
@@ -276,7 +277,9 @@ namespace Atspi
 		private void UpdateChildren (AccessiblePath [] childPaths)
 		{
 			bool initializing = (children == null);
-			if (StateSet.Contains (StateType.ManagesDescendants)) {
+			if (StateSet.Contains (StateType.ManagesDescendants) ||
+				(Role == Role.Filler)) {
+				// Do not cache filler to work around BGO#577392
 				if (!(children is UncachedChildren))
 					children = new UncachedChildren (this);
 			} else {
@@ -325,6 +328,8 @@ namespace Atspi
 				flag = Interfaces.Document;
 			} else if (name == "org.a11y.atspi.EditableText") {
 				flag = Interfaces.EditableText;
+			} else if (name == "org.a11y.atspi.Hyperlink") {
+				flag = Interfaces.Hyperlink;
 			} else if (name == "org.a11y.atspi.Hypertext") {
 				flag = Interfaces.Hypertext;
 			} else if (name == "org.a11y.atspi.Image") {
@@ -562,6 +567,13 @@ namespace Atspi
 			return null;
 		}
 
+		public Hyperlink QueryHyperlink ()
+		{
+			if ((Interfaces & Interfaces.Hyperlink) != 0)
+				return new Hyperlink (this, path);
+			return null;
+		}
+
 		public Hypertext QueryHypertext ()
 		{
 			if ((Interfaces & Interfaces.Hypertext) != 0)
@@ -662,13 +674,14 @@ namespace Atspi
 		Component = 0x0004,
 		Document = 0x0008,
 		EditableText = 0x0010,
-		Hypertext = 0x0020,
-		Image = 0x0040,
-		Selection = 0x0080,
-		StreamableContent = 0x0100,
-		Table = 0x0200,
-		Text = 0x0400,
-		Value = 0x0800,
+		Hyperlink = 0x0020,
+		Hypertext = 0x0040,
+		Image = 0x0080,
+		Selection = 0x0100,
+		StreamableContent = 0x0120,
+		Table = 0x0400,
+		Text = 0x0800,
+		Value = 0x1000,
 		Invalid = 0x80000000
 	}
 

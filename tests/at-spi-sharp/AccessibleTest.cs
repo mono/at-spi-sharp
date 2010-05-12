@@ -33,14 +33,16 @@ namespace AtSpiTest
 	[TestFixture]
 	public class AccessibleTest : Base
 	{
-		Accessible frame = null;
+		Accessible radioButtonFrame = null;
+		Accessible buttonFrame = null;
 		Accessible documentFrame = null;
 		Accessible radioButton = null;
 
 		public AccessibleTest ()
 		{
-			frame = GetFrame ("gtkradiobutton.py");
-			radioButton = FindByRole (frame, Role.RadioButton, true);
+			radioButtonFrame = GetFrame ("gtkradiobutton.py");
+			buttonFrame = GetFrame ("gtkbutton.py");
+			radioButton = FindByRole (radioButtonFrame, Role.RadioButton, true);
 			Assert.IsNotNull (radioButton, "Find radioButton");
 			documentFrame = GetFrame ("DocumentTest.exe", "DocumentTest");
 		}
@@ -95,7 +97,7 @@ namespace AtSpiTest
 		[Test]
 		public void ParentOfApplication ()
 		{
-			Accessible application = frame.Parent;
+			Accessible application = radioButtonFrame.Parent;
 			Assert.AreEqual (Role.Application, application.Role, "Application Role");
 			Accessible parent = application.Parent;
 			Assert.IsNotNull (parent, "Parent of application should not be null");
@@ -109,6 +111,16 @@ namespace AtSpiTest
 			Assert.AreEqual (2, attributes.Count, "Document Attributes.Count");
 			Assert.AreEqual ("2.0", attributes ["left-margin"], "Document Attributes[\"left-margin\"]");
 			Assert.AreEqual ("org.a11y.Accessible", attributes ["attribute-interface"], "Document Attributes[\"left-margin\"]");
+		}
+
+		[Test]
+		public void Bug600024 ()
+		{
+			Accessible button2 = Find (buttonFrame, Role.PushButton, "Button 2", true);
+			button2.QueryAction ().DoAction (0);
+			System.Threading.Thread.Sleep (1000);
+			Accessible button4 = Find (buttonFrame, Role.PushButton, "Button 4", true);
+			Assert.IsNotNull (button4, "Couldn't find the new button");
 		}
 		#endregion
 	}

@@ -1,7 +1,13 @@
+2010-05-12  Mike Gorse  <mgorse@novell.com>
+
+	* Accessible.cs: Do not cache children of a Filler [BNC#600024]
+
 2010-04-20  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs, StateSet.cs: Make StateSet cache its accessible and
 	do not trust cache for StateType.Enabled (bug 596801)
+
+	* Accessible.cs: Recognize Hyperlink interface.
 
 2010-03-17  Mike Gorse  <mgorse@novell.com>
 

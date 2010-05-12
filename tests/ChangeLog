@@ -1,3 +1,10 @@
+2010-05-12  Mike Gorse  <mgorse@novell.com>
+
+	* at-spi-sharp/AccessibleTest.cs, apps/gtkbutton.py: Add test for
+	BNC#600024.
+
+	* at-spi-sharp/Makefile.am: Fix to copy at-spi-sharp.dll.mdb
+
 2010-04-20  Mike Gorse  <mgorse@novell.com>
 
 	* apps/Document.cs: Fix NRE in GetText.

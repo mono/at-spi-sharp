@@ -27,6 +27,11 @@ class ButtonSample:
         response = self.dialog.run()
         self.dialog.destroy()
 
+    # callback that adds a button using pack_start
+    def add_button(self, widget, data=None):
+        self.button4 = gtk.Button("Button 4")
+        self.box1.pack_start(self.button4, True, True, False)
+
     # another callback
     def delete_event(self, widget, event, data=None):
         gtk.main_quit()
@@ -76,9 +81,8 @@ class ButtonSample:
         # Do these same steps again to create a second button
         self.button2 = gtk.Button("Button 2")
  
-        # Call the same callback method with a different argument,
-        # passing a pointer to "button 2" instead.
-        self.button2.connect("clicked", self.open_dialog)
+        # When clicked, add a new button with pack_start()
+        self.button2.connect("clicked", self.add_button)
  
 	# XXX: Use pack_start when fixed: https://bugzilla.gnome.org/show_bug.cgi?id=577392
         self.box1.add(self.button2)
