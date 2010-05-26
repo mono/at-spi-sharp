@@ -1,3 +1,7 @@
+What's new in at-spi-sharp 1.0.91:
+
+* Updated object path of cache object to correspond with the new at-spi2-atk.
+
 What's new in at-spi-sharp 1.0.90:
 
 * Children of Fillers are not cached, to work around a gail bug.
