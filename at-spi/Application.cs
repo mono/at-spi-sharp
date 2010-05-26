@@ -62,7 +62,7 @@ namespace Atspi
 				return;
 			}
 
-			proxy = Registry.Bus.GetObject<ICache> (name, new ObjectPath ("/org/at_spi/cache"));
+			proxy = Registry.Bus.GetObject<ICache> (name, new ObjectPath ("/org/a11y/atspi/cache"));
 
 			proxy.AddAccessible += OnAddAccessible;
 			proxy.RemoveAccessible += OnRemoveAccessible;

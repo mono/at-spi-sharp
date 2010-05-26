@@ -1,3 +1,8 @@
+2010-05-26  Mike Gorse  <mgorse@novell.com>
+
+	* Application.cs: Fix cache object path name to correspond with
+	what is now used by at-spi2-atk.
+
 2010-05-12  Mike Gorse  <mgorse@novell.com>
 
 	* Accessible.cs: Do not cache children of a Filler [BNC#600024]
