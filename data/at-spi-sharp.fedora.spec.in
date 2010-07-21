@@ -46,9 +46,9 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%dir %{_prefix}/lib/mono/gac/at-spi-sharp/
-%{_prefix}/lib/mono/accessibility/at-spi-sharp.dll
-%{_prefix}/lib/mono/gac/at-spi-sharp/*
+%dir %{_libdir}/mono/gac/at-spi-sharp/
+%{_libdir}/mono/accessibility/at-spi-sharp.dll
+%{_libdir}/mono/gac/at-spi-sharp/*
 
 %files devel
 %defattr(-,root,root)
@@ -56,5 +56,3 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Mon Nov 30 2009 Stephen Shaw <sshaw@decriptor.com> = 1.8.90-1
-- Initial RPM
