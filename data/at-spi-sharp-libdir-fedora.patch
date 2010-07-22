@@ -1,0 +1,76 @@
+diff -uraN at-spi-sharp-1.0.91.orig//at-spi/Makefile.in at-spi-sharp-1.0.91/at-spi/Makefile.in
+--- at-spi-sharp-1.0.91.orig//at-spi/Makefile.in	2010-07-21 22:56:48.000000000 -0600
++++ at-spi-sharp-1.0.91/at-spi/Makefile.in	2010-07-21 23:07:59.000000000 -0600
+@@ -338,7 +338,7 @@
+ culture_resource_commandlines = $(call unesc2,cmd_line_satellite_$1 += '/embed:$(subst .resx,.resources,$2)')
+ build_satellite_assembly_list = $(call q2s,$(cultures:%=$(BUILD_DIR)/%/$(SATELLITE_ASSEMBLY_NAME)))
+ build_culture_res_files = $(call q2s,$(foreach res, $(culture_resources),$(call get_resource_name,$(res))))
+-GACROOT = $(DESTDIR)$(prefix)/lib
++GACROOT = $(DESTDIR)$(libdir)
+ all: all-am
+ 
+ .SUFFIXES:
+diff -uraN at-spi-sharp-1.0.91.orig//data/Makefile.am at-spi-sharp-1.0.91/data/Makefile.am
+--- at-spi-sharp-1.0.91.orig//data/Makefile.am	2010-07-21 22:56:48.000000000 -0600
++++ at-spi-sharp-1.0.91/data/Makefile.am	2010-07-21 23:03:03.000000000 -0600
+@@ -1,8 +1,8 @@
+ 
+ EXTRA_DIST =  
+ 
+-net20dir   = $(prefix)/lib/mono/2.0
+-a11ydir    = $(prefix)/lib/mono/accessibility
++net20dir   = $(libdir)/mono/2.0
++a11ydir    = $(libdir)/mono/accessibility
+ 
+ SHELL = /bin/sh
+ MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
+diff -uraN at-spi-sharp-1.0.91.orig//data/Makefile.in at-spi-sharp-1.0.91/data/Makefile.in
+--- at-spi-sharp-1.0.91.orig//data/Makefile.in	2010-07-21 22:56:48.000000000 -0600
++++ at-spi-sharp-1.0.91/data/Makefile.in	2010-07-21 23:03:25.000000000 -0600
+@@ -177,8 +177,8 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ EXTRA_DIST = 
+-net20dir = $(prefix)/lib/mono/2.0
+-a11ydir = $(prefix)/lib/mono/accessibility
++net20dir = $(libdir)/mono/2.0
++a11ydir = $(libdir)/mono/accessibility
+ MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
+ INSTALL_D = $(INSTALL) -c -m 644
+ REWRITE = 
+diff -uraN at-spi-sharp-1.0.91.orig//Makefile.include at-spi-sharp-1.0.91/Makefile.include
+--- at-spi-sharp-1.0.91.orig//Makefile.include	2010-07-21 22:56:48.000000000 -0600
++++ at-spi-sharp-1.0.91/Makefile.include	2010-07-21 23:02:43.000000000 -0600
+@@ -107,7 +107,7 @@
+ 	mkdir -p '$(@D)'
+ 	$(AL) -out:'$@' -culture:$* -t:lib $(cmd_line_satellite_$*)
+ 
+-GACROOT = $(DESTDIR)$(prefix)/lib
++GACROOT = $(DESTDIR)$(libdir)
+ 
+ gac-install: $(POLICY_ASSEMBLIES)
+ 	$(GACUTIL) /i $(ASSEMBLY) /f $(GACUTIL_FLAGS) /root $(GACROOT) $(PACKAGE_FLAG) || exit 1;
+diff -uraN at-spi-sharp-1.0.91.orig//tests/apps/Makefile.in at-spi-sharp-1.0.91/tests/apps/Makefile.in
+--- at-spi-sharp-1.0.91.orig//tests/apps/Makefile.in	2010-07-21 22:56:48.000000000 -0600
++++ at-spi-sharp-1.0.91/tests/apps/Makefile.in	2010-07-21 23:09:15.000000000 -0600
+@@ -308,7 +308,7 @@
+ culture_resource_commandlines = $(call unesc2,cmd_line_satellite_$1 += '/embed:$(subst .resx,.resources,$2)')
+ build_satellite_assembly_list = $(call q2s,$(cultures:%=$(BUILD_DIR)/%/$(SATELLITE_ASSEMBLY_NAME)))
+ build_culture_res_files = $(call q2s,$(foreach res, $(culture_resources),$(call get_resource_name,$(res))))
+-GACROOT = $(DESTDIR)$(prefix)/lib
++GACROOT = $(DESTDIR)$(libdir)
+ all: all-am
+ 
+ .SUFFIXES:
+diff -uraN at-spi-sharp-1.0.91.orig//tests/at-spi-sharp/Makefile.in at-spi-sharp-1.0.91/tests/at-spi-sharp/Makefile.in
+--- at-spi-sharp-1.0.91.orig//tests/at-spi-sharp/Makefile.in	2010-07-21 22:56:48.000000000 -0600
++++ at-spi-sharp-1.0.91/tests/at-spi-sharp/Makefile.in	2010-07-21 23:09:41.000000000 -0600
+@@ -325,7 +325,7 @@
+ culture_resource_commandlines = $(call unesc2,cmd_line_satellite_$1 += '/embed:$(subst .resx,.resources,$2)')
+ build_satellite_assembly_list = $(call q2s,$(cultures:%=$(BUILD_DIR)/%/$(SATELLITE_ASSEMBLY_NAME)))
+ build_culture_res_files = $(call q2s,$(foreach res, $(culture_resources),$(call get_resource_name,$(res))))
+-GACROOT = $(DESTDIR)$(prefix)/lib
++GACROOT = $(DESTDIR)$(libdir)
+ ATSPISHARP_DLL = $(BUILD_DIR)/at-spi-sharp.dll
+ all: all-am
+ 

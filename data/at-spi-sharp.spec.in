@@ -1,3 +1,9 @@
+%define LIBDIR %{_prefix}/lib
+%if 0%{?fedora}
+Patch0:		at-spi-sharp-libdir-fedora.patch
+%define LIBDIR %{_libdir}
+%endif
+
 #
 # spec file for package at-spi-sharp
 #
@@ -12,9 +18,8 @@ Source0:        %{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       mono-core >= 2.4
 BuildRequires:	mono-devel >= 2.4
-BuildRequires:	mono-uia >= 2.0
+BuildRequires:	mono-uia-devel >= 2.0
 BuildRequires:	ndesk-dbus-glib-devel
-BuildRequires:	pkg-config
 
 Summary:        C# bindings for at-spi
 
@@ -31,6 +36,9 @@ Devel package that contains the pc file for at-spi-sharp
 
 %prep
 %setup -q
+%if 0%{?fedora}
+%patch0 -p1
+%endif
 
 %build
 %configure --disable-tests
@@ -38,17 +46,16 @@ Devel package that contains the pc file for at-spi-sharp
 make
 
 %install
-%makeinstall
-
+make DESTDIR=%{buildroot} install
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%dir %{_prefix}/lib/mono/gac/at-spi-sharp/
-%{_prefix}/lib/mono/accessibility/at-spi-sharp.dll
-%{_prefix}/lib/mono/gac/at-spi-sharp/*
+%dir %{LIBDIR}/mono/gac/at-spi-sharp/
+%{LIBDIR}/mono/accessibility/at-spi-sharp.dll
+%{LIBDIR}/mono/gac/at-spi-sharp/*
 
 %files devel
 %defattr(-,root,root)
