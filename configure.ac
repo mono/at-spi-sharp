@@ -106,7 +106,6 @@ at-spi/Makefile
 data/Makefile
 data/at-spi-sharp.pc.in
 data/at-spi-sharp.spec
-data/at-spi-sharp.fedora.spec
 tests/Makefile
 tests/apps/Makefile
 tests/at-spi-sharp/Makefile

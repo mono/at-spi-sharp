@@ -1,0 +1,7 @@
+*.swp
+*.log
+*.in
+Makefile
+ndesk-dbus/*.cs
+ndesk-dbus-git/
+aclocal.m4
