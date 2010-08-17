@@ -41,10 +41,12 @@ namespace Atspi
 
 		public event EventII Modifiers {
 			add {
+				Registry.RegisterEventListener ("Keyboard:Modifiers");
 				proxy.Modifiers += GetDelegate (value);
 			}
 			remove {
 				proxy.Modifiers -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Keyboard:Modifiers");
 			}
 		}
 	}

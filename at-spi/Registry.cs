@@ -44,12 +44,14 @@ namespace Atspi
 		private volatile static Registry instance;
 		private Bus bus;
 		private IBus busProxy;
+		private IRegistry proxy;
 		private Dictionary<string, Application> applications;
 		private Desktop desktop;
 		private bool suspendDBusCalls;
 		private static object sync = new object ();
 		private static Thread loopThread;
 		internal static Queue<System.Action> pendingCalls = new Queue<System.Action> ();
+		private Dictionary<string, int> eventListeners;
 
 		public static void Initialize ()
 		{
@@ -93,6 +95,13 @@ namespace Atspi
 			bus = GetAtspiBus ();
 			if (bus == null)
 				bus = Bus.Session;
+
+			ObjectPath op = new ObjectPath ("/org/a11y/atspi/registry");
+			proxy = Registry.Bus.GetObject<IRegistry> ("org.a11y.atspi.Registry", op);
+			eventListeners = new Dictionary<string, int> ();
+			RegisterEventListener ("Object:ChildrenChanged");
+			RegisterEventListener ("Object:StateChanged");
+			RegisterEventListener ("Object:PropertyChange");
 
 			applications = new Dictionary<string, Application> ();
 			applications [name] = this;
@@ -246,5 +255,32 @@ namespace Atspi
 				}
 			}
 		}
+
+		internal static void RegisterEventListener (string name)
+		{
+			if (!instance.eventListeners.ContainsKey (name))
+				instance.eventListeners [name] = 1;
+			else
+				instance.eventListeners [name]++;
+			if (instance.eventListeners [name] == 1)
+				instance.proxy.RegisterEvent (name);
+		}
+
+		internal static void DeregisterEventListener (string name)
+		{
+			if (!instance.eventListeners.ContainsKey (name) ||
+				instance.eventListeners [name] == 0)
+				return;
+			instance.eventListeners [name]--;
+			if (instance.eventListeners [name] == 0)
+				instance.proxy.DeregisterEvent (name);
+		}
+	}
+
+	[Interface ("org.a11y.atspi.Registry")]
+	interface IRegistry
+	{
+		void RegisterEvent (string name);
+		void DeregisterEvent (string name);
 	}
 }
