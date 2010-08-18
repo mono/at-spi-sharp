@@ -1,3 +1,10 @@
+What's new in at-spi-sharp 1.1.0:
+
+* Notify the registry when adding/removing event listeners, as is now required
+as of at-spi2 0.3.90.
+
+* GetObject() has been fixed for hyperlinks.
+
 What's new in at-spi-sharp 1.0.91:
 
 * Updated object path of cache object to correspond with the new at-spi2-atk.
