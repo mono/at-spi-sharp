@@ -41,46 +41,56 @@ namespace Atspi
 
 		public event EventSimple LineChanged {
 			add {
+				Registry.RegisterEventListener ("terminal:LineChanged");
 				proxy.LineChanged += GetDelegate (value);
 			}
 			remove {
 				proxy.LineChanged -= GetDelegate (value);
+				Registry.DeregisterEventListener ("terminal:LineChanged");
 			}
 		}
 
 		public event EventSimple ColumncountChanged {
 			add {
+				Registry.RegisterEventListener ("terminal:ColumnCountChanged");
 				proxy.ColumncountChanged += GetDelegate (value);
 			}
 			remove {
 				proxy.ColumncountChanged -= GetDelegate (value);
+				Registry.DeregisterEventListener ("terminal:ColumnCountChanged");
 			}
 		}
 
 		public event EventSimple LinecountChanged {
 			add {
+				Registry.RegisterEventListener ("Terminal:LineCountChanged");
 				proxy.LinecountChanged += GetDelegate (value);
 			}
 			remove {
 				proxy.LinecountChanged -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Terminal:LineCountChanged");
 			}
 		}
 
 		public event EventSimple ApplicationChanged {
 			add {
+				Registry.RegisterEventListener ("terminal:ApplicationChanged");
 				proxy.ApplicationChanged += GetDelegate (value);
 			}
 			remove {
 				proxy.ApplicationChanged -= GetDelegate (value);
+				Registry.DeregisterEventListener ("terminal:ApplicationChanged");
 			}
 		}
 
 		public event EventSimple CharwidthChanged {
 			add {
+				Registry.RegisterEventListener ("terminal:CharWidthChanged");
 				proxy.CharwidthChanged += GetDelegate (value);
 			}
 			remove {
 				proxy.CharwidthChanged -= GetDelegate (value);
+				Registry.DeregisterEventListener ("terminal:CharWidthChanged");
 			}
 		}
 	}

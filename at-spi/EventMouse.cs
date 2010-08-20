@@ -41,28 +41,34 @@ namespace Atspi
 
 		public event EventII Abs {
 			add {
+				Registry.RegisterEventListener ("Mouse:Abs");
 				proxy.Abs += GetDelegate (value);
 			}
 			remove {
 				proxy.Abs -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Mouse:Abs");
 			}
 		}
 
 		public event EventSimple Rel {
 			add {
+				Registry.RegisterEventListener ("Mouse:Rel");
 				proxy.Rel += GetDelegate (value);
 			}
 			remove {
 				proxy.Rel -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Mouse:Rel");
 			}
 		}
 
 		public event EventSII Button {
 			add {
+				Registry.RegisterEventListener ("Mouse:Button");
 				proxy.Button += GetDelegate (value);
 			}
 			remove {
 				proxy.Button -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Mouse:Button");
 			}
 		}
 	}

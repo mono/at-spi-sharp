@@ -41,46 +41,56 @@ namespace Atspi
 
 		public event EventSimple LoadComplete {
 			add {
+				Registry.RegisterEventListener ("Document:LoadComplete");
 				proxy.LoadComplete += GetDelegate (value);
 			}
 			remove {
 				proxy.LoadComplete -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Document:LoadComplete");
 			}
 		}
 
 		public event EventSimple Reload {
 			add {
+				Registry.RegisterEventListener ("Document:Reload");
 				proxy.Reload += GetDelegate (value);
 			}
 			remove {
 				proxy.Reload -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Document:Reload");
 			}
 		}
 
 		public event EventSimple LoadStopped {
 			add {
+				Registry.RegisterEventListener ("Document:LoadStopped");
 				proxy.LoadStopped += GetDelegate (value);
 			}
 			remove {
 				proxy.LoadStopped -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Document:LoadStopped");
 			}
 		}
 
 		public event EventSimple ContentChanged {
 			add {
+				Registry.RegisterEventListener ("Document:ContentChanged");
 				proxy.ContentChanged += GetDelegate (value);
 			}
 			remove {
 				proxy.ContentChanged -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Document:ContentChanged");
 			}
 		}
 
 		public event EventSimple AttributesChanged {
 			add {
+				Registry.RegisterEventListener ("Document:AttributesChanged");
 				proxy.AttributesChanged += GetDelegate (value);
 			}
 			remove {
 				proxy.AttributesChanged -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Document:AttributesChanged");
 			}
 		}
 	}

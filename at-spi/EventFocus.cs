@@ -42,9 +42,11 @@ namespace Atspi
 		public event EventSimple Focus {
 			add {
 				proxy.Focus += GetDelegate (value);
+				Registry.RegisterEventListener ("Focus");
 			}
 			remove {
 				proxy.Focus -= GetDelegate (value);
+				Registry.DeregisterEventListener ("Focus");
 			}
 		}
 	}

@@ -66,8 +66,8 @@ namespace Atspi
 
 		public Accessible GetObject (int index)
 		{
-			ObjectPath path = proxy.GetObject (index);
-			Accessible ret = application.GetElement (path, true);
+			AccessiblePath path = proxy.GetObject (index);
+			Accessible ret = Registry.GetElement (path, true);
 			// hack -- we get an object which we may not have
 			// received an event for.
 			if (ret != null)
@@ -84,7 +84,7 @@ namespace Atspi
 	[Interface ("org.a11y.atspi.Hyperlink")]
 	interface IHyperlink : Introspectable
 	{
-			ObjectPath GetObject (int index);
+			AccessiblePath GetObject (int index);
 			string GetURI (int i);
 	}
 }
