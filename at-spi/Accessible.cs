@@ -145,7 +145,7 @@ namespace Atspi
 
 		protected virtual  void Dispose (bool disposing)
 		{
-			if (stateSet != null && stateSet.Contains (StateType.Defunct))
+			if (Defunct)
 				return;
 			if (parent != null) {
 				Desktop.RaiseChildRemoved (parent, this);
@@ -187,8 +187,13 @@ namespace Atspi
 			}
 			else if (children is List<Accessible>) {
 				if (added) {
-					if (!(this is Desktop))
-						children.Insert (n, child);
+					if (!(this is Desktop)) {
+						try {
+							children.Insert (n, child);
+						} catch (Exception) {
+							RefreshChildren ();
+						}
+					}
 				}
 				else if (child != null)
 					children.Remove (child);
@@ -199,6 +204,16 @@ namespace Atspi
 				Desktop.RaiseChildAdded (this, child);
 			else
 				Desktop.RaiseChildRemoved (this, child);
+		}
+
+		private void RefreshChildren ()
+		{
+			AccessiblePath [] childPaths = proxy.GetChildren ();
+			List<Accessible> newChildren = new List<Accessible> ();
+			foreach (AccessiblePath child in childPaths)
+				newChildren.Add (Registry.GetElement (child,
+					true));
+			children  = newChildren;
 		}
 
 		private void OnPropertyChange (Accessible sender, string property, object value)
@@ -360,6 +375,8 @@ namespace Atspi
 
 		public Accessible Parent {
 			get {
+				if (Defunct)
+				return null;
 				if (parent == null && !(this is Desktop)) {
 					object o = properties.Get (IFACE, "Parent");
 					AccessiblePath path = (AccessiblePath) Convert.ChangeType (o, typeof (AccessiblePath));
@@ -389,7 +406,15 @@ namespace Atspi
 
 		public Accessible GetChildAtIndexNoCache (int index)
 		{
-			AccessiblePath path = proxy.GetChildAtIndex (index);
+			AccessiblePath path;
+			if (Defunct)
+				return null;
+			try {
+				path = proxy.GetChildAtIndex (index);
+			} catch (System.Exception) {
+				Defunct = true;
+				return null;
+			}
 			return Registry.GetElement (path, true);
 		}
 
@@ -481,10 +506,29 @@ namespace Atspi
 			}
 		}
 
+		public bool Defunct {
+			get {
+				return (stateSet != null &&
+					stateSet.Contains (StateType.Defunct));
+			}
+			set {
+				stateSet = new StateSet ();
+				stateSet.Add (StateType.Defunct);
+			}
+		}
+
 		internal Interfaces Interfaces {
 			get {
+				if (Defunct)
+					return Interfaces.Invalid;
 				if ((interfaces & Interfaces.Invalid) != 0) {
-					string [] ifaces = proxy.GetInterfaces ();
+					string [] ifaces;
+					try {
+						ifaces = proxy.GetInterfaces ();
+					} catch (System.Exception) {
+						Defunct = true;
+						return Interfaces.Invalid;
+					}
 					interfaces = 0;
 					foreach (string iface in ifaces)
 						AddInterface (iface);
@@ -696,5 +740,6 @@ namespace Atspi
 		string [] GetInterfaces ();
 		uint GetRole ();
 		uint [] GetState ();
+		AccessiblePath GetApplication ();
 	}
 }
