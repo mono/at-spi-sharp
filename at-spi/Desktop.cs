@@ -97,6 +97,12 @@ namespace Atspi
 			}
 		}
 
+		internal string GetAlternateBusName ()
+		{
+			AccessiblePath app = proxy.GetApplication ();
+			return app.bus_name;
+		}
+
 		public static void Terminate ()
 		{
 			lock (sync) {

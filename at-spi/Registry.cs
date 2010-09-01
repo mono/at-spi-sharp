@@ -106,6 +106,7 @@ namespace Atspi
 			applications = new Dictionary<string, Application> ();
 			applications [name] = this;
 			desktop = new Desktop (this);
+			applications [desktop.GetAlternateBusName ()] = this;
 			accessibles [SPI_PATH_ROOT] = desktop;
 
 			busProxy = Bus.GetObject<IBus> ("org.freedesktop.DBus", new ObjectPath ("/org/freedesktop/DBus"));
