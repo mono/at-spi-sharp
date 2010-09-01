@@ -1,5 +1,5 @@
 AC_PREREQ([2.54])
-AC_INIT([at-spi-sharp], [1.1.0])
+AC_INIT([at-spi-sharp], [1.1.90])
 AM_INIT_AUTOMAKE([foreign])
 
 # pkg-config
