@@ -46,7 +46,7 @@ namespace Atspi
 			this.accessible = accessible;
 			if (states.Length != 2)
 				throw new ArgumentException ("Expecting int [2]");
-			this.states = (ulong)(states [1] << (sizeof (int) * 8)) | (ulong)states [0];
+			this.states = (((ulong) states [1]) << (sizeof (int) * 8)) | (ulong)states [0];
 		}
 
 		public bool Contains (StateType state)

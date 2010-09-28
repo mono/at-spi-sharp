@@ -155,8 +155,7 @@ namespace Atspi
 			if (children is List<Accessible>)
 				children.Clear ();
 			if (stateSet == null)
-				stateSet = new StateSet ();
-			stateSet.Add (StateType.Defunct);
+				Defunct = true;
 			if (ObjectEvents != null) {
 				ObjectEvents.PropertyChange -= OnPropertyChange;
 				ObjectEvents.ChildrenChanged -= OnChildrenChanged;
@@ -420,9 +419,9 @@ namespace Atspi
 
 		public int IndexInParent {
 			get {
-				if (parent == null)
+				if (Parent == null)
 					return -1;
-				return parent.children.IndexOf (this);
+				return Parent.children.IndexOf (this);
 			}
 		}
 
@@ -458,8 +457,7 @@ namespace Atspi
 					try {
 						states = proxy.GetState ();
 					} catch (System.Exception) {
-						stateSet = new StateSet ();
-						stateSet.Add (StateType.Defunct);
+						Defunct = true;
 						return stateSet;
 					}
 					stateSet = new StateSet (this, states);
