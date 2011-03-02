@@ -65,6 +65,21 @@ namespace Atspi
 			proxy.GetSize (out x, out y);
 		}
 
+		public bool SetExtents (BoundingBox extents, CoordType coordType)
+		{
+			return proxy.SetExtents (extents, coordType);
+		}
+
+		public bool SetPosition (int x, int y, CoordType coordType)
+		{
+			return proxy.SetPosition (x, y, coordType);
+		}
+
+		public bool SetSize (int x, int y)
+		{
+			return proxy.SetSize (x, y);
+		}
+
 		public ComponentLayer Layer {
 			get { return proxy.GetLayer (); }
 		}
@@ -93,6 +108,9 @@ namespace Atspi
 		BoundingBox GetExtents (CoordType coord_type);
 		void GetPosition (CoordType coord_type, out int x, out int y);
 		void GetSize (out int x, out int y);
+		bool SetExtents (BoundingBox extents, CoordType coord_type);
+		bool SetPosition (int x, int y, CoordType coord_type);
+		bool SetSize (int width, int height);
 		ComponentLayer GetLayer ();
 		short GetMDIZOrder ();
 		bool GrabFocus ();
@@ -125,5 +143,13 @@ namespace Atspi
 		public int Y;
 		public int Width;
 		public int Height;
+
+		public BoundingBox (int x, int y, int width, int height)
+		{
+			this.X = x;
+			this.Y = y;
+			this.Width = width;
+			this.Height = height;
+		}
 	}
 }

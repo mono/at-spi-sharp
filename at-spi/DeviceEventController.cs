@@ -277,7 +277,7 @@ namespace Atspi
 	}
 
 	[System.Flags]
-	public enum KeyModifier : short
+	public enum KeyModifier : uint
 	{
 		Shift = 1,
 		ShiftLock = 2,
@@ -292,7 +292,7 @@ namespace Atspi
 	{
 		public uint Type;
 		public int Id;
-		public short HwCode;
+		public uint HwCode;
 		public KeyModifier Modifiers;
 		public int Timestamp;
 		public string EventString;

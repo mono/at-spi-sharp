@@ -106,6 +106,44 @@ namespace AtSpiTest
 		}
 
 		[Test]
+		public void SetExtents ()
+		{
+			Component component = pushButton.QueryComponent ();
+			BoundingBox bbox = new BoundingBox (50, 60, 70, 80);
+			Assert.IsFalse (component.SetExtents (bbox,
+				CoordType.Screen),
+				"SetExtents on a pushbutton");
+			component = frame.QueryComponent ();
+			Assert.IsTrue (component.SetExtents (bbox,
+				CoordType.Screen),
+				"SetExtents on the frame");
+		}
+
+		[Test]
+		public void SetPosition ()
+		{
+			Component component = pushButton.QueryComponent ();
+			Assert.IsFalse (component.SetPosition (50, 60,
+				CoordType.Screen),
+				"SetPosition on a pushbutton");
+			component = frame.QueryComponent ();
+			Assert.IsTrue (component.SetPosition (50, 60,
+				CoordType.Screen),
+				"SetPosition on the frame");
+		}
+
+		[Test]
+		public void SetSize ()
+		{
+			Component component = pushButton.QueryComponent ();
+			Assert.IsFalse (component.SetSize (70, 80),
+				"SetSize on a pushbutton");
+			component = frame.QueryComponent ();
+			Assert.IsTrue (component.SetSize (70, 80),
+				"SetSize on the frame");
+		}
+
+		[Test]
 		public void MiscFunctions ()
 		{
 			// just make sure we don't crash
